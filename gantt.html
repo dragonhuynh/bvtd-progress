@@ -10,7 +10,7 @@
   --white:#fff; --text:#1a202c; --muted:#718096; --border:#e2e8f0;
   --green:#48bb78; --blue:#4299e1; --red:#f56565; --r:12px;
   --sh:0 2px 12px rgba(0,0,0,.08);
-  --col-sub:340px; --col-st:148px; --col-dp:96px; --day-w:38px; --row-h:44px;
+  --col-id:52px; --col-sub:300px; --col-st:148px; --col-dp:96px; --day-w:38px; --row-h:44px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;overflow:hidden;
@@ -123,7 +123,7 @@ html,body{height:100%;overflow:hidden;
 /* Left panel */
 .lp{
   flex-shrink:0;
-  width:calc(var(--col-sub) + var(--col-st) + var(--col-dp));
+  width:calc(var(--col-id) + var(--col-sub) + var(--col-st) + var(--col-dp));
   display:flex;flex-direction:column;
   border-right:2px solid var(--border);background:var(--white);overflow:hidden;
 }
@@ -133,6 +133,7 @@ html,body{height:100%;overflow:hidden;
 }
 .lh{padding:0 14px;font-weight:700;font-size:11px;color:var(--muted);
   text-transform:uppercase;letter-spacing:.06em;}
+.lh-id{width:var(--col-id);text-align:center;}
 .lh-sub{width:var(--col-sub);}
 .lh-st{width:var(--col-st);padding:0 10px;}
 .lh-dp{flex:1;padding:0 10px;}
@@ -145,8 +146,10 @@ html,body{height:100%;overflow:hidden;
   border-bottom:1px solid var(--border);transition:background .1s;cursor:default;
 }
 .tr:hover{background:#fdf6ee;}
+.tr-id{width:var(--col-id);padding:0 6px;text-align:center;flex-shrink:0;}
+.tr-id-badge{font-size:10px;font-weight:700;color:var(--muted);background:#f0f4f8;padding:2px 5px;border-radius:4px;white-space:nowrap;}
 .tr-sub{
-  width:var(--col-sub);padding:0 14px;display:flex;
+  width:var(--col-sub);padding:0 10px 0 0;display:flex;
   align-items:center;gap:8px;overflow:hidden;min-width:0;
 }
 .tr-sub-txt{
@@ -365,6 +368,7 @@ html,body{height:100%;overflow:hidden;
   <div class="content">
     <div class="lp">
       <div class="lp-head">
+        <div class="lh lh-id">ID</div>
         <div class="lh lh-sub">Đầu việc</div>
         <div class="lh lh-st">Trạng thái</div>
         <div class="lh lh-dp">Phòng</div>
@@ -474,6 +478,7 @@ function renderL(){
     const div=document.createElement('div');
     div.className='tr';div.dataset.i=i;
     div.innerHTML=`
+      <div class="tr-id"><span class="tr-id-badge">${esc(t.id)}</span></div>
       <div class="tr-sub">
         <span class="nd nd-${t.nhom||'hanh_chanh'}" title="${esc(NM_LBL[t.nhom]||t.nhom)}"></span>
         <span class="tr-sub-txt" title="${esc(t.ten_dau_viec)}">${esc(t.ten_dau_viec)}</span>
