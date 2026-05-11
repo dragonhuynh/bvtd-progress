@@ -20,3 +20,15 @@ ngay_cap_nhat,task_id,ten_dau_viec,phong_chinh,phong_bao_cao,user,trang_thai_cu,
 2026-05-11,173,Triển khai đưa vào hoạt động Phòng khám Nội thứ 3,KHTH,KHTH,KHTH,tre_deadline,dang_thuc_hien,,"Thứ 2, thứ 3, thứ 6 hàng tuần.",dashboard_auto
 2026-05-11,177,Tăng cường giám sát tuân thủ trang phục y tế và đeo bảng tên NVYT,KHTH,KHTH,KHTH,tre_deadline,dang_thuc_hien,,,dashboard_auto
 2026-05-11,19,Đo lường kích thước khu vực WC và hành lang ngoài cho X-quang,HCQT,HCQT,HCQT,tre_deadline,da_hoan_thanh,2026-03-20,Hoàn thành,dashboard_auto
+2026-05-11,8,Vẽ lại sơ đồ quy trình khám bệnh mới (tối ưu hóa luồng),KHTH,KHTH,KHTH,tre_deadline,da_hoan_thanh,2026-04-15,Đã phối hợp hoàn thành,dashboard_auto
+2026-05-11,18,Thiết kế lại mặt bằng tích hợp CT - X-quang,KHTH,KHTH,KHTH,tre_deadline,dang_thuc_hien,,Phối hợp khảo sát đảm bảo quy trình chuyên môn,dashboard_auto
+2026-05-11,54,Tái bố trí nhân sự Nội/Ngoại/Sản/Cấp cứu theo định hướng trực tập trung,KHTH,KHTH,KHTH,tre_deadline,da_hoan_thanh,2026-02-15,"Thông báo về việc trực tập trung, giám sát mỗi đợt nhân sự mới",dashboard_auto
+2026-05-11,82,Hoàn thiện và trình phê duyệt hệ thống quy trình phác đồ điều trị phù hợp CS2,KHTH,KHTH,KHTH,tre_deadline,dang_thuc_hien,,"Đã ban hành 2 phác đồ, 2 QTKT, đang chờ bổ sung phác đồ nội ngoại thường gặp",dashboard_auto
+2026-05-11,99,KHTH giám sát BS nội trú tập trung trực tại Cấp cứu đảm bảo điều trị kịp thời,KHTH,KHTH,KHTH,tre_deadline,da_hoan_thanh,2026-04-30,giám sát mỗi ngày,dashboard_auto
+2026-05-11,143,KHTH + Điều dưỡng bố trí trực Tết và chuẩn bị khu khám bệnh tại CC,KHTH,KHTH,KHTH,tre_deadline,da_hoan_thanh,2026-03-15,,dashboard_auto
+2026-05-11,167,Thực hiện nghiêm túc chế độ báo cáo định kỳ (hoạt động chung + chuyên môn + chuyển tuyến),KHTH,KHTH,KHTH,tre_deadline,da_hoan_thanh,2026-05-10,Thực hiện theo biểu mẫu báo cáo giao ban hằng ngày,dashboard_auto
+2026-05-11,172,Tổ chức chuyên đề sinh hoạt khoa học về Bệnh Động Kinh,KHTH,KHTH,KHTH,tre_deadline,da_hoan_thanh,2026-04-08,,dashboard_auto
+2026-05-11,223,Trực tập trung tại khoa Cấp cứu (điều hành KHTH + Điều dưỡng + HCQT),KHTH,KHTH,KHTH,tre_deadline,da_hoan_thanh,2026-04-10,"Đã hoàn thành thông báo cho luân chuyển mới, thực hiện giám sát",dashboard_auto
+2026-05-11,260,KHTH + HCQT lắp đặt biển chỉ dẫn đường bộ 3 vị trí đến BVTD CS2,KHTH,KHTH,KHTH,tre_deadline,dang_thuc_hien,,Phối hợp HCQT liên hệ địa phương : thống nhất vị trí lắp đặt,dashboard_auto
+2026-05-11,361,"KHTH + Điều dưỡng + HCQT rà soát chỉnh sửa bảng thông tin phòng họp Cấp cứu (BN nặng, số NB và NV toàn viện từng khoa theo ngày)",KHTH,KHTH,KHTH,tre_deadline,da_hoan_thanh,2026-04-17,Thực hiện mỗi ngày,dashboard_auto
+2026-05-11,387,KHTH + Điều dưỡng + HCQT làm bảng thông tin trực phòng họp CC (lãnh đạo/BS/ĐD/hotline),KHTH,KHTH,KHTH,tre_deadline,da_hoan_thanh,2026-04-17,Đã hoàn thành,dashboard_auto
