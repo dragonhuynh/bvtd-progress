@@ -826,6 +826,9 @@ body {
       <select id="filter-dept" onchange="filterTasks()">
         <option value="">Tất cả phòng</option>
       </select>
+      <select id="filter-bienban" onchange="filterTasks()">
+        <option value="">Tất cả biên bản</option>
+      </select>
       <input type="text" id="filter-search" placeholder="Tìm kiếm..." aria-label="Tìm kiếm đầu việc" oninput="filterTasks()">
     </div>
   </header>
@@ -997,6 +1000,8 @@ function doLogout() {
   window._myTasks = null; window._myStats = null;
   const deptFilter = document.getElementById('filter-dept');
   while (deptFilter.options.length > 1) deptFilter.remove(1);
+  const bbFilter = document.getElementById('filter-bienban');
+  while (bbFilter.options.length > 1) bbFilter.remove(1);
   document.getElementById('app-body').style.display = 'none';
   document.getElementById('login-overlay').style.display = 'flex';
   document.getElementById('login-user').value = '';
@@ -1369,17 +1374,19 @@ function toggleDept(uid) {
 }
 
 function filterTasks() {
-  const nhom   = document.getElementById('filter-nhom').value;
-  const status = document.getElementById('filter-status').value;
-  const dept   = document.getElementById('filter-dept').value;
-  const search = (document.getElementById('filter-search').value || '').toLowerCase().trim();
+  const nhom     = document.getElementById('filter-nhom').value;
+  const status   = document.getElementById('filter-status').value;
+  const dept     = document.getElementById('filter-dept').value;
+  const bienban  = document.getElementById('filter-bienban').value;
+  const search   = (document.getElementById('filter-search').value || '').toLowerCase().trim();
 
   const base = window._myTasks || D.tasks;
   const filtered = base.filter(t => {
     if (nhom && t.nhom !== nhom) return false;
     if (status === 'chua_xong') { if (t.tt === 'da_hoan_thanh') return false; }
     else if (status && t.tt !== status) return false;
-    if (dept   && t.phong !== dept)   return false;
+    if (dept    && t.phong !== dept)    return false;
+    if (bienban && t.nguon !== bienban) return false;
     if (search && !t.ten.toLowerCase().includes(search) && !t.phong.toLowerCase().includes(search)) return false;
     return true;
   });
@@ -1396,6 +1403,12 @@ function initTasksView() {
     const o = document.createElement('option');
     o.value = d; o.textContent = d;
     deptFilter.appendChild(o);
+  });
+  const bbFilter = document.getElementById('filter-bienban');
+  [...new Set(myTasks.map(t => t.nguon || '').filter(Boolean))].sort().forEach(bb => {
+    const o = document.createElement('option');
+    o.value = bb; o.textContent = bb.replace(/^Biên bản /, '');
+    bbFilter.appendChild(o);
   });
   // Default: chỉ hiện trễ + đang làm
   document.getElementById('filter-status').value = 'chua_xong';
