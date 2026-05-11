@@ -1,7 +1,7 @@
 """
 generate_dashboard.py — Sinh dashboard.html theo phong cach project management hien dai
 """
-import json, csv, re
+import json, csv, re, base64
 from pathlib import Path
 from datetime import datetime, date
 from collections import defaultdict
@@ -233,10 +233,19 @@ def compute(tasks):
 
 # ── HTML template ──────────────────────────────────────────────────────────────
 
+def _logo_data_uri() -> str:
+    for name in ("logo-tudu-footer.png", "logo-tudu.png"):
+        p = ROOT / name
+        if p.exists():
+            return "data:image/png;base64," + base64.b64encode(p.read_bytes()).decode()
+    return ""
+
+
 def build_html(data: dict) -> str:
     data_json = json.dumps(data, ensure_ascii=False).replace('</script>', r'<\/script>')
     fb_cfg = load_json_file(ROOT / "data" / "firebase_config.json")
     fb_cfg_json = json.dumps(fb_cfg, ensure_ascii=False)
+    logo_uri = _logo_data_uri()
 
     return """<!DOCTYPE html>
 <html lang="vi">
@@ -256,8 +265,8 @@ def build_html(data: dict) -> str:
   --sidebar: #0D3B7A;
   --accent:  #1A5CA8;
   --accent2: #134489;
-  --pink:    #E91E8C;
-  --pink2:   #C41A77;
+  --pink:    #F06EA3;
+  --pink2:   #D8578A;
   --white:   #ffffff;
   --text:    #1a202c;
   --muted:   #718096;
@@ -411,7 +420,7 @@ body {
 .stat-done  .stat-num  { color: #48bb78; }
 .stat-active .stat-num { color: #ed8936; }
 .stat-late  .stat-num  { color: #f56565; }
-.stat-rate  .stat-num  { color: #9f7aea; }
+.stat-rate  .stat-num  { color: var(--pink); }
 
 /* Btn */
 .btn-primary {
@@ -460,7 +469,7 @@ body {
 .date-badge.red    { background: #fff5f5; color: #c53030; }
 .date-badge.orange { background: #fffaf0; color: #c05621; }
 .date-badge.green  { background: #f0fff4; color: #276749; }
-.nhac-badge { font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 5px; background: #fef3c7; color: #92400e; }
+.nhac-badge { font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 5px; background: #fde8f2; color: var(--pink2); }
 .no-data { padding: 24px 0; text-align: center; color: var(--muted); font-size: 13px; }
 
 /* Sources */
@@ -567,6 +576,20 @@ body {
 }
 .search-result-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); }
 
+/* ── Mobile overlay ── */
+.mob-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,.45); z-index: 99;
+}
+.mob-overlay.open { display: block; }
+.mob-hamburger {
+  display: none; position: fixed; top: 12px; left: 12px; z-index: 200;
+  width: 40px; height: 40px; border-radius: 10px;
+  background: var(--sidebar); border: none; cursor: pointer;
+  flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+}
+.mob-hamburger span { display: block; width: 20px; height: 2px; background: #fff; border-radius: 2px; transition: all .2s; }
+
 @media (max-width: 1100px) { .stats-grid { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 900px) {
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
@@ -577,22 +600,34 @@ body {
   .page-header > div:last-child { width: 100%; }
   .search-box, .search-box input { width: 100%; }
   .filter-bar { overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; padding-bottom: 4px; }
-  .task-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
   .sources-grid { grid-template-columns: repeat(2, 1fr); }
+  /* Table mobile: horizontal scroll + ẩn cột phụ */
+  .task-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .task-table { min-width: 560px; }
+  .col-hide-mobile { display: none; }
+  /* Card view cho dept sections */
+  .dept-section-header { padding: 10px 12px; }
+  .dept-badges { gap: 4px; }
 }
 @media (max-width: 640px) {
-  .sidebar { width: 60px; }
-  .logo-name, .logo-sub, .nav-item span:not(.ni), .nav-group-label, .sidebar-gen, .user-info { display: none; }
-  .view { padding: 14px; }
+  /* Sidebar ẩn hoàn toàn, dùng hamburger */
+  .sidebar { position: fixed; left: -240px; top: 0; height: 100vh; width: 220px !important; z-index: 150; transition: left .25s ease; box-shadow: 4px 0 20px rgba(0,0,0,.2); }
+  .sidebar.mob-open { left: 0; }
+  .mob-hamburger { display: flex; }
+  .main { padding-top: 0; }
+  .view { padding: 56px 14px 24px; }
   .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
   .stat-card { padding: 14px 12px; gap: 10px; }
   .stat-num { font-size: 22px; }
-  .stat-icon { font-size: 22px; }
+  .stat-icon { font-size: 20px; }
   .login-box { width: calc(100vw - 32px); padding: 32px 20px; }
+  /* Modal full-width trên mobile */
+  .modal-bx { width: calc(100vw - 24px); padding: 20px 16px; }
 }
 @media (max-width: 400px) {
   .stat-icon { display: none; }
   .dp-stats { display: none; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 /* ── Pending updates & update modal ── */
@@ -605,8 +640,8 @@ body {
 .pending-meta{color:var(--muted);margin-top:2px;}
 .btn-appr{background:#f0fff4;border:1px solid var(--green);color:#276749;border-radius:6px;padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;}
 .btn-rejt{background:#fff5f5;border:1px solid var(--red);color:#c53030;border-radius:6px;padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;}
-.btn-upd{background:none;border:1px solid var(--accent);border-radius:6px;padding:3px 9px;font-size:11px;font-weight:600;cursor:pointer;color:var(--accent);transition:all .15s;margin-top:4px;display:inline-block;}
-.btn-upd:hover{background:var(--accent);color:#fff;}
+.btn-upd{background:none;border:1px solid var(--pink);border-radius:6px;padding:3px 9px;font-size:11px;font-weight:600;cursor:pointer;color:var(--pink);transition:all .15s;margin-top:4px;display:inline-block;}
+.btn-upd:hover{background:var(--pink);color:#fff;}
 .btn-sent{background:#f0fff4;border-color:#68d391;color:#276749;}
 .btn-sent:hover{background:#dcfce7;}
 .btn-exp{background:#48bb78;color:#fff;border:none;border-radius:7px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;}
@@ -653,13 +688,9 @@ body {
 <div id="login-overlay">
   <div class="login-box">
     <div class="login-logo">
-      <div class="ic">🏥</div>
-      <div class="brand-badge">
-        <span class="bb-name">BVTD Cơ Sở 2</span>
-        <span class="bb-sub">Tu Du Hospital</span>
-      </div>
+      <img src="__LOGO_URI__" alt="Logo Bệnh Viện Từ Dũ" style="width:88px;height:88px;object-fit:contain;margin-bottom:10px;">
       <div class="nm">Bệnh Viện <span>Từ Dũ</span></div>
-      <div class="sub">Hệ thống theo dõi tiến độ đầu việc</div>
+      <div class="sub">Cơ Sở 2 — Hệ thống theo dõi tiến độ đầu việc</div>
     </div>
     <div class="login-field">
       <label>Tên đăng nhập</label>
@@ -684,15 +715,22 @@ body {
 <!-- ═══ APP BODY ═══ -->
 <div id="app-body" style="display:none;flex-direction:row;min-height:100vh;">
 
+<!-- Mobile hamburger + overlay -->
+<button class="mob-hamburger" id="mob-ham" onclick="toggleSidebar()" aria-label="Mở menu">
+  <span></span><span></span><span></span>
+</button>
+<div class="mob-overlay" id="mob-overlay" onclick="toggleSidebar()"></div>
+
 <!-- Sidebar -->
 <nav class="sidebar">
   <div class="sidebar-logo">
-    <div class="logo-icon">🏥</div>
-    <div class="sidebar-brand">
-      <span class="sb-main">BVTD Cơ Sở 2</span>
-      <span class="sb-pink">Tu Du Hospital</span>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <img src="__LOGO_URI__" alt="Logo BVTD" style="width:40px;height:40px;object-fit:contain;border-radius:50%;background:#fff;padding:2px;flex-shrink:0;">
+      <div>
+        <div class="logo-name">BVTD Cơ Sở 2</div>
+        <div class="logo-sub" style="display:block !important;">Tu Du Hospital</div>
+      </div>
     </div>
-    <div class="logo-sub">Theo dõi tiến độ đầu việc</div>
   </div>
   <div class="nav-section">
     <div class="nav-group-label">Chính</div>
@@ -1031,6 +1069,23 @@ function doLogout() {
   document.getElementById('login-pass').value = '';
 }
 
+// ── Mobile sidebar toggle ───────────────────────────────────────────────────────
+function toggleSidebar() {
+  const sb = document.querySelector('.sidebar');
+  const ov = document.getElementById('mob-overlay');
+  sb.classList.toggle('mob-open');
+  ov.classList.toggle('open');
+}
+// Đóng sidebar khi chọn nav item trên mobile
+document.querySelectorAll('.nav-item').forEach(el => {
+  el.addEventListener('click', () => {
+    if (window.innerWidth <= 640) {
+      document.querySelector('.sidebar').classList.remove('mob-open');
+      document.getElementById('mob-overlay').classList.remove('open');
+    }
+  });
+});
+
 // ── Helpers ────────────────────────────────────────────────────────────────────
 function fmtDate(s) {
   if (!s) return '—';
@@ -1349,10 +1404,10 @@ function buildTasksView(filtered) {
         return `<tr>
           <td class="task-id">${t.id}</td>
           <td class="task-ten">${t.ten}${parseInt(t.nhac)>=2?`<span class="task-nhac">🔁${t.nhac}x</span>`:''}</td>
-          <td><span style="font-size:11px;color:var(--muted)">${t.phoi_hop||'—'}</span></td>
-          <td style="white-space:nowrap;font-size:12px">${fmtDate(t.bat_dau)}</td>
+          <td class="col-hide-mobile"><span style="font-size:11px;color:var(--muted)">${t.phoi_hop||'—'}</span></td>
+          <td class="col-hide-mobile" style="white-space:nowrap;font-size:12px">${fmtDate(t.bat_dau)}</td>
           <td style="white-space:nowrap;font-size:12px">${t.ket_thuc?fmtDate(t.ket_thuc):'—'}</td>
-          <td class="nguon-cell" title="${t.nguon}">${nguonShort}</td>
+          <td class="nguon-cell col-hide-mobile" title="${t.nguon}">${nguonShort}</td>
           <td>${statusPill(t.tt)}${updBtn}</td>
         </tr>`;
       }).join('');
@@ -1373,8 +1428,8 @@ function buildTasksView(filtered) {
           <div class="task-table-wrap" id="${uid}">
             <table class="task-table">
               <thead><tr>
-                <th>ID</th><th>Đầu việc</th><th>Phối hợp</th>
-                <th>Bắt đầu</th><th>Deadline</th><th>Biên Bản</th><th>Trạng thái</th>
+                <th>ID</th><th>Đầu việc</th><th class="col-hide-mobile">Phối hợp</th>
+                <th class="col-hide-mobile">Bắt đầu</th><th>Deadline</th><th class="col-hide-mobile">Biên Bản</th><th>Trạng thái</th>
               </tr></thead>
               <tbody>${rows}</tbody>
             </table>
@@ -1994,7 +2049,7 @@ if (savedAuth) {
 }
 </script>
 </body>
-</html>"""
+</html>""".replace("__LOGO_URI__", logo_uri)
 
 
 # ── Main ───────────────────────────────────────────────────────────────────────
