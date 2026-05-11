@@ -221,7 +221,7 @@ id,ten_dau_viec,nhom,phong_chinh,phong_phoi_hop,bat_dau,ket_thuc,trang_thai,so_l
 220,Cải tạo 2 bồn cây trên mặt đất trước phòng khám YHCT,hanh_chanh,HCQT,,2026-02-10,2026-02-13,tre_deadline,2,Nhắc lại từ BB 04/02,Biên bản 10/02/2026
 221,Bổ sung bảng cấm hút thuốc tại sảnh ngoài và dọc lối lên cấp cứu,hanh_chanh,HCQT,,2026-02-10,2026-02-13,da_hoan_thanh,1,,Biên bản 10/02/2026
 222,Dọn dẹp 5S; di dời xe CC cũ hư; trang bị TV lớn phòng họp CC; làm quầy nước; bổ sung ảnh BGĐ,hanh_chanh,HCQT,,2026-02-10,2026-02-13,da_hoan_thanh,1,,Biên bản 10/02/2026
-223,Trực tập trung tại khoa Cấp cứu (điều hành KHTH + Điều dưỡng + HCQT),hanh_chanh,KHTH,Điều dưỡng|HCQT,2026-02-10,2026-02-13,dang_thuc_hien,1,⚠️ Báo cáo từ phòng phối hợp (HCQT) — cần kiểm tra lại với phòng chính (KHTH),Biên bản 10/02/2026
+223,Trực tập trung tại khoa Cấp cứu (điều hành KHTH + Điều dưỡng + HCQT),hanh_chanh,KHTH,Điều dưỡng|HCQT,2026-02-10,2026-02-13,tre_deadline,1,⚠️ Báo cáo từ phòng phối hợp (HCQT) — cần kiểm tra lại với phòng chính (KHTH),Biên bản 10/02/2026
 224,Chuyển khoa Sản xuống tầng trệt gần Cấp cứu trong tuần,hanh_chanh,KHTH,Điều dưỡng|HCQT,2026-02-10,2026-02-13,da_hoan_thanh,1,⚠️ Báo cáo từ phòng phối hợp (HCQT) — cần kiểm tra lại với phòng chính (KHTH),Biên bản 10/02/2026
 225,Tích hợp phòng khám Sản + Phụ + Soi thành 1 phòng khám,hanh_chanh,KHTH,Điều dưỡng|HCQT,2026-02-10,2026-02-10,da_hoan_thanh,1,⚠️ Báo cáo từ phòng phối hợp (HCQT) — cần kiểm tra lại với phòng chính (KHTH),Biên bản 10/02/2026
 226,HCQT chuyển tủ lạnh KSNK về đúng vị trí; tủ sắt đến kho văn phòng phẩm,chuyen_mon,HCQT,,2026-02-10,2026-02-13,da_hoan_thanh,1,,Biên bản 10/02/2026
@@ -405,7 +405,7 @@ id,ten_dau_viec,nhom,phong_chinh,phong_phoi_hop,bat_dau,ket_thuc,trang_thai,so_l
 404,KHTH xây dựng bộ CLS thường quy theo triệu chứng/ICD bệnh,chuyen_mon,KHTH,,2026-04-21,2026-04-28,tre_deadline,1,,Biên bản 2026-04-21
 405,KHTH + Dược + YHCT triển khai thuốc thang/thuốc bốc tại CS2 (quy trình/vận chuyển/lưu trữ/hẹn BN),chuyen_mon,KHTH,Dược|YHCT,2026-04-21,2026-04-28,tre_deadline,1,,Biên bản 2026-04-21
 406,Điều dưỡng + CTXH thiết kế Poster nuôi con bằng sữa mẹ Human Milk (dạ dày trẻ sơ sinh tại hậu sản/GMHS/Nhi),quan_ly_khac,Điều dưỡng,CTXH,2026-04-21,2026-04-28,tre_deadline,1,,Biên bản 2026-04-21
-407,KHTH + Điều dưỡng + HCQT + VTTBYT rà soát TB KL họp T1-4/2026 và báo cáo hạng mục chưa/đang triển khai,quan_ly_khac,KHTH,Điều dưỡng|HCQT|VTTBYT,2026-04-21,2026-04-28,dang_thuc_hien,1,⚠️ Báo cáo từ phòng phối hợp (HCQT) — cần kiểm tra lại với phòng chính (KHTH),Biên bản 2026-04-21
+407,KHTH + Điều dưỡng + HCQT + VTTBYT rà soát TB KL họp T1-4/2026 và báo cáo hạng mục chưa/đang triển khai,quan_ly_khac,KHTH,Điều dưỡng|HCQT|VTTBYT,2026-04-21,2026-04-28,tre_deadline,1,⚠️ Báo cáo từ phòng phối hợp (HCQT) — cần kiểm tra lại với phòng chính (KHTH),Biên bản 2026-04-21
 408,Điều dưỡng + HCQT giám sát đồng phục NB (áo người bệnh) và người nhà (áo vàng) đúng quy định,quan_ly_khac,Điều dưỡng,HCQT,2026-04-21,2026-04-28,tre_deadline,1,,Biên bản 2026-04-21
 409,VTTBYT + HCQT rà soát kho TTB không nhận - niêm phong và khóa (ghi ngày + chữ ký),hanh_chanh,VTTBYT,HCQT,2026-04-21,2026-04-28,tre_deadline,1,,Biên bản 2026-04-21
 410,VTTBYT rà soát TTB phòng mổ và chuyển vào phòng mổ,hanh_chanh,VTTBYT,,2026-04-21,2026-04-28,tre_deadline,1,,Biên bản 2026-04-21
