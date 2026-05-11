@@ -248,7 +248,7 @@ id,ten_dau_viec,nhom,phong_chinh,phong_phoi_hop,bat_dau,ket_thuc,trang_thai,so_l
 247,KHTH + TCCB lên lịch và giám sát BS trực các khoa tập trung tại CC ca tối,quan_ly_khac,KHTH,TCCB,2026-02-10,2026-02-13,tre_deadline,1,,Biên bản 10/02/2026
 248,Điều dưỡng quản lý giấy chuyển viện,quan_ly_khac,Điều dưỡng,,2026-02-10,2026-02-13,tre_deadline,1,,Biên bản 10/02/2026
 249,KHTH + CTXH học tập khám đoàn tại BV Lê Văn Thịnh trước Tết; báo cáo GĐ sau Tết,quan_ly_khac,KHTH,CTXH,2026-02-10,2026-02-13,tre_deadline,2,Nhắc lại từ BB 04/02,Biên bản 10/02/2026
-250,TCCB rà soát triển khai nhân sự đi từ 3 tháng trở lên (không đi 1 tháng hay tuần),quan_ly_khac,TCCB,,2026-02-10,2026-02-13,tre_deadline,2,,Biên bản 10/02/2026
+250,TCCB rà soát triển khai nhân sự đi từ 3 tháng trở lên (không đi 1 tháng hay tuần),quan_ly_khac,TCCB,,2026-02-10,2026-02-13,tre_deadline,3,Nhắc lại BB 05/05/2026: quyết định thời gian công tác ít nhất 3 tháng đặc biệt cấp trưởng/lãnh đạo,Biên bản 10/02/2026
 251,TCCB + KHTH + Điều dưỡng rà soát lịch trực Tết; đặc biệt Thận nhân tạo,quan_ly_khac,TCCB,KHTH|Điều dưỡng,2026-02-10,2026-02-13,tre_deadline,1,,Biên bản 10/02/2026
 252,HCQT đảm bảo ăn uống nhân viên trong Tết không bị gián đoạn,quan_ly_khac,HCQT,,2026-02-10,2026-02-13,da_hoan_thanh,1,,Biên bản 10/02/2026
 253,Công Đoàn + TCCB + ĐTN + ĐD + CTXH lên kế hoạch thăm sản phụ đã sanh và BN khó khăn,quan_ly_khac,Công Đoàn,TCCB|Đoàn Thanh niên|Điều dưỡng|CTXH,2026-02-10,2026-02-13,tre_deadline,1,,Biên bản 10/02/2026
@@ -444,3 +444,4 @@ id,ten_dau_viec,nhom,phong_chinh,phong_phoi_hop,bat_dau,ket_thuc,trang_thai,so_l
 443,KHTH + Điều dưỡng + TCCB vẽ sơ đồ nhân sự từng khoa (tên cụ thể BS/ĐD/HS/KTV),quan_ly_khac,KHTH,Điều dưỡng|TCCB,2026-05-05,2026-05-12,dang_thuc_hien,1,,Biên bản 2026-05-05
 444,TCCB rà soát nhân sự CS2 cần truyền tải năng lượng tích cực,quan_ly_khac,TCCB,,2026-05-05,2026-05-12,dang_thuc_hien,1,,Biên bản 2026-05-05
 445,TCCB + KHTH + Điều dưỡng bố trí lịch trực/làm việc đúng chính sách; ngày nghỉ/lễ/Tết chu đáo,quan_ly_khac,TCCB,KHTH|Điều dưỡng,2026-05-05,2026-05-12,dang_thuc_hien,1,,Biên bản 2026-05-05
+446,TCCB rà soát và giám sát nhân sự luân chuyển công tác cần có biên bản bàn giao công việc gửi về TCCB,quan_ly_khac,TCCB,,2026-05-05,2026-05-12,dang_thuc_hien,1,,Biên bản 2026-05-05
