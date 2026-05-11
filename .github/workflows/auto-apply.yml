@@ -1,0 +1,35 @@
+name: Auto Apply Dashboard Updates
+
+on:
+  push:
+    paths:
+      - 'data/pending_updates.json'
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Apply pending updates & regenerate dashboard
+        run: python scripts/apply_pending.py
+
+      - name: Commit & push results
+        run: |
+          git config user.name  "BVTD Bot"
+          git config user.email "bot@bvtd.local"
+          git add data/tasks.csv data/tasks_index.json \
+                  data/report_versions.json data/update_log.csv \
+                  tien_do.html || true
+          git diff --cached --quiet \
+            || git commit -m "auto: áp dụng cập nhật dashboard $(date +'%d/%m/%Y %H:%M')"
+          git push

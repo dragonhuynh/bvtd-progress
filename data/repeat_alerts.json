@@ -1,0 +1,179 @@
+{
+  "_meta": "Nhiem vu duoc nhac lap lai nhieu lan boi giam doc",
+  "alerts": {
+    "KHTH": [
+      {
+        "chu_de": "In toa thuốc tập trung (in 1 trạm tất cả phiếu Y)",
+        "so_lan_nhac": 3,
+        "task_ids": [5, 7, 132],
+        "ngay_bat_dau": "2025-12-16",
+        "cac_bien_ban": [
+          "BC Tiến độ họp BS Ngọc Hải 16/12/2025",
+          "Kết luận họp BS Ngọc Hải 29/12/2025",
+          "Biên bản 13/01/2026"
+        ],
+        "trang_thai_hien_tai": "tre_deadline",
+        "danh_gia": "cham_trien_khai",
+        "ghi_chu_gd": "Nhắc lại lần 3 - triển khai chiều T3 13/01/2026"
+      },
+      {
+        "chu_de": "Thận nhân tạo (kết nối HIS-BHYT + nhân sự hành chính + đẩy dữ liệu)",
+        "so_lan_nhac": 4,
+        "task_ids": [31, 95, 110, 111, 184, 203, 204, 242, 277, 278],
+        "ngay_bat_dau": "2025-12-16",
+        "cac_bien_ban": [
+          "BC Tiến độ họp BS Ngọc Hải 16/12/2025",
+          "Biên bản 06/01/2026",
+          "Biên bản 13/01/2026",
+          "Biên bản 04/02/2026",
+          "Biên bản 10/02/2026",
+          "Biên bản 25/02/2026"
+        ],
+        "trang_thai_hien_tai": "dang_thuc_hien",
+        "danh_gia": "can_theo_doi",
+        "ghi_chu_gd": "Nhắc lại liên tục qua 6 biên bản - chủ đề trọng điểm cần đặc biệt theo dõi"
+      },
+      {
+        "chu_de": "Diễn tập cấp cứu (báo động đỏ + CC hàng loạt) định kỳ hàng tuần",
+        "so_lan_nhac": 3,
+        "task_ids": [86, 195, 196, 197, 243, 244, 273],
+        "ngay_bat_dau": "2026-01-29",
+        "cac_bien_ban": [
+          "Biên bản 29/01/2026",
+          "Biên bản 04/02/2026",
+          "Biên bản 10/02/2026",
+          "Biên bản 25/02/2026"
+        ],
+        "trang_thai_hien_tai": "dang_thuc_hien",
+        "danh_gia": "cham_trien_khai",
+        "ghi_chu_gd": "Nhắc lại 3 cuộc họp liên tiếp - chưa thực hiện định kỳ hàng tuần"
+      },
+      {
+        "chu_de": "Quy trình và theo dõi chuyển tuyến (bảng kiểm + theo dấu BN + báo cáo chi tiết)",
+        "so_lan_nhac": 3,
+        "task_ids": [133, 175, 176, 177, 235, 236, 267, 268, 269],
+        "ngay_bat_dau": "2026-01-13",
+        "cac_bien_ban": [
+          "Biên bản 13/01/2026",
+          "Biên bản 04/02/2026",
+          "Biên bản 10/02/2026",
+          "Biên bản 25/02/2026"
+        ],
+        "trang_thai_hien_tai": "dang_thuc_hien",
+        "danh_gia": "cham_trien_khai",
+        "ghi_chu_gd": "Nhắc lại 4 biên bản - quy trình chuyển tuyến vẫn chưa chuẩn hóa đầy đủ"
+      },
+      {
+        "chu_de": "Tiêm chủng TUDU Vaccine (Nhi + người lớn + pháp lý + kế hoạch)",
+        "so_lan_nhac": 2,
+        "task_ids": [193, 194, 206, 248, 249, 250],
+        "ngay_bat_dau": "2026-02-04",
+        "cac_bien_ban": [
+          "Biên bản 04/02/2026",
+          "Biên bản 25/02/2026"
+        ],
+        "trang_thai_hien_tai": "dang_thuc_hien",
+        "danh_gia": "can_theo_doi",
+        "ghi_chu_gd": "Nhắc lại 2 biên bản liên tiếp - tiêm chủng là dịch vụ ưu tiên triển khai"
+      },
+      {
+        "chu_de": "Đăng ký DMKT nội soi (tiêu hóa + TMH) với Sở Y tế",
+        "so_lan_nhac": 2,
+        "task_ids": [182, 263],
+        "ngay_bat_dau": "2026-02-04",
+        "cac_bien_ban": [
+          "Biên bản 04/02/2026",
+          "Biên bản 25/02/2026"
+        ],
+        "trang_thai_hien_tai": "dang_thuc_hien",
+        "danh_gia": "can_theo_doi",
+        "ghi_chu_gd": "Nhắc lại - bổ sung thêm nội soi TMH; cần đẩy nhanh hồ sơ Sở Y tế"
+      },
+      {
+        "chu_de": "Khám đoàn - học tập mô hình tại BV Lê Văn Thịnh",
+        "so_lan_nhac": 2,
+        "task_ids": [209, 249],
+        "ngay_bat_dau": "2026-02-04",
+        "cac_bien_ban": [
+          "Biên bản 04/02/2026",
+          "Biên bản 10/02/2026"
+        ],
+        "trang_thai_hien_tai": "dang_thuc_hien",
+        "danh_gia": "can_theo_doi",
+        "ghi_chu_gd": "Nhắc lại - cần báo cáo GĐ kết quả học tập sau Tết"
+      }
+    ],
+    "HCQT": [
+      {
+        "chu_de": "Vườn thuốc nam (khảo sát + quy hoạch + triển khai)",
+        "so_lan_nhac": 2,
+        "task_ids": [109, 118],
+        "ngay_bat_dau": "2026-01-06",
+        "cac_bien_ban": [
+          "Biên bản 06/01/2026",
+          "Biên bản 13/01/2026"
+        ],
+        "trang_thai_hien_tai": "dang_thuc_hien",
+        "danh_gia": "can_theo_doi",
+        "ghi_chu_gd": "Nhắc lại 13/01 - quy hoạch khu vực vườn thuốc nam"
+      },
+      {
+        "chu_de": "Cửa kiên cố tại Khoa Cấp cứu (4-5 vị trí)",
+        "so_lan_nhac": 2,
+        "task_ids": [102],
+        "ngay_bat_dau": "2026-01-06",
+        "cac_bien_ban": [
+          "Biên bản 06/01/2026",
+          "Biên bản 13/01/2026"
+        ],
+        "trang_thai_hien_tai": "dang_thuc_hien",
+        "danh_gia": "can_theo_doi",
+        "ghi_chu_gd": "13/01 nhắc lại - mở rộng thành 5 vị trí"
+      },
+      {
+        "chu_de": "Cải tạo bồn cây và khuôn viên trước phòng khám YHCT",
+        "so_lan_nhac": 2,
+        "task_ids": [151, 220],
+        "ngay_bat_dau": "2026-02-04",
+        "cac_bien_ban": [
+          "Biên bản 04/02/2026",
+          "Biên bản 10/02/2026"
+        ],
+        "trang_thai_hien_tai": "dang_thuc_hien",
+        "danh_gia": "can_theo_doi",
+        "ghi_chu_gd": "Nhắc lại 10/02 - chưa hoàn thành trước Tết"
+      }
+    ],
+    "Điều dưỡng": [
+      {
+        "chu_de": "Đồng phục người bệnh và nhân viên y tế",
+        "so_lan_nhac": 3,
+        "task_ids": [62, 211],
+        "ngay_bat_dau": "2025-12-29",
+        "cac_bien_ban": [
+          "Kết luận họp BS Ngọc Hải 29/12/2025",
+          "Biên bản 06/01/2026",
+          "Biên bản 04/02/2026"
+        ],
+        "trang_thai_hien_tai": "tre_deadline",
+        "danh_gia": "cham_trien_khai",
+        "ghi_chu_gd": "Nhắc lại lần 3 - size không chuẩn gây mất thẩm mỹ cần khắc phục ngay"
+      }
+    ],
+    "TCCB": [
+      {
+        "chu_de": "Quản lý kho CS2 (ra quyết định giao Khoa Dược)",
+        "so_lan_nhac": 2,
+        "task_ids": [207, 278],
+        "ngay_bat_dau": "2026-02-04",
+        "cac_bien_ban": [
+          "Biên bản 04/02/2026",
+          "Biên bản 25/02/2026"
+        ],
+        "trang_thai_hien_tai": "dang_thuc_hien",
+        "danh_gia": "can_theo_doi",
+        "ghi_chu_gd": "Nhắc lại - cần ra quyết định chính thức"
+      }
+    ]
+  }
+}

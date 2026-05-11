@@ -1,0 +1,1904 @@
+"""
+generate_dashboard.py — Sinh dashboard.html theo phong cach project management hien dai
+"""
+import json, csv, re
+from pathlib import Path
+from datetime import datetime, date
+from collections import defaultdict
+
+ROOT = Path(__file__).parent.parent
+
+DEPT_NORMALIZE = {
+    "Bs Hoàng":          "KHTH",
+    "Bảo vệ":            "HCQT",
+    "Đoàn Thanh niên":   "Đoàn Thanh Niên",
+    "ĐTN":               "Đoàn Thanh Niên",
+    "Điều dưỡng trưởng": "Điều dưỡng",
+    "K.CC":              "K.Cấp cứu",
+    "CC":                "K.Cấp cứu",
+    "K.XN":              "XN",
+    "Khoa Dược":         "Dược",
+    "K.PHCN":            "K.PHCN",
+}
+
+def normalize_dept(d):
+    return DEPT_NORMALIZE.get(d, d)
+
+
+def extract_date_key(name: str) -> str | None:
+    """Extract YYMMDD from a name containing dd/mm/yy pattern."""
+    m = re.search(r'\b(\d{2})/(\d{2})/(\d{2})\b', name)
+    if m:
+        return m.group(3) + m.group(2) + m.group(1)
+    return None
+
+
+def load_json_file(p: Path) -> dict:
+    if not p.exists():
+        return {}
+    try:
+        return json.loads(p.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return {}
+
+
+def build_pdf_map() -> dict:
+    """Scan bien-ban-da-ky/ and return {YYMMDD: filename} (first match wins)."""
+    folder = ROOT / "bien-ban-da-ky"
+    pdf_map = {}
+    if not folder.exists():
+        return pdf_map
+    for f in sorted(folder.glob("*.pdf")):
+        prefix = f.name[:6]
+        if prefix.isdigit() and prefix not in pdf_map:
+            pdf_map[prefix] = f.name
+    return pdf_map
+
+
+def normalize_source_name(name: str) -> str:
+    """Convert YYYY-MM-DD → dd/mm/yy and dd/mm/yyyy → dd/mm/yy in source names."""
+    # YYYY-MM-DD pattern
+    m = re.search(r'\b(\d{4})-(\d{2})-(\d{2})\b', name)
+    if m:
+        y, mo, d = m.group(1)[2:], m.group(2), m.group(3)
+        return name[:m.start()] + f"{d}/{mo}/{y}" + name[m.end():]
+    # dd/mm/yyyy pattern (4-digit year → 2-digit)
+    m = re.search(r'\b(\d{2}/\d{2}/)(\d{4})\b', name)
+    if m:
+        return name[:m.start(2)] + m.group(2)[2:] + name[m.end():]
+    return name
+
+
+# ── Data loading ───────────────────────────────────────────────────────────────
+
+def load_tasks():
+    p = ROOT / "data" / "tasks.csv"
+    if not p.exists():
+        return []
+    with open(p, encoding="utf-8") as f:
+        return list(csv.DictReader(f))
+
+
+def auto_overdue(tasks):
+    today = date.today().isoformat()
+    for t in tasks:
+        if t["trang_thai"] == "dang_thuc_hien" and t.get("ket_thuc") and t["ket_thuc"] < today:
+            t["trang_thai"] = "tre_deadline"
+
+
+# ── Stats computation ──────────────────────────────────────────────────────────
+
+def compute(tasks):
+    auto_overdue(tasks)
+
+    total = len(tasks)
+    done  = sum(1 for t in tasks if t["trang_thai"] == "da_hoan_thanh")
+    active = sum(1 for t in tasks if t["trang_thai"] == "dang_thuc_hien")
+    late  = sum(1 for t in tasks if t["trang_thai"] == "tre_deadline")
+
+    # Monthly tasks added (last 8 months)
+    monthly = defaultdict(int)
+    for t in tasks:
+        if t.get("bat_dau") and len(t["bat_dau"]) >= 7:
+            monthly[t["bat_dau"][:7]] += 1
+    month_keys = sorted(monthly.keys())[-8:]
+
+    # Department breakdown — normalized
+    dept = defaultdict(lambda: {"total": 0, "done": 0, "active": 0, "late": 0})
+    for t in tasks:
+        raw = (t.get("phong_chinh") or "Khác").strip()
+        d = normalize_dept(raw)
+        dept[d]["total"] += 1
+        s = t["trang_thai"]
+        if s == "da_hoan_thanh":    dept[d]["done"] += 1
+        elif s == "dang_thuc_hien": dept[d]["active"] += 1
+        else:                        dept[d]["late"] += 1
+
+    dept_list = sorted(
+        [{"name": k, **v} for k, v in dept.items()],
+        key=lambda x: -x["total"]
+    )
+
+    # Nhom breakdown
+    nhom = defaultdict(int)
+    for t in tasks:
+        nhom[t.get("nhom") or "quan_ly_khac"] += 1
+
+    # Urgent (overdue tasks) — top 20
+    urgent = sorted(
+        [t for t in tasks if t["trang_thai"] == "tre_deadline"],
+        key=lambda t: t.get("ket_thuc") or "9999"
+    )
+
+    # Repeat tasks (so_lan_nhac >= 2)
+    repeat_tasks = sorted(
+        [t for t in tasks if int(t.get("so_lan_nhac") or "1") >= 2],
+        key=lambda t: -int(t.get("so_lan_nhac") or "1")
+    )
+
+    # Source documents — normalize date format in names
+    sources = {}
+    for t in tasks:
+        src_raw = (t.get("nguon_van_ban") or "").strip()
+        src = normalize_source_name(src_raw) if src_raw else ""
+        if src and src not in sources:
+            sources[src] = {"date": t.get("bat_dau", ""), "count": 0}
+        if src:
+            sources[src]["count"] += 1
+    src_list = sorted(sources.items(), key=lambda x: x[1]["date"])
+    _pdf_map = build_pdf_map()
+
+    # Build task_id → last_reminder_date / cac_bien_ban from repeat_alerts.json
+    _repeat_data = load_json_file(ROOT / "data" / "repeat_alerts.json")
+    _task_last_reminder: dict[str, str] = {}
+    _task_bien_ban: dict[str, list] = {}
+    for _dept_alerts in _repeat_data.get("alerts", {}).values():
+        for _alert in _dept_alerts:
+            _bbs = _alert.get("cac_bien_ban", [])
+            _last_date = None
+            for _bb in reversed(_bbs):
+                _m = re.search(r'\b(\d{2})/(\d{2})/(\d{4})\b', _bb)
+                if _m:
+                    _last_date = f"{_m.group(3)}-{_m.group(2)}-{_m.group(1)}"
+                    break
+            for _tid in _alert.get("task_ids", []):
+                _key = str(int(_tid))
+                if _last_date and (_key not in _task_last_reminder or _last_date > _task_last_reminder[_key]):
+                    _task_last_reminder[_key] = _last_date
+                if _key not in _task_bien_ban:
+                    _task_bien_ban[_key] = _bbs
+
+    # Slim tasks for JS — normalized dept
+    tasks_slim = [
+        {
+            "id":      t["id"],
+            "ten":     t["ten_dau_viec"],
+            "nhom":    t.get("nhom") or "quan_ly_khac",
+            "phong":   normalize_dept((t.get("phong_chinh") or "").strip()),
+            "phoi_hop": (t.get("phong_phoi_hop") or "").replace("|", ", "),
+            "bat_dau": t.get("bat_dau") or "",
+            "ket_thuc": t.get("ket_thuc") or "",
+            "tt":      t["trang_thai"],
+            "nhac":    t.get("so_lan_nhac") or "1",
+            "ghi_chu": t.get("ghi_chu") or "",
+            "nguon":   normalize_source_name((t.get("nguon_van_ban") or "").strip()),
+            "last_reminder": _task_last_reminder.get(t["id"], ""),
+            "cac_bien_ban":  _task_bien_ban.get(t["id"], []),
+        }
+        for t in tasks
+    ]
+
+    # Today label in Vietnamese
+    today_obj = datetime.now()
+    wd_vn = ["Thứ Hai","Thứ Ba","Thứ Tư","Thứ Năm","Thứ Sáu","Thứ Bảy","Chủ Nhật"]
+    today_vn = f"{wd_vn[today_obj.weekday()]}, {today_obj.strftime('%d/%m/%Y')}"
+
+    return {
+        "total": total, "done": done, "active": active, "late": late,
+        "rate": round(done / total * 100) if total else 0,
+        "months": month_keys,
+        "monthly_counts": [monthly[m] for m in month_keys],
+        "dept": dept_list,
+        "nhom": dict(nhom),
+        "urgent": [
+            {"id": t["id"], "ten": t["ten_dau_viec"],
+             "phong": normalize_dept(t.get("phong_chinh", "")),
+             "ket_thuc": t.get("ket_thuc", ""), "nhac": t.get("so_lan_nhac", "1")}
+            for t in urgent[:20]
+        ],
+        "repeats": [
+            {"id": t["id"], "ten": t["ten_dau_viec"],
+             "phong": normalize_dept(t.get("phong_chinh", "")),
+             "nhom": t.get("nhom") or "quan_ly_khac",
+             "nhac": t.get("so_lan_nhac", "1"),
+             "ket_thuc": t.get("ket_thuc", ""),
+             "tt": t["trang_thai"],
+             "nguon": normalize_source_name((t.get("nguon_van_ban") or "").strip()),
+             "cac_bien_ban": _task_bien_ban.get(t["id"], []),
+             "last_reminder": _task_last_reminder.get(t["id"], "")}
+            for t in repeat_tasks
+        ],
+        "sources": [
+            {"name": k, "count": v["count"], "date": v["date"],
+             "pdf": _pdf_map.get(extract_date_key(k))}
+            for k, v in src_list
+        ],
+        "tasks": tasks_slim,
+        "generated": datetime.now().strftime("%d/%m/%Y %H:%M"),
+        "today": today_obj.strftime("%d/%m/%Y"),
+        "today_vn": today_vn,
+        "version": load_json_file(ROOT / "data" / "report_versions.json").get("version", "—"),
+    }
+
+
+# ── HTML template ──────────────────────────────────────────────────────────────
+
+def build_html(data: dict) -> str:
+    data_json = json.dumps(data, ensure_ascii=False).replace('</script>', r'<\/script>')
+
+    return """<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BVTD CS2 — Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg:      #f5e6d8;
+  --sidebar: #1c2341;
+  --accent:  #f47c3c;
+  --accent2: #e06528;
+  --white:   #ffffff;
+  --text:    #1a202c;
+  --muted:   #718096;
+  --border:  #e2e8f0;
+  --green:   #48bb78;
+  --blue:    #4299e1;
+  --red:     #f56565;
+  --orange:  #ed8936;
+  --purple:  #9f7aea;
+  --r: 14px;
+  --sh: 0 2px 16px rgba(0,0,0,.09);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Segoe UI', -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  min-height: 100vh;
+}
+
+/* ── Login overlay ── */
+#login-overlay {
+  position: fixed; inset: 0;
+  background: linear-gradient(135deg, #1c2341 0%, #2d3a6b 100%);
+  z-index: 9999;
+  display: flex; align-items: center; justify-content: center;
+}
+.login-box {
+  background: #fff; border-radius: 20px; padding: 44px 40px;
+  width: 380px; box-shadow: 0 24px 64px rgba(0,0,0,.45);
+}
+.login-logo { text-align: center; margin-bottom: 28px; }
+.login-logo .ic { font-size: 48px; }
+.login-logo .nm { font-size: 22px; font-weight: 800; color: #1c2341; margin-top: 8px; }
+.login-logo .sub { font-size: 13px; color: #718096; margin-top: 4px; }
+.login-field { margin-bottom: 16px; }
+.login-field label { display: block; font-size: 12px; font-weight: 700; color: #4a5568; margin-bottom: 6px; text-transform: uppercase; letter-spacing: .04em; }
+.login-field input {
+  width: 100%; padding: 11px 14px;
+  border: 1.5px solid #e2e8f0; border-radius: 9px;
+  font-size: 14px; outline: none; transition: border .15s;
+  font-family: inherit;
+}
+.login-field input:focus { border-color: #f47c3c; }
+#login-err { color: #c53030; font-size: 12px; margin-bottom: 12px; display: none; padding: 8px 12px; background: #fff5f5; border-radius: 6px; }
+.login-btn {
+  width: 100%; padding: 13px;
+  background: #f47c3c; color: #fff; border: none;
+  border-radius: 9px; font-size: 15px; font-weight: 700;
+  cursor: pointer; transition: background .15s; font-family: inherit;
+}
+.login-btn:hover { background: #e06528; }
+.login-hint { font-size: 11px; color: #718096; text-align: center; margin-top: 14px; }
+
+/* ── App body ── */
+#app-body { display: none; min-height: 100vh; }
+
+/* Sidebar */
+.sidebar {
+  width: 220px; min-height: 100vh;
+  background: var(--sidebar);
+  display: flex; flex-direction: column;
+  position: sticky; top: 0; height: 100vh;
+  overflow-y: auto; flex-shrink: 0; z-index: 100;
+}
+.sidebar-logo { padding: 24px 20px 20px; border-bottom: 1px solid rgba(255,255,255,.08); }
+.logo-icon { font-size: 32px; }
+.logo-name { font-size: 15px; font-weight: 700; color: #fff; margin-top: 8px; }
+.logo-sub  { font-size: 11px; color: rgba(255,255,255,.45); margin-top: 2px; }
+.nav-section { padding: 14px 0 8px; flex: 1; }
+.nav-group-label {
+  font-size: 10px; font-weight: 600; color: rgba(255,255,255,.3);
+  text-transform: uppercase; letter-spacing: .08em;
+  padding: 0 20px 6px; margin-top: 8px;
+}
+.nav-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 20px; cursor: pointer;
+  border-left: 3px solid transparent;
+  transition: all .15s;
+  color: rgba(255,255,255,.58); font-size: 13.5px; font-weight: 500;
+  text-decoration: none; user-select: none;
+}
+.nav-item:hover { background: rgba(255,255,255,.05); color: rgba(255,255,255,.9); }
+.nav-item.active { background: rgba(244,124,60,.14); border-left-color: var(--accent); color: #fff; }
+.nav-item .ni { font-size: 16px; width: 20px; text-align: center; flex-shrink: 0; }
+.sidebar-footer { padding: 12px 0 20px; border-top: 1px solid rgba(255,255,255,.07); }
+.sidebar-gen { font-size: 10px; color: rgba(255,255,255,.22); padding: 6px 20px; text-align: center; }
+.user-info {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 16px; margin: 0 8px 4px;
+  background: rgba(255,255,255,.07); border-radius: 8px;
+}
+.user-badge {
+  font-size: 12px; font-weight: 700; color: #fff;
+  background: var(--accent); padding: 3px 10px; border-radius: 5px;
+}
+.logout-btn {
+  font-size: 11px; color: rgba(255,255,255,.4);
+  background: none; border: none; cursor: pointer; padding: 2px 4px;
+  font-family: inherit; transition: color .15s;
+}
+.logout-btn:hover { color: rgba(255,255,255,.9); }
+
+/* Main */
+.main { flex: 1; overflow-y: auto; min-width: 0; }
+.view { display: none; padding: 28px 32px 40px; }
+.view.active { display: block; }
+
+/* Page header */
+.page-header {
+  display: flex; align-items: flex-start;
+  justify-content: space-between; margin-bottom: 24px;
+  flex-wrap: wrap; gap: 12px;
+}
+.page-header h1 { font-size: 22px; font-weight: 700; }
+.page-header .subtitle { color: var(--muted); margin-top: 3px; font-size: 13px; }
+.search-box input {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 8px; padding: 9px 16px; font-size: 13px;
+  width: 240px; outline: none; transition: border .15s;
+}
+.search-box input:focus { border-color: var(--accent); }
+
+/* Stats grid */
+.stats-grid {
+  display: grid; grid-template-columns: repeat(5, 1fr);
+  gap: 16px; margin-bottom: 20px;
+}
+.stat-card {
+  background: var(--white); border-radius: var(--r);
+  padding: 20px 22px; box-shadow: var(--sh);
+  display: flex; align-items: center; gap: 16px;
+}
+.stat-icon { font-size: 28px; }
+.stat-num  { font-size: 28px; font-weight: 800; line-height: 1; }
+.stat-label { font-size: 12px; color: var(--muted); margin-top: 4px; font-weight: 500; }
+.stat-total .stat-num  { color: #4299e1; }
+.stat-done  .stat-num  { color: #48bb78; }
+.stat-active .stat-num { color: #ed8936; }
+.stat-late  .stat-num  { color: #f56565; }
+.stat-rate  .stat-num  { color: #9f7aea; }
+
+/* Btn */
+.btn-primary {
+  background: var(--accent); color: #fff; border: none;
+  border-radius: 8px; padding: 10px 20px;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  transition: background .15s; white-space: nowrap;
+}
+.btn-primary:hover { background: var(--accent2); }
+
+/* Layout */
+.two-col   { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.mt-16 { margin-top: 16px; }
+
+/* Card */
+.card { background: var(--white); border-radius: var(--r); padding: 20px 22px; box-shadow: var(--sh); }
+.card.full-width { grid-column: 1/-1; }
+.card-header {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;
+}
+.card-header h3 { font-size: 15px; font-weight: 700; }
+.see-more { font-size: 12px; color: var(--accent); cursor: pointer; font-weight: 600; text-decoration: none; }
+.see-more:hover { text-decoration: underline; }
+
+/* Urgent list */
+.urgent-list { list-style: none; max-height: 400px; overflow-y: auto; }
+.urgent-item {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border);
+}
+.urgent-item:last-child { border-bottom: none; }
+.urgent-body { flex: 1; min-width: 0; }
+.urgent-id {
+  font-size: 10px; font-weight: 700; color: var(--muted);
+  background: #f0f4f8; padding: 1px 6px; border-radius: 4px;
+  display: inline-block; margin-bottom: 3px;
+}
+.urgent-ten {
+  font-size: 13px; font-weight: 500; line-height: 1.4;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.urgent-phong { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.urgent-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0; }
+.date-badge { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 5px; white-space: nowrap; }
+.date-badge.red    { background: #fff5f5; color: #c53030; }
+.date-badge.orange { background: #fffaf0; color: #c05621; }
+.date-badge.green  { background: #f0fff4; color: #276749; }
+.nhac-badge { font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 5px; background: #fef3c7; color: #92400e; }
+.no-data { padding: 24px 0; text-align: center; color: var(--muted); font-size: 13px; }
+
+/* Sources */
+.sources-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+.source-card {
+  background: var(--bg); border-radius: 10px; padding: 14px 16px;
+  border: 1px solid var(--border);
+  transition: transform .18s, box-shadow .18s, border-color .18s;
+}
+.source-card.clickable { cursor: pointer; }
+.source-card.clickable:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  border-color: var(--accent);
+}
+.source-name {
+  font-size: 12px; font-weight: 600; line-height: 1.4; margin-bottom: 8px;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.source-count { font-size: 22px; font-weight: 800; color: var(--accent); }
+.source-date  { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.source-pdf-icon { margin-top: 6px; font-size: 10px; font-weight: 600; color: var(--accent); }
+.source-no-pdf  { margin-top: 6px; font-size: 10px; color: var(--muted); }
+
+/* Filter bar */
+.filter-bar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.filter-bar select, .filter-bar input {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 8px; padding: 8px 14px; font-size: 13px; outline: none; transition: border .15s;
+}
+.filter-bar select:focus, .filter-bar input:focus { border-color: var(--accent); }
+.filter-bar input { width: 200px; }
+
+/* Nhom section headers in task view */
+.nhom-section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 20px; margin: 24px 0 4px;
+  background: var(--sidebar); border-radius: var(--r);
+  color: #fff;
+}
+.nhom-section-header:first-child { margin-top: 0; }
+.nhom-label { font-size: 15px; font-weight: 700; }
+
+/* Task dept sections */
+.dept-section { margin-bottom: 12px; }
+.dept-section-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px; background: var(--white);
+  border-radius: var(--r) var(--r) 0 0;
+  border-bottom: 2px solid var(--border);
+  cursor: pointer; user-select: none;
+}
+.dept-section-header:hover { background: #f9f9f9; }
+.dept-section-avatar { width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0; }
+.dept-section-name { font-size: 14px; font-weight: 700; flex: 1; }
+.dept-badges { display: flex; gap: 6px; flex-wrap: wrap; }
+.badge { font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 5px; }
+.badge-green  { background: #f0fff4; color: #276749; }
+.badge-orange { background: #fffaf0; color: #c05621; }
+.badge-red    { background: #fff5f5; color: #c53030; }
+.badge-blue   { background: #ebf8ff; color: #2c5282; }
+.badge-gray   { background: #f7fafc; color: #4a5568; }
+.toggle-ic    { font-size: 12px; color: var(--muted); }
+
+.task-table-wrap { background: var(--white); border-radius: 0 0 var(--r) var(--r); overflow-x: auto; box-shadow: var(--sh); }
+.task-table-wrap.hidden { display: none; }
+.task-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.task-table th {
+  background: #f7fafc; padding: 10px 14px; text-align: left;
+  font-weight: 600; color: var(--muted); font-size: 11px;
+  text-transform: uppercase; letter-spacing: .04em;
+  white-space: nowrap; border-bottom: 1px solid var(--border);
+}
+.task-table td { padding: 11px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.task-table tr:last-child td { border-bottom: none; }
+.task-table tr:hover td { background: #fafbfc; }
+.task-id { font-size: 11px; font-weight: 700; color: var(--muted); white-space: nowrap; }
+.task-ten { line-height: 1.45; max-width: 320px; }
+.task-nhac { font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 4px; background: #fef3c7; color: #92400e; margin-left: 5px; }
+.status-pill { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; white-space: nowrap; display: inline-block; }
+.status-done   { background: #f0fff4; color: #276749; }
+.status-active { background: #ebf8ff; color: #2c5282; }
+.status-late   { background: #fff5f5; color: #c53030; }
+.nguon-cell { font-size: 11px; color: var(--muted); white-space: nowrap; max-width: 140px; overflow: hidden; text-overflow: ellipsis; }
+
+/* Dept progress bars */
+.dept-progress-row { display: flex; align-items: center; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--border); }
+.dept-progress-row:last-child { border-bottom: none; }
+.dp-name { width: 110px; font-size: 12.5px; font-weight: 600; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dp-bar-wrap { flex: 1; height: 10px; background: #f0f4f8; border-radius: 5px; display: flex; overflow: hidden; }
+.dp-bar-done   { background: var(--green); height: 100%; transition: width .4s; }
+.dp-bar-active { background: var(--blue);  height: 100%; transition: width .4s; }
+.dp-bar-late   { background: var(--red);   height: 100%; transition: width .4s; }
+.dp-stats { font-size: 11px; color: var(--muted); white-space: nowrap; flex-shrink: 0; width: 130px; text-align: right; }
+
+.no-tasks-msg { text-align: center; padding: 40px 0; color: var(--muted); font-size: 14px; }
+.mb-16 { margin-bottom: 16px; }
+
+/* Search results */
+.search-result-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.search-result-table th {
+  background: #f7fafc; padding: 8px 12px; text-align: left;
+  font-weight: 600; color: var(--muted); font-size: 11px; border-bottom: 1px solid var(--border);
+}
+.search-result-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); }
+
+@media (max-width: 1100px) { .stats-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 900px) {
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .two-col, .three-col { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  .page-header { flex-direction: column; gap: 8px; }
+  .page-header > div:last-child { width: 100%; }
+  .search-box, .search-box input { width: 100%; }
+  .filter-bar { overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; padding-bottom: 4px; }
+  .task-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .sources-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .sidebar { width: 60px; }
+  .logo-name, .logo-sub, .nav-item span:not(.ni), .nav-group-label, .sidebar-gen, .user-info { display: none; }
+  .view { padding: 14px; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .stat-card { padding: 14px 12px; gap: 10px; }
+  .stat-num { font-size: 22px; }
+  .stat-icon { font-size: 22px; }
+  .login-box { width: calc(100vw - 32px); padding: 32px 20px; }
+}
+@media (max-width: 400px) {
+  .stat-icon { display: none; }
+  .dp-stats { display: none; }
+}
+
+/* ── Pending updates & update modal ── */
+.pending-panel{background:#fffaf0;border:1px solid var(--orange);border-radius:var(--r);padding:16px 20px;margin-bottom:20px;}
+.pending-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;font-size:14px;font-weight:700;color:#c05621;flex-wrap:wrap;gap:8px;}
+.pending-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid #fdebc8;}
+.pending-item:last-child{border-bottom:none;}
+.pending-info{flex:1;min-width:0;font-size:12px;}
+.pending-name{font-size:13px;font-weight:600;margin:2px 0;}
+.pending-meta{color:var(--muted);margin-top:2px;}
+.btn-appr{background:#f0fff4;border:1px solid var(--green);color:#276749;border-radius:6px;padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;}
+.btn-rejt{background:#fff5f5;border:1px solid var(--red);color:#c53030;border-radius:6px;padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;}
+.btn-upd{background:none;border:1px solid var(--accent);border-radius:6px;padding:3px 9px;font-size:11px;font-weight:600;cursor:pointer;color:var(--accent);transition:all .15s;margin-top:4px;display:inline-block;}
+.btn-upd:hover{background:var(--accent);color:#fff;}
+.btn-sent{background:#f0fff4;border-color:#68d391;color:#276749;}
+.btn-sent:hover{background:#dcfce7;}
+.btn-exp{background:#48bb78;color:#fff;border:none;border-radius:7px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;}
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:8000;display:flex;align-items:center;justify-content:center;}
+.modal-bx{background:#fff;border-radius:var(--r);padding:28px;width:440px;max-width:calc(100vw - 32px);box-shadow:0 20px 60px rgba(0,0,0,.3);}
+.modal-ttl{font-size:16px;font-weight:700;margin-bottom:4px;}
+.modal-sub{font-size:12px;color:var(--muted);margin-bottom:18px;line-height:1.5;}
+.mfield{margin-bottom:13px;}
+.mfield label{display:block;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px;}
+.mfield input,.mfield textarea,.mfield select{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;outline:none;transition:border .15s;resize:vertical;box-sizing:border-box;}
+.mfield input:focus,.mfield textarea:focus,.mfield select:focus{border-color:var(--accent);}
+.mfield select{background:#fff;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23718096' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;}
+.mactions{display:flex;gap:10px;margin-top:20px;justify-content:flex-end;}
+.btn-cncl{background:var(--border);border:none;border-radius:7px;padding:9px 18px;font-size:13px;cursor:pointer;font-family:inherit;}
+.msg-err{padding:10px 12px;border-radius:8px;font-size:13px;background:#fff5f5;color:#c53030;border:1.5px solid #fc8181;}
+.msg-ok{padding:10px 12px;border-radius:8px;font-size:13px;background:#f0fff4;color:#276749;border:1.5px solid #68d391;}
+
+/* ── Nav badge ── */
+.nav-badge{display:inline-flex;align-items:center;justify-content:center;background:#f56565;color:#fff;font-size:10px;font-weight:700;border-radius:10px;min-width:18px;height:18px;padding:0 5px;margin-left:auto;flex-shrink:0;}
+
+/* ── Review view ── */
+.review-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;}
+.rv-section{margin-bottom:28px;}
+.rv-section-title{font-size:15px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:10px;padding-bottom:10px;border-bottom:2px solid var(--border);}
+.rv-item{background:var(--white);border-radius:var(--r);padding:16px 18px;margin-bottom:10px;box-shadow:var(--sh);border-left:4px solid var(--border);}
+.rv-item.pending-color{border-left-color:var(--orange);}
+.rv-item.approved-color{border-left-color:var(--green);}
+.rv-item-hdr{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px;}
+.rv-item-meta{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.5;}
+.rv-reporter{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:8px;margin-top:8px;background:#f7fafc;flex-wrap:wrap;}
+.rv-reporter-phong{font-size:11px;font-weight:700;color:var(--sidebar);background:#e2e8f0;padding:3px 9px;border-radius:5px;white-space:nowrap;flex-shrink:0;align-self:flex-start;}
+.rv-reporter-body{flex:1;min-width:0;}
+.rv-reporter-actions{display:flex;gap:6px;flex-shrink:0;align-self:flex-start;}
+.rv-empty{text-align:center;padding:36px 0;color:var(--muted);font-size:14px;}
+.rv-export-bar{display:flex;justify-content:flex-end;margin-top:16px;}
+@media(max-width:900px){.review-stats{grid-template-columns:1fr 1fr;}}
+@media(max-width:640px){.review-stats{grid-template-columns:1fr 1fr;}.rv-reporter{flex-direction:column;}.rv-reporter-actions{width:100%;justify-content:flex-end;}}
+</style>
+</head>
+<body>
+<script>window.__D = """ + data_json + """;</script>
+
+<!-- ═══ LOGIN OVERLAY ═══ -->
+<div id="login-overlay">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="ic">🏥</div>
+      <div class="nm">BVTD Cơ Sở 2</div>
+      <div class="sub">Hệ thống theo dõi tiến độ</div>
+    </div>
+    <div class="login-field">
+      <label>Tên đăng nhập</label>
+      <input id="login-user" type="text" placeholder="VD: HCQT, BGD, KHTH..."
+        autocomplete="username" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <div class="login-field">
+      <label>Mật khẩu</label>
+      <input id="login-pass" type="password" placeholder="Nhập mật khẩu..."
+        autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+      <input type="checkbox" id="login-remember" style="width:auto;accent-color:#f47c3c;cursor:pointer;">
+      <label for="login-remember" style="font-size:13px;color:#4a5568;margin-bottom:0;text-transform:none;letter-spacing:normal;cursor:pointer;">Ghi nhớ đăng nhập</label>
+    </div>
+    <div id="login-err">Sai tên đăng nhập hoặc mật khẩu. Vui lòng thử lại.</div>
+    <button class="login-btn" onclick="doLogin()">Đăng nhập →</button>
+    <div class="login-hint">Liên hệ CNTT nếu quên mật khẩu</div>
+  </div>
+</div>
+
+<!-- ═══ APP BODY ═══ -->
+<div id="app-body" style="display:none;flex-direction:row;min-height:100vh;">
+
+<!-- Sidebar -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon">🏥</div>
+    <div class="logo-name">BVTD CS2</div>
+    <div class="logo-sub">Theo dõi tiến độ</div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-group-label">Chính</div>
+    <div class="nav-item active" data-view="dashboard">
+      <span class="ni">⊞</span><span>Tổng Quan</span>
+    </div>
+    <div class="nav-item" data-view="tasks">
+      <span class="ni">✔</span><span>Đầu Việc</span>
+    </div>
+    <div class="nav-group-label" style="margin-top:16px;">Liên kết</div>
+    <div class="nav-item" data-view="review" id="nav-review" style="display:none">
+      <span class="ni">📋</span><span>Duyệt Cập Nhật</span>
+      <span class="nav-badge" id="nav-review-badge" style="display:none">0</span>
+    </div>
+    <a class="nav-item" href="gantt.html" target="_blank" rel="noopener noreferrer">
+      <span class="ni">📅</span><span>Biểu đồ Gantt</span>
+    </a>
+  </div>
+  <div class="sidebar-footer">
+    <div class="user-info">
+      <span class="user-badge" id="user-badge">—</span>
+      <button class="logout-btn" onclick="doLogout()" title="Đăng xuất">✕ Thoát</button>
+    </div>
+    <div class="sidebar-gen" id="gen-label"></div>
+    <div class="sidebar-gen" id="ver-label" style="color:rgba(255,255,255,.35);font-size:10px;padding-top:0;"></div>
+  </div>
+</nav>
+
+<!-- Main -->
+<main class="main" style="flex:1;">
+
+<!-- ═══ DASHBOARD ═══ -->
+<div id="view-dashboard" class="view active">
+  <header class="page-header">
+    <div>
+      <h1>Xin chào! 👋</h1>
+      <p class="subtitle" id="today-label"></p>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center;">
+      <div class="search-box">
+        <input type="text" id="dash-search" placeholder="Tìm kiếm đầu việc..." aria-label="Tìm kiếm đầu việc" oninput="handleDashSearch(this.value)">
+      </div>
+      <button class="btn-primary" onclick="switchView('tasks')">Xem tất cả →</button>
+    </div>
+  </header>
+
+  <!-- Stats (5 cards) -->
+  <div class="stats-grid">
+    <div class="stat-card stat-total">
+      <div class="stat-icon">📋</div>
+      <div><div class="stat-num" id="s-total">—</div><div class="stat-label">Tổng đầu việc</div></div>
+    </div>
+    <div class="stat-card stat-done">
+      <div class="stat-icon">✅</div>
+      <div><div class="stat-num" id="s-done">—</div><div class="stat-label">Hoàn thành</div></div>
+    </div>
+    <div class="stat-card stat-active">
+      <div class="stat-icon">🔄</div>
+      <div><div class="stat-num" id="s-active">—</div><div class="stat-label">Đang thực hiện</div></div>
+    </div>
+    <div class="stat-card stat-late">
+      <div class="stat-icon">⚠️</div>
+      <div><div class="stat-num" id="s-late">—</div><div class="stat-label">Trễ deadline</div></div>
+    </div>
+    <div class="stat-card stat-rate">
+      <div class="stat-icon">📈</div>
+      <div><div class="stat-num" id="s-rate">—%</div><div class="stat-label">Hoàn thành</div></div>
+    </div>
+  </div>
+
+  <!-- Search results -->
+  <div id="dash-search-results" style="display:none;" class="card full-width mb-16">
+    <div class="card-header">
+      <h3>Kết quả tìm kiếm</h3>
+      <span class="see-more" onclick="clearDashSearch()">✕ Đóng</span>
+    </div>
+    <div id="dash-search-list"></div>
+  </div>
+
+  <!-- Row 1: Urgent + Repeats alerts -->
+  <div class="two-col">
+    <div class="card">
+      <div class="card-header">
+        <h3>⚠️ Đầu Việc Trễ Hạn</h3>
+        <span class="badge badge-red" id="urgent-count-badge">0</span>
+      </div>
+      <ul class="urgent-list" id="urgent-list"></ul>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <h3>🔁 Nhiệm Vụ Nhắc Lại Nhiều Lần</h3>
+        <span id="repeats-count-badge" class="see-more" style="cursor:default;"></span>
+      </div>
+      <ul class="urgent-list" id="repeat-preview-list"></ul>
+    </div>
+  </div>
+
+  <!-- Row 2: Dept progress (full width) -->
+  <div class="card full-width mt-16">
+    <div class="card-header">
+      <h3>Tiến Độ Theo Phòng Ban</h3>
+      <div style="display:flex;gap:16px;font-size:11px;color:var(--muted);">
+        <span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--green);margin-right:4px;vertical-align:middle;"></span>Hoàn thành</span>
+        <span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--blue);margin-right:4px;vertical-align:middle;"></span>Đang làm</span>
+        <span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--red);margin-right:4px;vertical-align:middle;"></span>Trễ</span>
+      </div>
+    </div>
+    <div id="dept-breakdown"></div>
+  </div>
+
+  <!-- Row 3: Charts -->
+  <div class="two-col mt-16">
+    <div class="card">
+      <div class="card-header"><h3>Đầu Việc Theo Tháng</h3></div>
+      <canvas id="monthly-chart" height="220"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-header"><h3>Phân Loại Nhóm</h3></div>
+      <canvas id="nhom-chart" height="220"></canvas>
+    </div>
+  </div>
+
+  <!-- Row 4: Meeting sources -->
+  <div class="card full-width mt-16">
+    <div class="card-header">
+      <h3>Biên Bản / Họp Giao Ban</h3>
+      <span style="font-size:12px;color:var(--muted);" id="src-count-label"></span>
+    </div>
+    <div class="sources-grid" id="sources-grid"></div>
+  </div>
+</div>
+
+<!-- ═══ TASKS ═══ -->
+<div id="view-tasks" class="view">
+  <header class="page-header">
+    <div>
+      <h1>Danh Sách Đầu Việc</h1>
+      <p class="subtitle" id="tasks-count-label">Tất cả đầu việc</p>
+    </div>
+    <div class="filter-bar">
+      <select id="filter-nhom" onchange="filterTasks()">
+        <option value="">Tất cả nhóm</option>
+        <option value="hanh_chanh">🏢 Hành chính</option>
+        <option value="chuyen_mon">🔬 Chuyên môn</option>
+        <option value="quan_ly_khac">📋 Quản lý khác</option>
+      </select>
+      <select id="filter-status" onchange="filterTasks()">
+        <option value="">Tất cả trạng thái</option>
+        <option value="chua_xong">⏳ Chưa xong</option>
+        <option value="da_hoan_thanh">✅ Hoàn thành</option>
+        <option value="dang_thuc_hien">🔄 Đang thực hiện</option>
+        <option value="tre_deadline">⚠️ Trễ deadline</option>
+      </select>
+      <select id="filter-dept" onchange="filterTasks()">
+        <option value="">Tất cả phòng</option>
+      </select>
+      <input type="text" id="filter-search" placeholder="Tìm kiếm..." aria-label="Tìm kiếm đầu việc" oninput="filterTasks()">
+    </div>
+  </header>
+  <div id="tasks-by-nhom"></div>
+</div>
+
+
+<!-- ═══ REVIEW (BGĐ only) ═══ -->
+<div id="view-review" class="view">
+  <header class="page-header">
+    <div>
+      <h1>📋 Duyệt Cập Nhật</h1>
+      <p class="subtitle" id="review-subtitle">Xem xét cập nhật tiến độ từ các phòng ban</p>
+    </div>
+    <button class="btn-primary" id="review-export-top" onclick="exportApproved()" style="display:none">⬇ Tải file cập nhật về máy</button>
+  </header>
+
+  <!-- KPI cards -->
+  <div class="review-stats">
+    <div class="stat-card" style="border-top:3px solid var(--orange);">
+      <div class="stat-icon">⏳</div>
+      <div><div class="stat-num" id="rv-pending-count" style="color:var(--orange)">0</div><div class="stat-label">Chờ duyệt</div></div>
+    </div>
+    <div class="stat-card" style="border-top:3px solid var(--green);">
+      <div class="stat-icon">✅</div>
+      <div><div class="stat-num" id="rv-approved-count" style="color:var(--green)">0</div><div class="stat-label">Đã duyệt</div></div>
+    </div>
+    <div class="stat-card" style="border-top:3px solid var(--blue);">
+      <div class="stat-icon">🏢</div>
+      <div><div class="stat-num" id="rv-depts-count" style="color:var(--blue)">0</div><div class="stat-label">Phòng báo cáo</div></div>
+    </div>
+  </div>
+
+  <!-- Pending section -->
+  <div class="rv-section">
+    <div class="rv-section-title">
+      ⏳ Chờ Duyệt
+      <span class="badge badge-orange" id="rv-pending-badge">0</span>
+    </div>
+    <div id="rv-pending-list"></div>
+  </div>
+
+  <!-- Approved section -->
+  <div class="rv-section">
+    <div class="rv-section-title">
+      ✅ Đã Duyệt
+      <span class="badge badge-green" id="rv-approved-badge">0</span>
+      <span style="font-size:12px;color:var(--muted);font-weight:400;margin-left:4px;">— sẵn sàng xuất JSON</span>
+    </div>
+    <div id="rv-approved-list"></div>
+    <div class="rv-export-bar" id="rv-export-btn" style="display:none;gap:10px;">
+      <button class="btn-primary" id="btn-gh-upload" onclick="uploadToGitHub()" style="flex:1;">
+        📤 Gửi lên GitHub — tự động cập nhật
+      </button>
+      <button onclick="exportApproved()" title="Tải file thủ công (dự phòng)"
+        style="background:none;border:1px solid var(--border);border-radius:8px;padding:9px 14px;font-size:12px;cursor:pointer;color:var(--muted);white-space:nowrap;">
+        ⬇ Tải file
+      </button>
+      <button onclick="showGHTokenSetup()" title="Cấu hình GitHub Token"
+        style="background:none;border:1px solid var(--border);border-radius:8px;padding:9px 10px;font-size:13px;cursor:pointer;color:var(--muted);">
+        ⚙
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ UPDATE MODAL ═══ -->
+<div id="upd-modal" class="modal-ov" style="display:none" onclick="if(event.target===this)closeUpd()">
+  <div class="modal-bx">
+    <div class="modal-ttl">✏ Báo cáo tiến độ</div>
+    <div class="modal-sub" id="upd-sub"></div>
+    <div class="mfield">
+      <label>Trạng thái</label>
+      <select id="upd-tt">
+        <option value="">-- Chọn trạng thái --</option>
+        <option value="da_hoan_thanh">✅ Hoàn thành</option>
+        <option value="dang_thuc_hien">🔄 Đang làm</option>
+        <option value="tre_deadline">⚠️ Trễ Deadline</option>
+      </select>
+    </div>
+    <div class="mfield" id="upd-ngay-wrap">
+      <label>Ngày hoàn thành (bắt buộc nếu chọn "Hoàn thành")</label>
+      <input type="text" id="upd-ngay" placeholder="dd/mm/yyyy" maxlength="10" pattern="\\d{2}/\\d{2}/\\d{4}" oninput="fmtDateInput(this)">
+    </div>
+    <div class="mfield">
+      <label>Ghi chú / Tình trạng</label>
+      <textarea id="upd-note" rows="3" placeholder="VD: Đã hoàn thành... / Đang chờ... / Khó khăn vì..."></textarea>
+    </div>
+    <div id="upd-msg" style="display:none"></div>
+    <div class="mactions">
+      <button class="btn-cncl" onclick="closeUpd()">Hủy</button>
+      <button class="btn-primary" onclick="submitUpd()">Gửi báo cáo →</button>
+    </div>
+  </div>
+</div>
+
+
+</main>
+</div><!-- end app-body -->
+
+<script>
+const D = window.__D;
+
+// ── Auth configuration ─────────────────────────────────────────────────────────
+const PASS = 'bvtd@cs2';
+// depts: null = xem tất cả; array = chỉ xem phòng ban trong list
+const USERS = {
+  'BGD':      null,
+  'HCQT':     ['HCQT'],
+  'KHTH':     ['KHTH'],
+  'CNTT':     ['CNTT'],
+  'KSNK':     ['KSNK'],
+  'CSKH':     ['CSKH'],
+  'CTXH':     ['CTXH'],
+  'VTTBYT':   ['VTTBYT'],
+  'XN':       ['XN'],
+  'TCCB':     ['TCCB'],
+  'TCKT':     ['TCKT'],
+  'DD':       ['Điều dưỡng', 'Công Đoàn', 'CSKH', 'Đoàn Thanh Niên'],
+  'GMHS':     ['GMHS'],
+  'DUOC':     ['Dược'],
+  'QLCL':     ['QLCL'],
+  'CONGDOAN': ['Công Đoàn'],
+  'DTN':      ['Đoàn Thanh Niên'],
+  'KCC':      ['K.Cấp cứu'],
+  'YHCT':     ['YHCT'],
+  'PHCN':     ['K.PHCN'],
+  'KNOI':     ['K.Nội'],
+  'KNGOAI':   ['K.Ngoại'],
+};
+
+let AUTH = null;
+
+function doLogin() {
+  const user = (document.getElementById('login-user').value || '').trim().toUpperCase();
+  const pass  = document.getElementById('login-pass').value || '';
+  const errEl = document.getElementById('login-err');
+  if (!(user in USERS) || pass !== PASS) {
+    errEl.style.display = 'block';
+    document.getElementById('login-pass').value = '';
+    return;
+  }
+  errEl.style.display = 'none';
+  AUTH = { user, depts: USERS[user] };
+  const remember = document.getElementById('login-remember').checked;
+  if (remember) {
+    localStorage.setItem('bvtd_auth', JSON.stringify(AUTH));
+    sessionStorage.removeItem('bvtd_auth');
+  } else {
+    sessionStorage.setItem('bvtd_auth', JSON.stringify(AUTH));
+    localStorage.removeItem('bvtd_auth');
+  }
+  document.getElementById('login-overlay').style.display = 'none';
+  document.getElementById('app-body').style.display = 'flex';
+  document.getElementById('user-badge').textContent = AUTH.user;
+  initApp();
+}
+
+function doLogout() {
+  sessionStorage.removeItem('bvtd_auth');
+  localStorage.removeItem('bvtd_auth');
+  AUTH = null;
+  chartsInited = false; tasksRendered = false;
+  window._myTasks = null; window._myStats = null;
+  const deptFilter = document.getElementById('filter-dept');
+  while (deptFilter.options.length > 1) deptFilter.remove(1);
+  document.getElementById('app-body').style.display = 'none';
+  document.getElementById('login-overlay').style.display = 'flex';
+  document.getElementById('login-user').value = '';
+  document.getElementById('login-pass').value = '';
+}
+
+// ── Helpers ────────────────────────────────────────────────────────────────────
+function fmtDate(s) {
+  if (!s) return '—';
+  const p = s.split('-');
+  return p.length === 3 ? p[2]+'/'+p[1]+'/'+p[0] : s;
+}
+
+const AC = ['#4299e1','#48bb78','#ed8936','#9f7aea','#f56565','#38b2ac','#667eea','#fc8181','#68d391','#63b3ed','#b794f4','#fbb6ce'];
+function avatarColor(name) {
+  let h = 0;
+  for (let c of name) h = (h * 31 + c.charCodeAt(0)) % AC.length;
+  return AC[Math.abs(h) % AC.length];
+}
+
+function statusPill(tt) {
+  if (tt === 'da_hoan_thanh')  return '<span class="status-pill status-done">✅ Hoàn thành</span>';
+  if (tt === 'dang_thuc_hien') return '<span class="status-pill status-active">🔄 Đang thực hiện</span>';
+  return '<span class="status-pill status-late">⚠️ Trễ deadline</span>';
+}
+
+function nhomLabel(n) {
+  if (n === 'hanh_chanh')   return '🏢 Hành chính';
+  if (n === 'chuyen_mon')   return '🔬 Chuyên môn';
+  return '📋 Quản lý khác';
+}
+
+// ── Task filtering ─────────────────────────────────────────────────────────────
+function getMyTasks() {
+  if (!AUTH || !AUTH.depts) return D.tasks;
+  return D.tasks.filter(t => {
+    // Check phong_chinh (normalized in tasks_slim)
+    if (AUTH.depts.some(d => t.phong === d)) return true;
+    // Check phong_phoi_hop (raw, comma-separated)
+    if (t.phoi_hop) {
+      const parts = t.phoi_hop.split(', ').map(p => p.trim());
+      if (parts.some(p => AUTH.depts.includes(p))) return true;
+    }
+    return false;
+  });
+}
+
+// ── Stats computation from tasks ──────────────────────────────────────────────
+function computeFromTasks(tasks) {
+  const done   = tasks.filter(t => t.tt === 'da_hoan_thanh').length;
+  const active = tasks.filter(t => t.tt === 'dang_thuc_hien').length;
+  const late   = tasks.filter(t => t.tt === 'tre_deadline').length;
+  const rate   = tasks.length ? Math.round(done / tasks.length * 100) : 0;
+
+  // Dept breakdown
+  const dm = {};
+  tasks.forEach(t => {
+    const d = t.phong || 'Khác';
+    if (!dm[d]) dm[d] = {total:0,done:0,active:0,late:0};
+    dm[d].total++;
+    if (t.tt === 'da_hoan_thanh') dm[d].done++;
+    else if (t.tt === 'dang_thuc_hien') dm[d].active++;
+    else dm[d].late++;
+  });
+  const dept = Object.entries(dm).map(([k,v]) => ({name:k,...v})).sort((a,b) => b.total-a.total);
+
+  // Monthly (last 8 months)
+  const mm = {};
+  tasks.forEach(t => {
+    if (t.bat_dau && t.bat_dau.length >= 7) {
+      const m = t.bat_dau.slice(0,7);
+      mm[m] = (mm[m]||0) + 1;
+    }
+  });
+  const months = Object.keys(mm).sort().slice(-8);
+
+  // Nhom
+  const nhom = {hanh_chanh:0, chuyen_mon:0, quan_ly_khac:0};
+  tasks.forEach(t => { nhom[t.nhom||'quan_ly_khac']++; });
+
+  // Urgent (late, sorted by deadline)
+  const urgent = tasks.filter(t => t.tt === 'tre_deadline')
+    .sort((a,b) => (a.ket_thuc||'9999').localeCompare(b.ket_thuc||'9999')).slice(0,20);
+
+  // Repeats (nhac >= 2)
+  const repeats = tasks.filter(t => parseInt(t.nhac||'1') >= 2)
+    .sort((a,b) => parseInt(b.nhac||'1') - parseInt(a.nhac||'1'));
+
+  return {total:tasks.length, done, active, late, rate, dept,
+          months, monthly_counts: months.map(m => mm[m]),
+          nhom, urgent, repeats};
+}
+
+// ── App init (called after login) ─────────────────────────────────────────────
+function initApp() {
+  tasksRendered = false;
+  const _tn = document.getElementById('tasks-by-nhom'); if (_tn) _tn.innerHTML = '';
+
+  const tasks = getMyTasks();
+  const st    = computeFromTasks(tasks);
+  window._myTasks = tasks;
+  window._myStats = st;
+
+  // Static labels
+  document.getElementById('today-label').textContent = D.today_vn || D.today;
+  document.getElementById('gen-label').textContent   = 'Cập nhật: ' + D.generated;
+  const _verEl = document.getElementById('ver-label');
+  if (_verEl && D.version) _verEl.textContent = 'v' + D.version;
+
+  // KPI cards
+  document.getElementById('s-total').textContent   = st.total;
+  document.getElementById('s-done').textContent    = st.done;
+  document.getElementById('s-active').textContent  = st.active;
+  document.getElementById('s-late').textContent    = st.late;
+  document.getElementById('s-rate').textContent    = st.rate + '%';
+  document.getElementById('urgent-count-badge').textContent = st.late;
+
+  // Urgent list
+  const urgentEl = document.getElementById('urgent-list');
+  if (!st.urgent.length) {
+    urgentEl.innerHTML = '<li class="no-data">Không có đầu việc trễ hạn 🎉</li>';
+  } else {
+    urgentEl.innerHTML = st.urgent.map(t => `
+        <li class="urgent-item">
+          <div class="urgent-body">
+            <span class="urgent-id">${t.id}</span>
+            <div class="urgent-ten">${t.ten}</div>
+            <div class="urgent-phong">${t.phong}</div>
+          </div>
+          <div class="urgent-right">
+            ${t.ket_thuc ? `<div class="date-badge red">${fmtDate(t.ket_thuc)}</div>` : ''}
+            ${parseInt(t.nhac)>=2 ? `<div class="nhac-badge">🔁 ${t.nhac}x</div>` : ''}
+          </div>
+        </li>`).join('');
+  }
+
+  // Repeat preview (all items — tab removed, this is the only view)
+  const repEl = document.getElementById('repeat-preview-list');
+  const repBadge = document.getElementById('repeats-count-badge');
+  if (!st.repeats.length) {
+    repEl.innerHTML = '<li class="no-data">Không có nhiệm vụ nào nhắc lại.</li>';
+    if (repBadge) repBadge.textContent = '';
+  } else {
+    if (repBadge) repBadge.textContent = st.repeats.length + ' nhiệm vụ';
+    repEl.innerHTML = st.repeats.map(t => {
+      const bbs = t.cac_bien_ban || [];
+      const tipLines = ['🔁 Nhắc ' + t.nhac + ' lần qua các biên bản:']
+        .concat(bbs.map(b => '  • ' + b));
+      if (t.ket_thuc) tipLines.push('📅 Deadline: ' + fmtDate(t.ket_thuc));
+      if (t.last_reminder) tipLines.push('⚠ Ngày HT không được trước: ' + fmtDate(t.last_reminder));
+      const tip = tipLines.join('\\n').replace(/"/g, '&quot;');
+      return `
+        <li class="urgent-item">
+          <div class="urgent-body">
+            <span class="urgent-id">${t.id}</span>
+            <div class="urgent-ten" title="${tip}" style="cursor:help;">${t.ten}</div>
+            <div class="urgent-phong">${t.phong}</div>
+          </div>
+          <div class="urgent-right">
+            <span class="nhac-badge">🔁 ${t.nhac}x nhắc</span>
+            ${statusPill(t.tt)}
+          </div>
+        </li>`;
+    }).join('');
+  }
+
+  // Dept progress bars
+  const deptEl = document.getElementById('dept-breakdown');
+  deptEl.innerHTML = st.dept.map(d => {
+    const dP = d.total ? Math.round(d.done/d.total*100) : 0;
+    const aP = d.total ? Math.round(d.active/d.total*100) : 0;
+    const lP = d.total ? Math.round(d.late/d.total*100) : 0;
+    return `
+      <div class="dept-progress-row">
+        <div class="dp-name" title="${d.name}">${d.name}</div>
+        <div class="dp-bar-wrap">
+          <div class="dp-bar-done"   style="width:${dP}%"></div>
+          <div class="dp-bar-active" style="width:${aP}%"></div>
+          <div class="dp-bar-late"   style="width:${lP}%"></div>
+        </div>
+        <div class="dp-stats">
+          <span style="color:var(--green)">${d.done}✓</span>&nbsp;
+          <span style="color:var(--blue)">${d.active}⟳</span>&nbsp;
+          <span style="color:var(--red)">${d.late}⚠</span>&nbsp;
+          <span style="color:var(--muted)">/${d.total}</span>
+        </div>
+      </div>`;
+  }).join('');
+
+  // Sources grid (always full — shows all biên bản regardless of user)
+  const srcEl = document.getElementById('sources-grid');
+  const srcLabelEl = document.getElementById('src-count-label');
+  if (!D.sources.length) {
+    srcEl.innerHTML = '<p style="color:var(--muted);font-size:13px;">Chưa có dữ liệu.</p>';
+  } else {
+    const srcTotal = D.sources.reduce((s,x) => s+x.count, 0);
+    if (srcLabelEl) srcLabelEl.textContent = D.sources.length + ' biên bản · ' + srcTotal + ' đầu việc';
+    srcEl.innerHTML = D.sources.map(s => {
+      const hasPdf = !!s.pdf;
+      const pdfPath = hasPdf ? 'bien-ban-da-ky/' + encodeURIComponent(s.pdf) : '';
+      const clickAttr = hasPdf ? `onclick="window.open('${pdfPath}','_blank')" title="Nhấn để xem biên bản PDF"` : '';
+      const pdfIcon = hasPdf
+        ? '<div class="source-pdf-icon">📄 Xem PDF</div>'
+        : '<div class="source-no-pdf">Chưa có file</div>';
+      return `
+        <div class="source-card${hasPdf ? ' clickable' : ''}" ${clickAttr}>
+          <div class="source-name">${s.name || ('Biên bản ' + fmtDate(s.date))}</div>
+          <div class="source-count">${s.count}</div>
+          <div class="source-date">đầu việc</div>
+          ${pdfIcon}
+        </div>`;
+    }).join('');
+  }
+
+  // BGĐ: show review nav + badge
+  updateNavBadge();
+
+  // Init charts
+  setTimeout(() => initCharts(st), 100);
+}
+
+// ── Charts ─────────────────────────────────────────────────────────────────────
+let chartsInited = false;
+let _monthlyChart = null, _nhomChart = null;
+
+function initCharts(st) {
+  if (typeof Chart === 'undefined') return;
+  const mn = ['','T1','T2','T3','T4','T5','T6','T7','T8','T9','T10','T11','T12'];
+  const monthLabels = st.months.map(m => { const [y,mo]=m.split('-'); return mn[parseInt(mo)]+'/'+y.slice(2); });
+
+  if (chartsInited) {
+    if (_monthlyChart) { _monthlyChart.data.labels = monthLabels; _monthlyChart.data.datasets[0].data = st.monthly_counts; _monthlyChart.update(); }
+    if (_nhomChart)    { _nhomChart.data.datasets[0].data = [st.nhom.hanh_chanh||0, st.nhom.chuyen_mon||0, st.nhom.quan_ly_khac||0]; _nhomChart.update(); }
+    return;
+  }
+  chartsInited = true;
+
+  const mCtx = document.getElementById('monthly-chart').getContext('2d');
+  _monthlyChart = new Chart(mCtx, {
+    type: 'bar',
+    data: { labels: monthLabels, datasets: [{ label:'Đầu việc mới', data:st.monthly_counts, backgroundColor:'#f47c3c', borderRadius:7, borderSkipped:false }] },
+    options: { responsive:true, plugins:{legend:{display:false}}, scales:{ y:{beginAtZero:true,grid:{color:'#f0f0f0'},ticks:{stepSize:20}}, x:{grid:{display:false}} } }
+  });
+
+  const nCtx = document.getElementById('nhom-chart').getContext('2d');
+  _nhomChart = new Chart(nCtx, {
+    type: 'doughnut',
+    data: { labels:['Hành chính','Chuyên môn','Quản lý khác'], datasets:[{ data:[st.nhom.hanh_chanh||0,st.nhom.chuyen_mon||0,st.nhom.quan_ly_khac||0], backgroundColor:['#ed8936','#9f7aea','#4299e1'], borderWidth:3, borderColor:'#fff' }] },
+    options: { responsive:true, plugins:{legend:{position:'bottom',labels:{padding:16,font:{size:12}}}} }
+  });
+}
+
+// ── Tasks view (grouped by nhom → then dept) ───────────────────────────────────
+let tasksRendered = false;
+
+const NHOM_GROUPS = [
+  { key: 'hanh_chanh',   label: '🏢 Hành Chính Quản Trị & VTTBYT' },
+  { key: 'chuyen_mon',   label: '🔬 Chuyên Môn' },
+  { key: 'quan_ly_khac', label: '📋 Quản Lý Khác' },
+];
+
+function buildTasksView(filtered) {
+  const container = document.getElementById('tasks-by-nhom');
+  container.innerHTML = '';
+
+  if (!filtered.length) {
+    container.innerHTML = '<div class="no-tasks-msg">Không tìm thấy đầu việc nào.</div>';
+    document.getElementById('tasks-count-label').textContent = '0 đầu việc';
+    return;
+  }
+
+  let totalDepts = new Set();
+  const parts = [];
+
+  NHOM_GROUPS.forEach(nhomG => {
+    const nhomTasks = filtered.filter(t => t.nhom === nhomG.key);
+    if (!nhomTasks.length) return;
+
+    const nhomDone   = nhomTasks.filter(t => t.tt === 'da_hoan_thanh').length;
+    const nhomActive = nhomTasks.filter(t => t.tt === 'dang_thuc_hien').length;
+    const nhomLate   = nhomTasks.filter(t => t.tt === 'tre_deadline').length;
+
+    parts.push(`
+      <div class="nhom-section-header">
+        <span class="nhom-label">${nhomG.label}</span>
+        <div class="dept-badges">
+          ${nhomDone   ? `<span class="badge badge-green">${nhomDone} xong</span>` : ''}
+          ${nhomActive ? `<span class="badge badge-blue">${nhomActive} đang</span>` : ''}
+          ${nhomLate   ? `<span class="badge badge-red">${nhomLate} trễ</span>` : ''}
+          <span class="badge" style="background:rgba(255,255,255,.15);color:#fff">${nhomTasks.length} task</span>
+        </div>
+      </div>`);
+
+    const byDept = {};
+    nhomTasks.forEach(t => {
+      const d = t.phong || 'Khác';
+      totalDepts.add(d);
+      if (!byDept[d]) byDept[d] = [];
+      byDept[d].push(t);
+    });
+
+    const depts = Object.keys(byDept).sort((a,b) => byDept[b].length - byDept[a].length);
+    const _pendingIds = new Set(lsGet(PK).filter(p => p.user === AUTH.user).map(p => p.id));
+
+    depts.forEach((dept, idx) => {
+      const tasks  = byDept[dept];
+      const done   = tasks.filter(t => t.tt === 'da_hoan_thanh').length;
+      const active = tasks.filter(t => t.tt === 'dang_thuc_hien').length;
+      const late   = tasks.filter(t => t.tt === 'tre_deadline').length;
+      const uid    = 'ds_' + nhomG.key + '_' + idx;
+      const color  = avatarColor(dept);
+      const rows = tasks.map(t => {
+        const nguonShort = t.nguon ? t.nguon.replace(/^Biên bản /, '') : '—';
+        const canUpd = AUTH && (t.tt === 'tre_deadline' || t.tt === 'dang_thuc_hien');
+        const updLabel = isBGD() ? '✏ Cập nhật' : '✏ Báo cáo';
+        const alreadySent = !isBGD() && canUpd && _pendingIds.has(t.id);
+        const updBtn = canUpd
+          ? (alreadySent
+              ? `<button class="btn-upd btn-sent" data-id="${t.id}" data-ten="${t.ten.replace(/"/g,'&quot;')}" data-phong="${t.phong}" data-phoi="${t.phoi_hop||''}" onclick="openUpd(this.dataset.id,this.dataset.ten,this.dataset.phong,this.dataset.phoi)">↺ Cập nhật lại</button>`
+              : `<button class="btn-upd" data-id="${t.id}" data-ten="${t.ten.replace(/"/g,'&quot;')}" data-phong="${t.phong}" data-phoi="${t.phoi_hop||''}" onclick="openUpd(this.dataset.id,this.dataset.ten,this.dataset.phong,this.dataset.phoi)">${updLabel}</button>`)
+          : '';
+        return `<tr>
+          <td class="task-id">${t.id}</td>
+          <td class="task-ten">${t.ten}${parseInt(t.nhac)>=2?`<span class="task-nhac">🔁${t.nhac}x</span>`:''}</td>
+          <td><span style="font-size:11px;color:var(--muted)">${t.phoi_hop||'—'}</span></td>
+          <td style="white-space:nowrap;font-size:12px">${fmtDate(t.bat_dau)}</td>
+          <td style="white-space:nowrap;font-size:12px">${t.ket_thuc?fmtDate(t.ket_thuc):'—'}</td>
+          <td class="nguon-cell" title="${t.nguon}">${nguonShort}</td>
+          <td>${statusPill(t.tt)}${updBtn}</td>
+        </tr>`;
+      }).join('');
+
+      parts.push(`
+        <div class="dept-section">
+          <div class="dept-section-header" onclick="toggleDept('${uid}')">
+            <div class="dept-section-avatar" style="background:${color}">${dept.slice(0,4)}</div>
+            <div class="dept-section-name">${dept}</div>
+            <div class="dept-badges">
+              ${done   ? `<span class="badge badge-green">${done} xong</span>`  : ''}
+              ${active ? `<span class="badge badge-blue">${active} đang</span>` : ''}
+              ${late   ? `<span class="badge badge-red">${late} trễ</span>`     : ''}
+              <span class="badge badge-gray">${tasks.length} task</span>
+            </div>
+            <span class="toggle-ic" id="ic-${uid}">▼</span>
+          </div>
+          <div class="task-table-wrap" id="${uid}">
+            <table class="task-table">
+              <thead><tr>
+                <th>ID</th><th>Đầu việc</th><th>Phối hợp</th>
+                <th>Bắt đầu</th><th>Deadline</th><th>Biên Bản</th><th>Trạng thái</th>
+              </tr></thead>
+              <tbody>${rows}</tbody>
+            </table>
+          </div>
+        </div>`);
+    });
+  });
+
+  container.innerHTML = parts.join('');
+
+  document.getElementById('tasks-count-label').textContent =
+    `${filtered.length} đầu việc · ${totalDepts.size} phòng ban`;
+}
+
+function toggleDept(uid) {
+  const el   = document.getElementById(uid);
+  const icon = document.getElementById('ic-' + uid);
+  el.classList.toggle('hidden');
+  if (icon) icon.textContent = el.classList.contains('hidden') ? '▶' : '▼';
+}
+
+function filterTasks() {
+  const nhom   = document.getElementById('filter-nhom').value;
+  const status = document.getElementById('filter-status').value;
+  const dept   = document.getElementById('filter-dept').value;
+  const search = (document.getElementById('filter-search').value || '').toLowerCase().trim();
+
+  const base = window._myTasks || D.tasks;
+  const filtered = base.filter(t => {
+    if (nhom && t.nhom !== nhom) return false;
+    if (status === 'chua_xong') { if (t.tt === 'da_hoan_thanh') return false; }
+    else if (status && t.tt !== status) return false;
+    if (dept   && t.phong !== dept)   return false;
+    if (search && !t.ten.toLowerCase().includes(search) && !t.phong.toLowerCase().includes(search)) return false;
+    return true;
+  });
+  buildTasksView(filtered);
+}
+
+function initTasksView() {
+  if (tasksRendered) return;
+  tasksRendered = true;
+
+  const myTasks = window._myTasks || D.tasks;
+  const deptFilter = document.getElementById('filter-dept');
+  [...new Set(myTasks.map(t => t.phong || 'Khác'))].sort().forEach(d => {
+    const o = document.createElement('option');
+    o.value = d; o.textContent = d;
+    deptFilter.appendChild(o);
+  });
+  // Default: chỉ hiện trễ + đang làm
+  document.getElementById('filter-status').value = 'chua_xong';
+  filterTasks();
+}
+
+// ── Dashboard search ───────────────────────────────────────────────────────────
+function handleDashSearch(val) {
+  const q = val.toLowerCase().trim();
+  const resEl  = document.getElementById('dash-search-results');
+  const listEl = document.getElementById('dash-search-list');
+  if (!q) { resEl.style.display = 'none'; return; }
+
+  const found = (window._myTasks || D.tasks).filter(t =>
+    t.ten.toLowerCase().includes(q) || t.phong.toLowerCase().includes(q)
+  ).slice(0, 20);
+
+  resEl.style.display = 'block';
+  if (!found.length) {
+    listEl.innerHTML = '<p style="color:var(--muted);padding:12px 0">Không tìm thấy.</p>';
+    return;
+  }
+
+  let html = '<table class="search-result-table"><thead><tr><th>ID</th><th>Đầu việc</th><th>Phòng</th><th>Deadline</th><th>Biên Bản</th><th>Trạng thái</th></tr></thead><tbody>';
+  found.forEach(t => {
+    const nguonShort = t.nguon ? t.nguon.replace(/^Biên bản /, '') : '—';
+    html += `<tr>
+      <td class="task-id">${t.id}</td>
+      <td style="max-width:300px">${t.ten}</td>
+      <td style="font-size:12px">${t.phong}</td>
+      <td style="font-size:12px;white-space:nowrap">${fmtDate(t.ket_thuc)}</td>
+      <td class="nguon-cell">${nguonShort}</td>
+      <td>${statusPill(t.tt)}</td>
+    </tr>`;
+  });
+  html += '</tbody></table>';
+  listEl.innerHTML = html;
+}
+
+function clearDashSearch() {
+  document.getElementById('dash-search').value = '';
+  document.getElementById('dash-search-results').style.display = 'none';
+}
+
+// ── View routing ───────────────────────────────────────────────────────────────
+function switchView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-item[data-view]').forEach(n => n.classList.remove('active'));
+  const v = document.getElementById('view-' + name);
+  if (v) v.classList.add('active');
+  const n = document.querySelector(`[data-view="${name}"]`);
+  if (n) n.classList.add('active');
+  if (name === 'tasks')  initTasksView();
+  if (name === 'review') renderReview();
+}
+
+document.querySelectorAll('[data-view]').forEach(el => {
+  el.addEventListener('click', () => switchView(el.dataset.view));
+});
+
+// ── Pending updates ────────────────────────────────────────────────────────────
+const PK = 'bvtd_pending', AK = 'bvtd_approved';
+const TT_LABELS = {da_hoan_thanh:'✅ Hoàn thành', dang_thuc_hien:'🔄 Đang làm', tre_deadline:'⚠️ Trễ Deadline'};
+let _updTask = null;
+
+function isBGD() { return AUTH && AUTH.user === 'BGD'; }
+function lsGet(k) { try { return JSON.parse(localStorage.getItem(k)||'[]'); } catch(e) { return []; } }
+function lsSave(k, v) { localStorage.setItem(k, JSON.stringify(v)); }
+
+function fmtDateInput(el) {
+  let v = el.value.replace(/[^\\d]/g, '');
+  if (v.length > 2) v = v.slice(0,2) + '/' + v.slice(2);
+  if (v.length > 5) v = v.slice(0,5) + '/' + v.slice(5,9);
+  el.value = v;
+}
+
+function openUpd(id, ten, phong, phoi) {
+  _updTask = {id, ten, phong, phoi: phoi || ''};
+  document.getElementById('upd-sub').textContent = id + ' — ' + ten + ' (' + phong + ')';
+  document.getElementById('upd-tt').value = '';
+  document.getElementById('upd-ngay').value = '';
+  document.getElementById('upd-note').value = '';
+  document.getElementById('upd-ngay-wrap').style.display = '';
+  document.getElementById('upd-msg').style.display = 'none';
+  document.getElementById('upd-modal').style.display = 'flex';
+}
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('upd-tt').addEventListener('change', function() {
+    const wrap = document.getElementById('upd-ngay-wrap');
+    wrap.style.display = this.value === 'dang_thuc_hien' ? 'none' : '';
+    if (this.value === 'dang_thuc_hien') document.getElementById('upd-ngay').value = '';
+  });
+});
+function closeUpd() { document.getElementById('upd-modal').style.display = 'none'; }
+function showUpdMsg(msg, isErr) {
+  const el = document.getElementById('upd-msg');
+  el.textContent = msg;
+  el.className = isErr ? 'msg-err' : 'msg-ok';
+  el.style.display = 'block';
+}
+
+function submitUpd() {
+  if (!_updTask) return;
+  const tt = document.getElementById('upd-tt').value;
+  let ngayRaw = document.getElementById('upd-ngay').value.trim();
+  const note = document.getElementById('upd-note').value.trim();
+  if (!tt) { showUpdMsg('Vui lòng chọn trạng thái.', true); return; }
+  if (tt === 'da_hoan_thanh' && !ngayRaw) { showUpdMsg('Vui lòng nhập ngày hoàn thành.', true); return; }
+  let ngay = '';
+  if (ngayRaw) {
+    if (/^\\d{2}\\/\\d{2}\\/\\d{4}$/.test(ngayRaw)) {
+      const [d,m,y] = ngayRaw.split('/');
+      ngay = y + '-' + m + '-' + d;
+    } else {
+      showUpdMsg('Ngày không hợp lệ. Vui lòng nhập đúng định dạng dd/mm/yyyy.', true); return;
+    }
+    // Kiểm tra ngày HT >= ngày nhắc cuối (task nhắc >= 2 lần)
+    const _tr = (window._myTasks || D.tasks).find(t => t.id === _updTask.id);
+    if (_tr && parseInt(_tr.nhac || '1') >= 2 && _tr.last_reminder && ngay < _tr.last_reminder) {
+      showUpdMsg('❌ Ngày hoàn thành không hợp lệ! Nhiệm vụ này đã bị nhắc ' + _tr.nhac + ' lần — lần nhắc cuối: ' + fmtDate(_tr.last_reminder) + '. Ngày hoàn thành phải từ ' + fmtDate(_tr.last_reminder) + ' trở đi.', true);
+      return;
+    }
+  }
+  // Kiểm tra user báo cáo là phòng chính hay chỉ phối hợp (BGD depts=null → xem tất cả)
+  const isPhongChinh = !AUTH.depts || AUTH.depts.some(d => d === _updTask.phong);
+  const isPhongPhoi = !isPhongChinh && _updTask.phoi && AUTH.depts && AUTH.depts.some(d =>
+    _updTask.phoi.split(', ').map(p => p.trim()).includes(d)
+  );
+  let finalNote = note || '';
+  if (isPhongPhoi) {
+    const flag = `⚠️ Báo cáo từ phòng phối hợp (${AUTH.user}) — cần kiểm tra lại với phòng chính (${_updTask.phong})`;
+    finalNote = finalNote ? flag + ' | ' + finalNote : flag;
+  }
+  const userPhong = AUTH.depts ? AUTH.depts.join(', ') : AUTH.user;
+  const entry = {id:_updTask.id, ten:_updTask.ten, phong:_updTask.phong,
+                 trang_thai:tt, ngay_ht:ngay, ghi_chu:finalNote, user:AUTH.user,
+                 user_phong:userPhong,
+                 at:new Date().toISOString().slice(0,10)};
+  if (isBGD()) {
+    // BGĐ → thẳng vào approved queue, xuất JSON rồi chạy /check
+    const appr = lsGet(AK);
+    const idx = appr.findIndex(a => a.id === _updTask.id);
+    if (idx >= 0) appr[idx] = entry; else appr.push(entry);
+    lsSave(AK, appr);
+    showUpdMsg('✓ Đã lưu. Nhấn "Xuất JSON" trong panel bên dưới để áp dụng vào database.', false);
+    setTimeout(() => { closeUpd(); renderPending(); }, 1200);
+  } else {
+    // Phòng ban → pending queue, mỗi user/phòng giữ 1 entry riêng cho cùng task
+    const arr = lsGet(PK);
+    const idx = arr.findIndex(p => p.id === _updTask.id && p.user === AUTH.user);
+    if (idx >= 0) arr[idx] = entry; else arr.push(entry);
+    lsSave(PK, arr);
+    // Cập nhật button ngay trên DOM → user thấy phản hồi tức thì
+    const _btn = document.querySelector(`button.btn-upd[data-id="${_updTask.id}"]`);
+    if (_btn) {
+      _btn.textContent = '↺ Cập nhật lại';
+      _btn.classList.add('btn-sent');
+    }
+    showUpdMsg('✓ Đã gửi báo cáo. BGĐ sẽ duyệt trong lần /check tiếp theo.', false);
+    setTimeout(closeUpd, 1500);
+  }
+}
+
+// ── Review view (BGĐ only) ────────────────────────────────────────────────────
+function renderReview() {
+  if (!isBGD()) return;
+  const approved = lsGet(AK);
+  const doneKeys = new Set(approved.map(a => a.id + '|' + a.user));
+  const pending  = lsGet(PK).filter(p => !doneKeys.has(p.id + '|' + p.user));
+  const depts    = new Set(pending.map(p => p.user));
+
+  // KPI
+  document.getElementById('rv-pending-count').textContent  = pending.length;
+  document.getElementById('rv-approved-count').textContent = approved.length;
+  document.getElementById('rv-depts-count').textContent    = depts.size;
+  document.getElementById('rv-pending-badge').textContent  = pending.length;
+  document.getElementById('rv-approved-badge').textContent = approved.length;
+  document.getElementById('review-subtitle').textContent   =
+    pending.length
+      ? pending.length + ' cập nhật đang chờ từ ' + depts.size + ' phòng ban'
+      : 'Không có cập nhật nào đang chờ duyệt';
+  const topBtn = document.getElementById('review-export-top');
+  if (topBtn) topBtn.style.display = approved.length ? '' : 'none';
+
+  // Pending list
+  const pendEl = document.getElementById('rv-pending-list');
+  if (!pending.length) {
+    pendEl.innerHTML = '<div class="rv-empty">🎉 Không có cập nhật nào đang chờ duyệt</div>';
+  } else {
+    const grouped = {};
+    pending.forEach(p => { if (!grouped[p.id]) grouped[p.id] = []; grouped[p.id].push(p); });
+    pendEl.innerHTML = Object.values(grouped).map(grp => {
+      const first = grp[0];
+      const task  = D.tasks.find(t => t.id === first.id);
+      const curTT = task ? statusPill(task.tt) : '';
+      const taskMeta = task ? [
+        task.ket_thuc ? `⏰ Deadline: <b>${fmtDate(task.ket_thuc)}</b>` : `<span style="color:var(--muted)">Không có deadline</span>`,
+        task.bat_dau  ? `📅 Giao: ${fmtDate(task.bat_dau)}` : '',
+        task.phoi_hop ? `🤝 Phối hợp: ${task.phoi_hop}` : '',
+        task.nguon    ? `📄 ${task.nguon}` : '',
+      ].filter(Boolean).join(' &ensp;·&ensp; ') : '';
+      const reporters = grp.map(p => `
+        <div class="rv-reporter">
+          <span class="rv-reporter-phong">${p.user_phong || p.user}</span>
+          <div class="rv-reporter-body">
+            <div style="font-size:13px;font-weight:600;">${TT_LABELS[p.trang_thai] || p.trang_thai || '—'}</div>
+            ${p.ngay_ht ? `<div class="rv-item-meta">📅 Ngày hoàn thành: <b>${p.ngay_ht}</b></div>` : ''}
+            ${p.ghi_chu ? `<div class="rv-item-meta">📝 ${p.ghi_chu}</div>` : ''}
+            <div class="rv-item-meta" style="margin-top:4px;">Báo cáo ngày ${p.at}</div>
+          </div>
+          <div class="rv-reporter-actions">
+            <button class="btn-appr" onclick="approveUpd('${p.id}','${p.user}')">✓ Duyệt</button>
+            <button class="btn-rejt"  onclick="rejectUpd('${p.id}','${p.user}')">✕ Từ chối</button>
+          </div>
+        </div>`).join('');
+      return `
+        <div class="rv-item pending-color">
+          <div class="rv-item-hdr">
+            <div style="flex:1;min-width:0;">
+              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                <span class="task-id">${first.id}</span>
+                <span style="font-size:14px;font-weight:700;">${first.ten}</span>
+              </div>
+              <div class="rv-item-meta" style="margin-top:6px;">
+                Phòng chính: <b>${first.phong}</b>&ensp;|&ensp;Trạng thái hiện tại: ${curTT}
+              </div>
+              ${taskMeta ? `<div class="rv-item-meta" style="margin-top:4px;">${taskMeta}</div>` : ''}
+            </div>
+            ${grp.length > 1 ? `<span class="badge badge-orange">${grp.length} phòng</span>` : ''}
+          </div>
+          ${reporters}
+        </div>`;
+    }).join('');
+  }
+
+  // Approved list
+  const apprEl = document.getElementById('rv-approved-list');
+  const expBtn = document.getElementById('rv-export-btn');
+  if (!approved.length) {
+    apprEl.innerHTML = '<div class="rv-empty" style="padding:20px 0;">Chưa có mục nào được duyệt.</div>';
+    if (expBtn) expBtn.style.display = 'none';
+  } else {
+    apprEl.innerHTML = approved.map(a => `
+      <div class="rv-item approved-color">
+        <div class="rv-item-hdr">
+          <div style="flex:1;min-width:0;">
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+              <span class="task-id">${a.id}</span>
+              <span style="font-size:14px;font-weight:700;">${a.ten}</span>
+            </div>
+            <div class="rv-item-meta" style="margin-top:4px;">
+              Phòng: <b>${a.user_phong || a.user}</b> &ensp;·&ensp; Phòng chính: ${a.phong} &ensp;·&ensp; ngày ${a.at}
+            </div>
+            ${TT_LABELS[a.trang_thai] ? `<div class="rv-item-meta" style="margin-top:4px;">${TT_LABELS[a.trang_thai]}</div>` : ''}
+            ${a.ngay_ht ? `<div class="rv-item-meta">📅 Ngày hoàn thành: <b>${a.ngay_ht}</b></div>` : ''}
+            ${a.ghi_chu ? `<div class="rv-item-meta">📝 ${a.ghi_chu}</div>` : ''}
+          </div>
+          <button class="btn-rejt" style="flex-shrink:0;align-self:flex-start;" onclick="removeApproved('${a.id}')">✕ Bỏ</button>
+        </div>
+      </div>`).join('');
+    if (expBtn) expBtn.style.display = '';
+  }
+
+  updateNavBadge();
+}
+
+function updateNavBadge() {
+  const navEl = document.getElementById('nav-review');
+  const badge = document.getElementById('nav-review-badge');
+  if (!isBGD()) { if (navEl) navEl.style.display = 'none'; return; }
+  if (navEl) navEl.style.display = 'flex';
+  const approved  = lsGet(AK);
+  const doneKeys  = new Set(approved.map(a => a.id + '|' + a.user));
+  const count     = lsGet(PK).filter(p => !doneKeys.has(p.id + '|' + p.user)).length;
+  if (badge) {
+    badge.textContent   = count;
+    badge.style.display = count > 0 ? 'inline-flex' : 'none';
+  }
+}
+
+function renderPending() {
+  const panel = document.getElementById('pending-panel');
+  if (!panel || !isBGD()) { if (panel) panel.innerHTML = ''; return; }
+  const approvedItems = lsGet(AK);
+  const doneIds = new Set(approvedItems.map(a => a.id));
+  const pendingItems = lsGet(PK).filter(p => !doneIds.has(p.id));
+  if (!pendingItems.length && !approvedItems.length) { panel.innerHTML = ''; return; }
+
+  let h = '<div class="pending-panel">';
+
+  if (pendingItems.length) {
+    h += `<div class="pending-hdr" style="margin-bottom:8px;">⏳ Chờ duyệt — ${pendingItems.length} cập nhật từ phòng ban</div>`;
+    // Group theo task ID
+    const grouped = {};
+    pendingItems.forEach(p => { if (!grouped[p.id]) grouped[p.id] = []; grouped[p.id].push(p); });
+    Object.values(grouped).forEach(grp => {
+      const first = grp[0];
+      const multiPhong = grp.length > 1;
+      h += `<div class="pending-item" style="${multiPhong?'border-left:3px solid #f6ad55;':''}">
+        <div class="pending-info" style="width:100%;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+            <span class="task-id">${first.id}</span>
+            <div class="pending-name" style="margin:0;">${first.ten}</div>
+            <span style="font-size:11px;color:#718096;margin-left:auto;">Phòng chính: <b>${first.phong}</b></span>
+          </div>
+          ${grp.map((p,i) => `
+          <div style="border:1px solid #e2e8f0;border-radius:6px;padding:8px 10px;margin-bottom:${i<grp.length-1?'6px':'0'};background:${i%2===0?'#f7fafc':'#fff'};">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="font-size:12px;font-weight:700;color:#2d3748;">📤 ${p.user_phong||p.user}</span>
+              <span style="font-size:11px;color:#a0aec0;">ngày ${p.at}</span>
+            </div>
+            ${p.trang_thai?`<div class="pending-meta" style="margin-top:4px;">${TT_LABELS[p.trang_thai]||p.trang_thai}</div>`:''}
+            ${p.ngay_ht?`<div class="pending-meta" style="margin-top:2px;">📅 Ngày HT: ${p.ngay_ht}</div>`:''}
+            ${p.ghi_chu?`<div class="pending-meta" style="margin-top:2px;">📝 ${p.ghi_chu}</div>`:''}
+            <div style="display:flex;gap:6px;margin-top:6px;">
+              <button class="btn-appr" onclick="approveUpd('${p.id}','${p.user}')">✓ Duyệt</button>
+              <button class="btn-rejt" onclick="rejectUpd('${p.id}','${p.user}')">✕ Từ chối</button>
+            </div>
+          </div>`).join('')}
+        </div>
+      </div>`;
+    });
+  }
+
+  if (approvedItems.length) {
+    if (pendingItems.length) h += '<div style="height:1px;background:var(--border);margin:12px 0;"></div>';
+    h += `<div style="font-size:13px;font-weight:700;color:#276749;margin-bottom:8px;">✅ Đã duyệt / BGĐ cập nhật trực tiếp — ${approvedItems.length} mục</div>`;
+    approvedItems.forEach(a => {
+      h += `<div class="pending-item" style="border-color:#c6f6d5;">
+        <div class="pending-info">
+          <span class="task-id">${a.id}</span>
+          <div class="pending-name">${a.ten}</div>
+          <div class="pending-meta">${a.phong} · ${a.user} ngày ${a.at}</div>
+          ${a.trang_thai?`<div class="pending-meta">${TT_LABELS[a.trang_thai]||a.trang_thai}</div>`:''}
+          ${a.ngay_ht?`<div class="pending-meta">📅 Ngày HT: ${a.ngay_ht}</div>`:''}
+          ${a.ghi_chu?`<div class="pending-meta">📝 ${a.ghi_chu}</div>`:''}
+        </div>
+        <button class="btn-rejt" style="flex-shrink:0;margin-top:4px;" onclick="removeApproved('${a.id}')">✕</button>
+      </div>`;
+    });
+  }
+
+  h += `<div style="margin-top:14px;display:flex;justify-content:flex-end;">
+    <button class="btn-exp" onclick="exportApproved()">⬇ Xuất JSON để chạy /check (${approvedItems.length} mục)</button>
+  </div>`;
+
+  panel.innerHTML = h + '</div>';
+}
+
+// ── GitHub Auto-Upload (BGĐ) ──────────────────────────────────────────────────
+const GH_TOKEN_KEY = 'bvtd_gh_token';
+const GH_REPO      = 'dragonhuynh/bvtd-progress';
+const GH_PATH      = 'data/pending_updates.json';
+
+function showGHTokenSetup() {
+  const cur = localStorage.getItem(GH_TOKEN_KEY) || '';
+  const tok = prompt(
+    'Nhập GitHub Personal Access Token\n\n' +
+    'Cách tạo token:\n' +
+    '1. Vào github.com → Settings → Developer settings\n' +
+    '2. Personal access tokens → Fine-grained tokens → Generate new\n' +
+    '3. Repository: dragonhuynh/bvtd-progress\n' +
+    '4. Permissions: Contents → Read and write\n\n' +
+    'Token hiện tại: ' + (cur ? cur.slice(0,8)+'...' : '(chưa có)'),
+    cur
+  );
+  if (tok !== null) {
+    localStorage.setItem(GH_TOKEN_KEY, tok.trim());
+    alert(tok.trim() ? '✓ Đã lưu token.' : '✓ Đã xóa token.');
+  }
+}
+
+async function uploadToGitHub() {
+  const approved = lsGet(AK);
+  if (!approved.length) { alert('Chưa có cập nhật nào được duyệt.'); return; }
+
+  let token = localStorage.getItem(GH_TOKEN_KEY) || '';
+  if (!token) {
+    token = prompt('Nhập GitHub Personal Access Token\n(Chỉ cần nhập 1 lần — lưu vào bộ nhớ):') || '';
+    if (!token) return;
+    localStorage.setItem(GH_TOKEN_KEY, token.trim());
+    token = token.trim();
+  }
+
+  const btn = document.getElementById('btn-gh-upload');
+  if (btn) { btn.textContent = '⏳ Đang gửi...'; btn.disabled = true; }
+
+  const apiUrl = `https://api.github.com/repos/${GH_REPO}/contents/${GH_PATH}`;
+  const headers = {
+    'Authorization': `Bearer ${token}`,
+    'Accept': 'application/vnd.github.v3+json',
+    'Content-Type': 'application/json',
+  };
+
+  try {
+    // Lấy SHA nếu file đã tồn tại (cần cho PUT)
+    let sha = '';
+    const chk = await fetch(apiUrl, { headers });
+    if (chk.ok) sha = (await chk.json()).sha || '';
+
+    // Upload
+    const payload = JSON.stringify(approved, null, 2);
+    const content  = btoa(unescape(encodeURIComponent(payload)));
+    const body = {
+      message: `dashboard: ${approved.length} cập nhật BGĐ duyệt ngày ${new Date().toLocaleDateString('vi-VN')}`,
+      content,
+      ...(sha ? { sha } : {}),
+    };
+
+    const resp = await fetch(apiUrl, { method: 'PUT', headers, body: JSON.stringify(body) });
+
+    if (resp.ok) {
+      lsSave(AK, []);
+      renderReview();
+      updateNavBadge();
+      if (btn) { btn.textContent = '✓ Đã gửi!'; btn.disabled = false; }
+      alert(
+        '✓ Đã gửi lên GitHub thành công!\\n\\n' +
+        'GitHub Actions sẽ tự động:\\n' +
+        '  1. Cập nhật tasks.csv\\n' +
+        '  2. Sinh lại dashboard HTML\\n' +
+        '  3. Deploy lên trang web\\n\\n' +
+        'Tải lại trang sau ~1–2 phút để thấy kết quả.'
+      );
+    } else {
+      const err = await resp.json().catch(() => ({}));
+      if (btn) { btn.textContent = '📤 Gửi lên GitHub — tự động cập nhật'; btn.disabled = false; }
+      if (resp.status === 401) {
+        localStorage.removeItem(GH_TOKEN_KEY);
+        alert('❌ Token không hợp lệ hoặc hết hạn. Nhấn ⚙ để nhập lại.');
+      } else if (resp.status === 403) {
+        alert('❌ Token thiếu quyền. Cần quyền "Contents: Read and write" cho repo bvtd-progress.');
+      } else {
+        alert(`❌ Lỗi ${resp.status}: ${err.message || 'Không rõ nguyên nhân'}`);
+      }
+    }
+  } catch(e) {
+    if (btn) { btn.textContent = '📤 Gửi lên GitHub — tự động cập nhật'; btn.disabled = false; }
+    alert('❌ Lỗi kết nối: ' + e.message + '\\nKiểm tra kết nối internet.');
+  }
+}
+
+function removeApproved(id) {
+  lsSave(AK, lsGet(AK).filter(a => a.id !== id));
+  renderPending(); renderReview();
+}
+
+function approveUpd(id, user) {
+  const all = lsGet(PK);
+  const item = all.find(p => p.id === id && p.user === user);
+  if (!item) return;
+  lsSave(PK, all.filter(p => !(p.id === id && p.user === user)));
+  const appr = lsGet(AK);
+  const idx = appr.findIndex(a => a.id === id);
+  if (idx >= 0) appr[idx] = item; else appr.push(item);
+  lsSave(AK, appr);
+  renderPending(); renderReview();
+}
+
+function rejectUpd(id, user) {
+  lsSave(PK, lsGet(PK).filter(p => !(p.id === id && p.user === user)));
+  renderPending(); renderReview();
+}
+
+function exportApproved() {
+  const appr = lsGet(AK);
+  if (!appr.length) { alert('Chưa có cập nhật nào được duyệt.'); return; }
+  const blob = new Blob([JSON.stringify(appr, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'pending_updates.json';
+  a.click();
+  lsSave(AK, []);
+  renderPending(); renderReview();
+  alert('✓ Đã tải file cập nhật về máy.\\nĐặt file pending_updates.json vào thư mục data/ rồi chạy /check để áp dụng.');
+}
+
+// ── Boot ───────────────────────────────────────────────────────────────────────
+const savedAuth = sessionStorage.getItem('bvtd_auth') || localStorage.getItem('bvtd_auth');
+if (savedAuth) {
+  let _sa = null;
+  try { _sa = JSON.parse(savedAuth); }
+  catch(e) { localStorage.removeItem('bvtd_auth'); sessionStorage.removeItem('bvtd_auth'); }
+  if (_sa && _sa.user && _sa.user in USERS) {
+    AUTH = _sa;
+    document.getElementById('login-overlay').style.display = 'none';
+    document.getElementById('app-body').style.display = 'flex';
+    document.getElementById('user-badge').textContent = AUTH.user;
+    initApp();
+  }
+}
+</script>
+</body>
+</html>"""
+
+
+# ── Main ───────────────────────────────────────────────────────────────────────
+
+def main():
+    tasks = load_tasks()
+    if not tasks:
+        print("Khong co du lieu trong tasks.csv")
+        return
+
+    data = compute(tasks)
+
+    html_out = build_html(data)
+    for fname in ("dashboard.html", "tien_do.html"):
+        (ROOT / fname).write_text(html_out, encoding="utf-8")
+    print(f"dashboard.html + tien_do.html da tao ({data['total']} tasks, {len(data['dept'])} phong ban, {len(data['repeats'])} nhac lai)")
+
+
+if __name__ == "__main__":
+    main()
