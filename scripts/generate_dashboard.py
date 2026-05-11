@@ -244,6 +244,9 @@ def build_html(data: dict) -> str:
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>BVTD CS2 — Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
@@ -1406,7 +1409,7 @@ function initTasksView() {
   });
   const bbFilter = document.getElementById('filter-bienban');
   const bbSortKey = s => {
-    const m = s.match(/(\d{2})\/(\d{2})\/(\d{2})\s*$/);
+    const m = s.match(/(\\d{2})\\/(\\d{2})\\/(\\d{2})\\s*$/);
     if (!m) return 0;
     return parseInt(m[3]) * 10000 + parseInt(m[2]) * 100 + parseInt(m[1]);
   };
