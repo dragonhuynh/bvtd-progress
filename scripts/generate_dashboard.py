@@ -235,6 +235,8 @@ def compute(tasks):
 
 def build_html(data: dict) -> str:
     data_json = json.dumps(data, ensure_ascii=False).replace('</script>', r'<\/script>')
+    fb_cfg = load_json_file(ROOT / "data" / "firebase_config.json")
+    fb_cfg_json = json.dumps(fb_cfg, ensure_ascii=False)
 
     return """<!DOCTYPE html>
 <html lang="vi">
@@ -243,6 +245,8 @@ def build_html(data: dict) -> str:
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>BVTD CS2 — Dashboard</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 <style>
 :root {
   --bg:      #f5e6d8;
@@ -627,7 +631,7 @@ body {
 </style>
 </head>
 <body>
-<script>window.__D = """ + data_json + """;</script>
+<script>window.__D = """ + data_json + """;window.__FB_CONFIG = """ + fb_cfg_json + """;</script>
 
 <!-- ═══ LOGIN OVERLAY ═══ -->
 <div id="login-overlay">
@@ -982,6 +986,7 @@ function doLogin() {
   document.getElementById('app-body').style.display = 'flex';
   document.getElementById('user-badge').textContent = AUTH.user;
   initApp();
+  startFbListener();
 }
 
 function doLogout() {
@@ -1294,7 +1299,7 @@ function buildTasksView(filtered) {
     });
 
     const depts = Object.keys(byDept).sort((a,b) => byDept[b].length - byDept[a].length);
-    const _pendingIds = new Set(lsGet(PK).filter(p => p.user === AUTH.user).map(p => p.id));
+    const _pendingIds = new Set(fbPendingList().filter(p => p.user === AUTH.user).map(p => p.id));
 
     depts.forEach((dept, idx) => {
       const tasks  = byDept[dept];
@@ -1451,14 +1456,40 @@ document.querySelectorAll('[data-view]').forEach(el => {
   el.addEventListener('click', () => switchView(el.dataset.view));
 });
 
-// ── Pending updates ────────────────────────────────────────────────────────────
-const PK = 'bvtd_pending', AK = 'bvtd_approved';
+// ── Firebase Realtime DB — pending updates (sync across devices) ───────────────
+const FB_CFG = window.__FB_CONFIG || {};
+const AK = 'bvtd_approved';
 const TT_LABELS = {da_hoan_thanh:'✅ Hoàn thành', dang_thuc_hien:'🔄 Đang làm', tre_deadline:'⚠️ Trễ Deadline'};
 let _updTask = null;
+let _db = null;
+let _fbPending = {};  // { "USER_taskId": entry } — synced by real-time listener
 
 function isBGD() { return AUTH && AUTH.user === 'BGD'; }
 function lsGet(k) { try { return JSON.parse(localStorage.getItem(k)||'[]'); } catch(e) { return []; } }
 function lsSave(k, v) { localStorage.setItem(k, JSON.stringify(v)); }
+function fbKey(user, id) { return user + '_' + id; }
+function fbEnabled() { return !!(FB_CFG && FB_CFG.databaseURL); }
+function fbPendingList() { return Object.values(_fbPending); }
+
+function fbInit() {
+  if (_db) return true;
+  if (!fbEnabled()) return false;
+  try {
+    if (!firebase.apps.length) firebase.initializeApp(FB_CFG);
+    _db = firebase.database();
+    return true;
+  } catch(e) { console.warn('Firebase init error:', e); return false; }
+}
+
+function startFbListener() {
+  if (!fbInit()) return;
+  _db.ref('bvtd_pending').on('value', snap => {
+    _fbPending = snap.val() || {};
+    renderPending();
+    renderReview();
+    updateNavBadge();
+  });
+}
 
 function fmtDateInput(el) {
   let v = el.value.replace(/[^\\d]/g, '');
@@ -1538,19 +1569,25 @@ function submitUpd() {
     showUpdMsg('✓ Đã lưu. Nhấn "Xuất JSON" trong panel bên dưới để áp dụng vào database.', false);
     setTimeout(() => { closeUpd(); renderPending(); }, 1200);
   } else {
-    // Phòng ban → pending queue, mỗi user/phòng giữ 1 entry riêng cho cùng task
-    const arr = lsGet(PK);
-    const idx = arr.findIndex(p => p.id === _updTask.id && p.user === AUTH.user);
-    if (idx >= 0) arr[idx] = entry; else arr.push(entry);
-    lsSave(PK, arr);
-    // Cập nhật button ngay trên DOM → user thấy phản hồi tức thì
-    const _btn = document.querySelector(`button.btn-upd[data-id="${_updTask.id}"]`);
-    if (_btn) {
-      _btn.textContent = '↺ Cập nhật lại';
-      _btn.classList.add('btn-sent');
+    // Phòng ban → Firebase pending (real-time, hiển thị ngay trên BGĐ dashboard)
+    if (!fbEnabled()) {
+      showUpdMsg('❌ Firebase chưa cấu hình — liên hệ CNTT để kích hoạt đồng bộ báo cáo.', true);
+      return;
     }
-    showUpdMsg('✓ Đã gửi báo cáo. BGĐ sẽ duyệt trong lần /check tiếp theo.', false);
-    setTimeout(closeUpd, 1500);
+    if (!fbInit()) {
+      showUpdMsg('❌ Không thể kết nối Firebase. Kiểm tra internet và thử lại.', true);
+      return;
+    }
+    const key = fbKey(AUTH.user, _updTask.id);
+    const _btn = document.querySelector(`button.btn-upd[data-id="${_updTask.id}"]`);
+    _db.ref('bvtd_pending/' + key).set(entry)
+      .then(() => {
+        _fbPending[key] = entry;
+        if (_btn) { _btn.textContent = '↺ Cập nhật lại'; _btn.classList.add('btn-sent'); }
+        showUpdMsg('✓ Đã gửi báo cáo. BGĐ sẽ thấy ngay trên dashboard.', false);
+        setTimeout(closeUpd, 1500);
+      })
+      .catch(e => showUpdMsg('❌ Lỗi gửi: ' + e.message, true));
   }
 }
 
@@ -1559,7 +1596,7 @@ function renderReview() {
   if (!isBGD()) return;
   const approved = lsGet(AK);
   const doneKeys = new Set(approved.map(a => a.id + '|' + a.user));
-  const pending  = lsGet(PK).filter(p => !doneKeys.has(p.id + '|' + p.user));
+  const pending  = fbPendingList().filter(p => !doneKeys.has(p.id + '|' + p.user));
   const depts    = new Set(pending.map(p => p.user));
 
   // KPI
@@ -1662,7 +1699,7 @@ function updateNavBadge() {
   if (navEl) navEl.style.display = 'flex';
   const approved  = lsGet(AK);
   const doneKeys  = new Set(approved.map(a => a.id + '|' + a.user));
-  const count     = lsGet(PK).filter(p => !doneKeys.has(p.id + '|' + p.user)).length;
+  const count     = fbPendingList().filter(p => !doneKeys.has(p.id + '|' + p.user)).length;
   if (badge) {
     badge.textContent   = count;
     badge.style.display = count > 0 ? 'inline-flex' : 'none';
@@ -1673,8 +1710,8 @@ function renderPending() {
   const panel = document.getElementById('pending-panel');
   if (!panel || !isBGD()) { if (panel) panel.innerHTML = ''; return; }
   const approvedItems = lsGet(AK);
-  const doneIds = new Set(approvedItems.map(a => a.id));
-  const pendingItems = lsGet(PK).filter(p => !doneIds.has(p.id));
+  const doneKeys2 = new Set(approvedItems.map(a => a.id + '|' + a.user));
+  const pendingItems = fbPendingList().filter(p => !doneKeys2.has(p.id + '|' + p.user));
   if (!pendingItems.length && !approvedItems.length) { panel.innerHTML = ''; return; }
 
   let h = '<div class="pending-panel">';
@@ -1837,19 +1874,22 @@ function removeApproved(id) {
 }
 
 function approveUpd(id, user) {
-  const all = lsGet(PK);
-  const item = all.find(p => p.id === id && p.user === user);
+  const key = fbKey(user, id);
+  const item = _fbPending[key];
   if (!item) return;
-  lsSave(PK, all.filter(p => !(p.id === id && p.user === user)));
+  if (fbInit()) _db.ref('bvtd_pending/' + key).remove();
+  delete _fbPending[key];
   const appr = lsGet(AK);
-  const idx = appr.findIndex(a => a.id === id);
+  const idx = appr.findIndex(a => a.id === id && a.user === user);
   if (idx >= 0) appr[idx] = item; else appr.push(item);
   lsSave(AK, appr);
   renderPending(); renderReview();
 }
 
 function rejectUpd(id, user) {
-  lsSave(PK, lsGet(PK).filter(p => !(p.id === id && p.user === user)));
+  const key = fbKey(user, id);
+  if (fbInit()) _db.ref('bvtd_pending/' + key).remove();
+  delete _fbPending[key];
   renderPending(); renderReview();
 }
 
@@ -1878,6 +1918,7 @@ if (savedAuth) {
     document.getElementById('app-body').style.display = 'flex';
     document.getElementById('user-badge').textContent = AUTH.user;
     initApp();
+    startFbListener();
   }
 }
 </script>
