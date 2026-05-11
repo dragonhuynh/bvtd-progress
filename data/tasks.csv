@@ -34,9 +34,9 @@ id,ten_dau_viec,nhom,phong_chinh,phong_phoi_hop,bat_dau,ket_thuc,trang_thai,so_l
 33,Lắp đặt biển báo Lối vào - Lối ra cho xe,hanh_chanh,HCQT,,2025-12-16,2025-12-23,da_hoan_thanh,1,,BC Tiến độ họp BS Ngọc Hải 16/12/2025
 34,Kiểm soát thẻ đeo ký tên ra vào đối với công nhân xây dựng,quan_ly_khac,Bảo vệ,HCQT,2025-12-16,2025-12-30,tre_deadline,1,Đang kiểm soát bằng sổ ra vào,BC Tiến độ họp BS Ngọc Hải 16/12/2025
 35,Làm mái che vòm sơn trắng khu vực Bảo vệ,hanh_chanh,HCQT,,2025-12-16,2025-12-30,da_hoan_thanh,1,Đã làm tờ trình 19.12.2025,BC Tiến độ họp BS Ngọc Hải 16/12/2025
-36,Cải tạo vườn trước phòng khám (lát tấm đan 80cm chia 5 ô),hanh_chanh,HCQT,,2025-12-16,2025-12-30,tre_deadline,1,Tờ trình T2 22.12.2025,BC Tiến độ họp BS Ngọc Hải 16/12/2025
-37,Cải tạo vườn trước khu nhân viên (lát tấm đan 80cm chia 2 ô),hanh_chanh,HCQT,,2025-12-16,2025-12-30,tre_deadline,1,Tờ trình T2 22.12.2025,BC Tiến độ họp BS Ngọc Hải 16/12/2025
-38,Vận chuyển 20 ghế Inox từ Cơ sở 1 lên tăng cường,hanh_chanh,HCQT,,2025-12-16,2025-12-25,tre_deadline,1,,BC Tiến độ họp BS Ngọc Hải 16/12/2025
+36,Cải tạo vườn trước phòng khám (lát tấm đan 80cm chia 5 ô),hanh_chanh,HCQT,,2025-12-16,2026-01-20,da_hoan_thanh,1,Tờ trình T2 22.12.2025,BC Tiến độ họp BS Ngọc Hải 16/12/2025
+37,Cải tạo vườn trước khu nhân viên (lát tấm đan 80cm chia 2 ô),hanh_chanh,HCQT,,2025-12-16,2026-01-20,da_hoan_thanh,1,Tờ trình T2 22.12.2025,BC Tiến độ họp BS Ngọc Hải 16/12/2025
+38,Vận chuyển 20 ghế Inox từ Cơ sở 1 lên tăng cường,hanh_chanh,HCQT,,2025-12-16,2026-01-20,da_hoan_thanh,1,,BC Tiến độ họp BS Ngọc Hải 16/12/2025
 39,Cải tạo kho phòng khám thành chỗ thay đồ (có tủ Locker),hanh_chanh,HCQT,,2025-12-16,2025-12-30,da_hoan_thanh,1,Đã xong 19.12.2025,BC Tiến độ họp BS Ngọc Hải 16/12/2025
 40,Đóng đinh khóa các phòng hiện chưa sử dụng,hanh_chanh,HCQT,,2025-12-16,2025-12-30,da_hoan_thanh,1,Đã xong 19.12.2025,BC Tiến độ họp BS Ngọc Hải 16/12/2025
 41,Thông báo cấm công nhân đi lối phòng khám và sử dụng thang máy PK,hanh_chanh,HCQT,,2025-12-16,2025-12-30,da_hoan_thanh,1,,BC Tiến độ họp BS Ngọc Hải 16/12/2025
@@ -61,9 +61,9 @@ id,ten_dau_viec,nhom,phong_chinh,phong_phoi_hop,bat_dau,ket_thuc,trang_thai,so_l
 60,Thành lập bộ phận quản lý điều hành BVTD CS2,quan_ly_khac,TCCB,HCQT,2025-12-29,2026-01-02,tre_deadline,1,Phòng làm việc tầng trệt - cung cấp số điện thoại liên hệ,Kết luận họp BS Ngọc Hải 29/12/2025
 61,Thực hiện và giám sát 5S tại khoa Cấp cứu chống độc,hanh_chanh,Điều dưỡng,,2025-12-29,2026-01-12,tre_deadline,1,,Kết luận họp BS Ngọc Hải 29/12/2025
 62,Chuẩn bị đồng phục cho bác sĩ và người bệnh,chuyen_mon,Điều dưỡng,,2025-12-29,2026-01-15,tre_deadline,2,Nhắc lại 06/01/2026,Kết luận họp BS Ngọc Hải 29/12/2025
-63,Cải tạo khu vực bồn cây trung tâm (trồng cây bông vàng-hồng + sơn bồn + tỉa cây + di dời cây bằng lăng),hanh_chanh,HCQT,,2026-01-29,2026-01-30,tre_deadline,1,,Kết luận họp BS Ngọc Hải 29/01/2026
-64,Phối hợp cải tạo vườn cây thuốc Nam khu phòng khám YHCT cùng BV Y học Cổ truyền TP.HCM,hanh_chanh,HCQT,Đoàn Thanh Niên,2026-01-29,2026-01-30,tre_deadline,1,,Kết luận họp BS Ngọc Hải 29/01/2026
-65,Cải tạo khu nhà nghỉ nhân viên: di dời cây xanh + sân phơi đồ (đá sỏi/dây phơi/chiếu sáng/sửa nắp cống) + sân thể thao,hanh_chanh,HCQT,,2026-01-29,2026-01-30,tre_deadline,1,,Kết luận họp BS Ngọc Hải 29/01/2026
+63,Cải tạo khu vực bồn cây trung tâm (trồng cây bông vàng-hồng + sơn bồn + tỉa cây + di dời cây bằng lăng),hanh_chanh,HCQT,,2026-01-29,2026-01-20,da_hoan_thanh,1,,Kết luận họp BS Ngọc Hải 29/01/2026
+64,Phối hợp cải tạo vườn cây thuốc Nam khu phòng khám YHCT cùng BV Y học Cổ truyền TP.HCM,hanh_chanh,HCQT,Đoàn Thanh Niên,2026-01-29,2026-01-30,da_hoan_thanh,1,,Kết luận họp BS Ngọc Hải 29/01/2026
+65,Cải tạo khu nhà nghỉ nhân viên: di dời cây xanh + sân phơi đồ (đá sỏi/dây phơi/chiếu sáng/sửa nắp cống) + sân thể thao,hanh_chanh,HCQT,,2026-01-29,2026-01-30,da_hoan_thanh,1,,Kết luận họp BS Ngọc Hải 29/01/2026
 66,Cải tạo kho trung tâm CS2 (khu vực KSNK) phục vụ VTTBYT + HCQT + Dược,hanh_chanh,HCQT,VTTBYT|Dược|KSNK,2026-01-29,2026-01-30,da_hoan_thanh,1,,Kết luận họp BS Ngọc Hải 29/01/2026
 67,Dọn vệ sinh 5S và di dời thiết bị hư tại khu nhà đại thể (bàn/giường inox + xe cấp cứu hư + thùng rác về CS1),hanh_chanh,HCQT,,2026-01-29,2026-01-30,da_hoan_thanh,1,,Kết luận họp BS Ngọc Hải 29/01/2026
 68,Dọn vệ sinh 5S và xây lưới B40 bảo vệ khu vực bình Oxy,hanh_chanh,HCQT,,2026-01-29,2026-01-30,da_hoan_thanh,1,,Kết luận họp BS Ngọc Hải 29/01/2026
