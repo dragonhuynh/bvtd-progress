@@ -1489,6 +1489,34 @@ function startFbListener() {
     renderReview();
     updateNavBadge();
   });
+  migrateLocalStorage();
+}
+
+function migrateLocalStorage() {
+  const OLD_KEY = 'bvtd_pending';
+  let old = [];
+  try { old = JSON.parse(localStorage.getItem(OLD_KEY) || '[]'); } catch(e) {}
+  if (!Array.isArray(old) || old.length === 0) return;
+  const myPending = old.filter(e => e.phong === AUTH.user || (AUTH.depts && AUTH.depts.includes(e.phong)));
+  if (myPending.length === 0) { localStorage.removeItem(OLD_KEY); return; }
+  if (!confirm('Bạn có ' + myPending.length + ' báo cáo cũ chưa được đồng bộ lên hệ thống.\\nBấm OK để đẩy lên ngay, Huỷ để bỏ qua.')) return;
+  let ok = 0;
+  myPending.forEach(e => {
+    const key = (e.task_id || e.id || Date.now()) + '_' + (e.phong || 'unknown') + '_' + (e.timestamp || Date.now());
+    const entry = {
+      task_id: e.task_id || e.id,
+      task_ten: e.task_ten || e.ten || '',
+      phong: e.phong || '',
+      trang_thai: e.trang_thai || e.tt || '',
+      ngay_hoan_thanh: e.ngay_hoan_thanh || e.ngay || '',
+      ghi_chu: e.ghi_chu || e.note || '',
+      timestamp: e.timestamp || Date.now(),
+      migrated: true
+    };
+    _db.ref('bvtd_pending/' + key).set(entry).then(() => ok++);
+  });
+  localStorage.removeItem(OLD_KEY);
+  setTimeout(() => alert('Đã đồng bộ ' + myPending.length + ' báo cáo lên Firebase thành công!'), 1000);
 }
 
 function fmtDateInput(el) {
