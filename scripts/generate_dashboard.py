@@ -252,25 +252,27 @@ def build_html(data: dict) -> str:
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 <style>
 :root {
-  --bg:      #f5e6d8;
-  --sidebar: #1c2341;
-  --accent:  #f47c3c;
-  --accent2: #e06528;
+  --bg:      #EBF4FF;
+  --sidebar: #0D3B7A;
+  --accent:  #1A5CA8;
+  --accent2: #134489;
+  --pink:    #E91E8C;
+  --pink2:   #C41A77;
   --white:   #ffffff;
   --text:    #1a202c;
   --muted:   #718096;
-  --border:  #e2e8f0;
+  --border:  #dce8f5;
   --green:   #48bb78;
   --blue:    #4299e1;
   --red:     #f56565;
   --orange:  #ed8936;
   --purple:  #9f7aea;
   --r: 14px;
-  --sh: 0 2px 16px rgba(0,0,0,.09);
+  --sh: 0 2px 16px rgba(13,59,122,.10);
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body {
-  font-family: 'Segoe UI', -apple-system, sans-serif;
+  font-family: 'Be Vietnam Pro', 'Inter', 'Segoe UI', -apple-system, sans-serif;
   background: var(--bg);
   color: var(--text);
   font-size: 14px;
@@ -280,7 +282,7 @@ body {
 /* ── Login overlay ── */
 #login-overlay {
   position: fixed; inset: 0;
-  background: linear-gradient(135deg, #1c2341 0%, #2d3a6b 100%);
+  background: linear-gradient(135deg, #0D3B7A 0%, #1A5CA8 100%);
   z-index: 9999;
   display: flex; align-items: center; justify-content: center;
 }
@@ -290,7 +292,7 @@ body {
 }
 .login-logo { text-align: center; margin-bottom: 28px; }
 .login-logo .ic { font-size: 48px; }
-.login-logo .nm { font-size: 22px; font-weight: 800; color: #1c2341; margin-top: 8px; }
+.login-logo .nm { font-size: 22px; font-weight: 800; color: #0D3B7A; margin-top: 8px; }
 .login-logo .sub { font-size: 13px; color: #718096; margin-top: 4px; }
 .login-field { margin-bottom: 16px; }
 .login-field label { display: block; font-size: 12px; font-weight: 700; color: #4a5568; margin-bottom: 6px; text-transform: uppercase; letter-spacing: .04em; }
@@ -300,15 +302,15 @@ body {
   font-size: 14px; outline: none; transition: border .15s;
   font-family: inherit;
 }
-.login-field input:focus { border-color: #f47c3c; }
+.login-field input:focus { border-color: #1A5CA8; }
 #login-err { color: #c53030; font-size: 12px; margin-bottom: 12px; display: none; padding: 8px 12px; background: #fff5f5; border-radius: 6px; }
 .login-btn {
   width: 100%; padding: 13px;
-  background: #f47c3c; color: #fff; border: none;
+  background: linear-gradient(135deg, #1A5CA8 0%, #E91E8C 100%); color: #fff; border: none;
   border-radius: 9px; font-size: 15px; font-weight: 700;
-  cursor: pointer; transition: background .15s; font-family: inherit;
+  cursor: pointer; transition: opacity .15s; font-family: inherit;
 }
-.login-btn:hover { background: #e06528; }
+.login-btn:hover { opacity: .88; }
 .login-hint { font-size: 11px; color: #718096; text-align: center; margin-top: 14px; }
 
 /* ── App body ── */
