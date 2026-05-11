@@ -866,10 +866,14 @@ body {
 
   <!-- Approved section -->
   <div class="rv-section">
-    <div class="rv-section-title">
+    <div class="rv-section-title" style="display:flex;align-items:center;gap:8px;">
       ✅ Đã Duyệt
       <span class="badge badge-green" id="rv-approved-badge">0</span>
-      <span style="font-size:12px;color:var(--muted);font-weight:400;margin-left:4px;">— sẵn sàng xuất JSON</span>
+      <span style="font-size:12px;color:var(--muted);font-weight:400;">— sẵn sàng xuất JSON</span>
+      <button onclick="showGHTokenSetup()" title="Cấu hình GitHub Token để gửi tự động"
+        style="margin-left:auto;background:none;border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer;color:var(--muted);display:flex;align-items:center;gap:4px;">
+        ⚙ GitHub Token
+      </button>
     </div>
     <div id="rv-approved-list"></div>
     <div class="rv-export-bar" id="rv-export-btn" style="display:none;gap:10px;">
