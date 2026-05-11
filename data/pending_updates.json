@@ -1,123 +1,24 @@
 [
   {
-    "id": "60",
-    "ten": "Thành lập bộ phận quản lý điều hành BVTD CS2",
-    "phong": "TCCB",
-    "trang_thai": "da_hoan_thanh",
-    "ngay_ht": "2026-01-02",
-    "ghi_chu": "⚠️ Báo cáo từ phòng phối hợp (HCQT) — cần kiểm tra lại với phòng chính (TCCB)",
-    "user": "HCQT",
-    "user_phong": "HCQT",
-    "at": "2026-05-11"
-  },
-  {
-    "id": "89",
-    "ten": "Chuẩn hóa và đánh dấu khu vực để xe lăn toàn viện theo chuẩn CS1 (khu CC và phòng khám)",
-    "phong": "Điều dưỡng",
-    "trang_thai": "da_hoan_thanh",
-    "ngay_ht": "2026-01-30",
-    "ghi_chu": "⚠️ Báo cáo từ phòng phối hợp (HCQT) — cần kiểm tra lại với phòng chính (Điều dưỡng)",
-    "user": "HCQT",
-    "user_phong": "HCQT",
-    "at": "2026-05-11"
-  },
-  {
-    "id": "116",
-    "ten": "TCCB + HCQT + Điều dưỡng thiết kế đồng phục bảo vệ (nón + giày + dây lưng) trình GĐ",
-    "phong": "TCCB",
-    "trang_thai": "da_hoan_thanh",
-    "ngay_ht": "2026-01-14",
-    "ghi_chu": "⚠️ Báo cáo từ phòng phối hợp (HCQT) — cần kiểm tra lại với phòng chính (TCCB)",
-    "user": "HCQT",
-    "user_phong": "HCQT",
-    "at": "2026-05-11"
-  },
-  {
-    "id": "204",
-    "ten": "Thu hồi bình Oxy di động và sơn lại vỏ bình theo quy chuẩn kỹ thuật an toàn",
-    "phong": "VTTBYT",
-    "trang_thai": "da_hoan_thanh",
-    "ngay_ht": "2026-02-10",
-    "ghi_chu": "⚠️ Báo cáo từ phòng phối hợp (HCQT) — cần kiểm tra lại với phòng chính (VTTBYT)",
-    "user": "HCQT",
-    "user_phong": "HCQT",
-    "at": "2026-05-11"
-  },
-  {
-    "id": "214",
-    "ten": "Lên kế hoạch trang trí Tết CS2 và giao lưu văn hóa với chính quyền/người dân địa phương",
-    "phong": "Điều dưỡng",
-    "trang_thai": "da_hoan_thanh",
-    "ngay_ht": "2026-02-10",
-    "ghi_chu": "⚠️ Báo cáo từ phòng phối hợp (HCQT) — cần kiểm tra lại với phòng chính (Điều dưỡng)",
-    "user": "HCQT",
-    "user_phong": "HCQT",
-    "at": "2026-05-11"
-  },
-  {
-    "id": "223",
-    "ten": "Trực tập trung tại khoa Cấp cứu (điều hành KHTH + Điều dưỡng + HCQT)",
+    "id": "173",
+    "ten": "Triển khai đưa vào hoạt động Phòng khám Nội thứ 3",
     "phong": "KHTH",
     "trang_thai": "dang_thuc_hien",
     "ngay_ht": "",
-    "ghi_chu": "⚠️ Báo cáo từ phòng phối hợp (HCQT) — cần kiểm tra lại với phòng chính (KHTH)",
-    "user": "HCQT",
-    "user_phong": "HCQT",
+    "ghi_chu": "Thứ 2, thứ 3, thứ 6 hàng tuần.",
+    "user": "KHTH",
+    "user_phong": "KHTH",
     "at": "2026-05-11"
   },
   {
-    "id": "224",
-    "ten": "Chuyển khoa Sản xuống tầng trệt gần Cấp cứu trong tuần",
-    "phong": "KHTH",
-    "trang_thai": "da_hoan_thanh",
-    "ngay_ht": "2026-02-13",
-    "ghi_chu": "⚠️ Báo cáo từ phòng phối hợp (HCQT) — cần kiểm tra lại với phòng chính (KHTH)",
-    "user": "HCQT",
-    "user_phong": "HCQT",
-    "at": "2026-05-11"
-  },
-  {
-    "id": "225",
-    "ten": "Tích hợp phòng khám Sản + Phụ + Soi thành 1 phòng khám",
-    "phong": "KHTH",
-    "trang_thai": "da_hoan_thanh",
-    "ngay_ht": "2026-02-10",
-    "ghi_chu": "⚠️ Báo cáo từ phòng phối hợp (HCQT) — cần kiểm tra lại với phòng chính (KHTH)",
-    "user": "HCQT",
-    "user_phong": "HCQT",
-    "at": "2026-05-11"
-  },
-  {
-    "id": "276",
-    "ten": "KHTH chuẩn bị báo cáo tổng kết 3 tháng bằng hình ảnh và số liệu tiêu biểu",
-    "phong": "KHTH",
-    "trang_thai": "da_hoan_thanh",
-    "ngay_ht": "2026-03-09",
-    "ghi_chu": "⚠️ Báo cáo từ phòng phối hợp (HCQT) — cần kiểm tra lại với phòng chính (KHTH)",
-    "user": "HCQT",
-    "user_phong": "HCQT",
-    "at": "2026-05-11"
-  },
-  {
-    "id": "407",
-    "ten": "KHTH + Điều dưỡng + HCQT + VTTBYT rà soát TB KL họp T1-4/2026 và báo cáo hạng mục chưa/đang triển khai",
+    "id": "177",
+    "ten": "Tăng cường giám sát tuân thủ trang phục y tế và đeo bảng tên NVYT",
     "phong": "KHTH",
     "trang_thai": "dang_thuc_hien",
     "ngay_ht": "",
-    "ghi_chu": "⚠️ Báo cáo từ phòng phối hợp (HCQT) — cần kiểm tra lại với phòng chính (KHTH)",
-    "user": "HCQT",
-    "user_phong": "HCQT",
-    "at": "2026-05-11"
-  },
-  {
-    "id": "416",
-    "ten": "TCCB + KHTH + Điều dưỡng + HCQT + CTXH triển khai mổ đục thủy tinh thể (CS2 chủ trì: tiếp nhận đến hậu phẫu và tư vấn tái khám)",
-    "phong": "TCCB",
-    "trang_thai": "da_hoan_thanh",
-    "ngay_ht": "2026-04-28",
-    "ghi_chu": "⚠️ Báo cáo từ phòng phối hợp (HCQT) — cần kiểm tra lại với phòng chính (TCCB)",
-    "user": "HCQT",
-    "user_phong": "HCQT",
+    "ghi_chu": "",
+    "user": "KHTH",
+    "user_phong": "KHTH",
     "at": "2026-05-11"
   }
 ]
