@@ -1,13 +1,134 @@
 [
   {
     "at": "2026-05-11",
-    "ghi_chu": "Hoàn thành",
-    "id": "19",
-    "ngay_ht": "2026-03-20",
-    "phong": "HCQT",
-    "ten": "Đo lường kích thước khu vực WC và hành lang ngoài cho X-quang",
+    "ghi_chu": "Đã phối hợp hoàn thành",
+    "id": "8",
+    "ngay_ht": "2026-04-15",
+    "phong": "KHTH",
+    "ten": "Vẽ lại sơ đồ quy trình khám bệnh mới (tối ưu hóa luồng)",
     "trang_thai": "da_hoan_thanh",
-    "user": "HCQT",
-    "user_phong": "HCQT"
+    "user": "KHTH",
+    "user_phong": "KHTH"
+  },
+  {
+    "at": "2026-05-11",
+    "ghi_chu": "Phối hợp khảo sát đảm bảo quy trình chuyên môn",
+    "id": "18",
+    "ngay_ht": "",
+    "phong": "KHTH",
+    "ten": "Thiết kế lại mặt bằng tích hợp CT - X-quang",
+    "trang_thai": "dang_thuc_hien",
+    "user": "KHTH",
+    "user_phong": "KHTH"
+  },
+  {
+    "at": "2026-05-11",
+    "ghi_chu": "Thông báo về việc trực tập trung, giám sát mỗi đợt nhân sự mới",
+    "id": "54",
+    "ngay_ht": "2026-02-15",
+    "phong": "KHTH",
+    "ten": "Tái bố trí nhân sự Nội/Ngoại/Sản/Cấp cứu theo định hướng trực tập trung",
+    "trang_thai": "da_hoan_thanh",
+    "user": "KHTH",
+    "user_phong": "KHTH"
+  },
+  {
+    "at": "2026-05-11",
+    "ghi_chu": "Đã ban hành 2 phác đồ, 2 QTKT, đang chờ bổ sung phác đồ nội ngoại thường gặp",
+    "id": "82",
+    "ngay_ht": "",
+    "phong": "KHTH",
+    "ten": "Hoàn thiện và trình phê duyệt hệ thống quy trình phác đồ điều trị phù hợp CS2",
+    "trang_thai": "dang_thuc_hien",
+    "user": "KHTH",
+    "user_phong": "KHTH"
+  },
+  {
+    "at": "2026-05-11",
+    "ghi_chu": "giám sát mỗi ngày",
+    "id": "99",
+    "ngay_ht": "2026-04-30",
+    "phong": "KHTH",
+    "ten": "KHTH giám sát BS nội trú tập trung trực tại Cấp cứu đảm bảo điều trị kịp thời",
+    "trang_thai": "da_hoan_thanh",
+    "user": "KHTH",
+    "user_phong": "KHTH"
+  },
+  {
+    "at": "2026-05-11",
+    "ghi_chu": "",
+    "id": "143",
+    "ngay_ht": "2026-03-15",
+    "phong": "KHTH",
+    "ten": "KHTH + Điều dưỡng bố trí trực Tết và chuẩn bị khu khám bệnh tại CC",
+    "trang_thai": "da_hoan_thanh",
+    "user": "KHTH",
+    "user_phong": "KHTH"
+  },
+  {
+    "at": "2026-05-11",
+    "ghi_chu": "Thực hiện theo biểu mẫu báo cáo giao ban hằng ngày",
+    "id": "167",
+    "ngay_ht": "2026-05-10",
+    "phong": "KHTH",
+    "ten": "Thực hiện nghiêm túc chế độ báo cáo định kỳ (hoạt động chung + chuyên môn + chuyển tuyến)",
+    "trang_thai": "da_hoan_thanh",
+    "user": "KHTH",
+    "user_phong": "KHTH"
+  },
+  {
+    "at": "2026-05-11",
+    "ghi_chu": "",
+    "id": "172",
+    "ngay_ht": "2026-04-08",
+    "phong": "KHTH",
+    "ten": "Tổ chức chuyên đề sinh hoạt khoa học về Bệnh Động Kinh",
+    "trang_thai": "da_hoan_thanh",
+    "user": "KHTH",
+    "user_phong": "KHTH"
+  },
+  {
+    "at": "2026-05-11",
+    "ghi_chu": "Đã hoàn thành thông báo cho luân chuyển mới, thực hiện giám sát",
+    "id": "223",
+    "ngay_ht": "2026-04-10",
+    "phong": "KHTH",
+    "ten": "Trực tập trung tại khoa Cấp cứu (điều hành KHTH + Điều dưỡng + HCQT)",
+    "trang_thai": "da_hoan_thanh",
+    "user": "KHTH",
+    "user_phong": "KHTH"
+  },
+  {
+    "at": "2026-05-11",
+    "ghi_chu": "Phối hợp HCQT liên hệ địa phương : thống nhất vị trí lắp đặt",
+    "id": "260",
+    "ngay_ht": "",
+    "phong": "KHTH",
+    "ten": "KHTH + HCQT lắp đặt biển chỉ dẫn đường bộ 3 vị trí đến BVTD CS2",
+    "trang_thai": "dang_thuc_hien",
+    "user": "KHTH",
+    "user_phong": "KHTH"
+  },
+  {
+    "at": "2026-05-11",
+    "ghi_chu": "Thực hiện mỗi ngày",
+    "id": "361",
+    "ngay_ht": "2026-04-17",
+    "phong": "KHTH",
+    "ten": "KHTH + Điều dưỡng + HCQT rà soát chỉnh sửa bảng thông tin phòng họp Cấp cứu (BN nặng, số NB và NV toàn viện từng khoa theo ngày)",
+    "trang_thai": "da_hoan_thanh",
+    "user": "KHTH",
+    "user_phong": "KHTH"
+  },
+  {
+    "at": "2026-05-11",
+    "ghi_chu": "Đã hoàn thành",
+    "id": "387",
+    "ngay_ht": "2026-04-17",
+    "phong": "KHTH",
+    "ten": "KHTH + Điều dưỡng + HCQT làm bảng thông tin trực phòng họp CC (lãnh đạo/BS/ĐD/hotline)",
+    "trang_thai": "da_hoan_thanh",
+    "user": "KHTH",
+    "user_phong": "KHTH"
   }
 ]
