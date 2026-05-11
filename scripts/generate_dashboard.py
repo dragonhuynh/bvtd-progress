@@ -1770,13 +1770,13 @@ async function uploadToGitHub() {
 
   let token = localStorage.getItem(GH_TOKEN_KEY) || '';
   if (!token) {
-    token = prompt('Nhập GitHub Personal Access Token\\n(Chỉ cần nhập 1 lần — lưu vào bộ nhớ):') || '';
+    token = (prompt('Nhập GitHub Personal Access Token\\n(Chỉ cần nhập 1 lần — lưu vào bộ nhớ):') || '').trim();
     if (!token) return;
-    localStorage.setItem(GH_TOKEN_KEY, token.trim());
-    token = token.trim();
+    localStorage.setItem(GH_TOKEN_KEY, token);
   }
 
   const btn = document.getElementById('btn-gh-upload');
+  const BTN_LABEL = '📤 Gửi lên GitHub — tự động cập nhật';
   if (btn) { btn.textContent = '⏳ Đang gửi...'; btn.disabled = true; }
 
   const apiUrl = `https://api.github.com/repos/${GH_REPO}/contents/${GH_PATH}`;
@@ -1818,7 +1818,7 @@ async function uploadToGitHub() {
       );
     } else {
       const err = await resp.json().catch(() => ({}));
-      if (btn) { btn.textContent = '📤 Gửi lên GitHub — tự động cập nhật'; btn.disabled = false; }
+      if (btn) { btn.textContent = BTN_LABEL; btn.disabled = false; }
       if (resp.status === 401) {
         localStorage.removeItem(GH_TOKEN_KEY);
         alert('❌ Token không hợp lệ hoặc hết hạn. Nhấn ⚙ để nhập lại.');
@@ -1829,7 +1829,7 @@ async function uploadToGitHub() {
       }
     }
   } catch(e) {
-    if (btn) { btn.textContent = '📤 Gửi lên GitHub — tự động cập nhật'; btn.disabled = false; }
+    if (btn) { btn.textContent = BTN_LABEL; btn.disabled = false; }
     alert('❌ Lỗi kết nối: ' + e.message + '\\nKiểm tra kết nối internet.');
   }
 }
@@ -1872,11 +1872,11 @@ function exportApproved() {
 // ── Boot ───────────────────────────────────────────────────────────────────────
 const savedAuth = sessionStorage.getItem('bvtd_auth') || localStorage.getItem('bvtd_auth');
 if (savedAuth) {
-  let _sa = null;
-  try { _sa = JSON.parse(savedAuth); }
+  let parsedAuth = null;
+  try { parsedAuth = JSON.parse(savedAuth); }
   catch(e) { localStorage.removeItem('bvtd_auth'); sessionStorage.removeItem('bvtd_auth'); }
-  if (_sa && _sa.user && _sa.user in USERS) {
-    AUTH = _sa;
+  if (parsedAuth && parsedAuth.user && parsedAuth.user in USERS) {
+    AUTH = parsedAuth;
     document.getElementById('login-overlay').style.display = 'none';
     document.getElementById('app-body').style.display = 'flex';
     document.getElementById('user-badge').textContent = AUTH.user;
