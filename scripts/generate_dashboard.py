@@ -556,14 +556,19 @@ body {
 .nguon-cell { font-size: 11px; color: var(--muted); white-space: nowrap; max-width: 140px; overflow: hidden; text-overflow: ellipsis; }
 
 /* Dept progress bars */
-.dept-progress-row { display: flex; align-items: center; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--border); }
+.dept-progress-row { display: grid; grid-template-columns: 100px 1fr auto; align-items: center; gap: 10px 14px; padding: 11px 0; border-bottom: 1px solid var(--border); }
 .dept-progress-row:last-child { border-bottom: none; }
-.dp-name { width: 110px; font-size: 12.5px; font-weight: 600; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.dp-bar-wrap { flex: 1; height: 10px; background: #f0f4f8; border-radius: 5px; display: flex; overflow: hidden; }
-.dp-bar-done   { background: var(--green); height: 100%; transition: width .4s; }
-.dp-bar-active { background: var(--blue);  height: 100%; transition: width .4s; }
-.dp-bar-late   { background: var(--red);   height: 100%; transition: width .4s; }
-.dp-stats { font-size: 11px; color: var(--muted); white-space: nowrap; flex-shrink: 0; width: 130px; text-align: right; }
+.dp-name { font-size: 13px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dp-bar-wrap { height: 12px; background: #dce8f5; border-radius: 6px; display: flex; overflow: hidden; }
+.dp-bar-done   { background: var(--green); height: 100%; transition: width .5s; }
+.dp-bar-active { background: var(--blue);  height: 100%; transition: width .5s; }
+.dp-bar-late   { background: var(--red);   height: 100%; transition: width .5s; }
+.dp-stats { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.dp-stat { font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 3px; }
+.dp-stat-done  { color: var(--green); }
+.dp-stat-act   { color: var(--blue); }
+.dp-stat-late  { color: var(--red); }
+.dp-stat-total { color: var(--muted); font-weight: 500; font-size: 12px; }
 
 .no-tasks-msg { text-align: center; padding: 40px 0; color: var(--muted); font-size: 14px; }
 .mb-16 { margin-bottom: 16px; }
@@ -596,37 +601,53 @@ body {
   .two-col, .three-col { grid-template-columns: 1fr; }
 }
 @media (max-width: 768px) {
+  /* Sidebar: ẩn hoàn toàn, dùng hamburger drawer */
+  .sidebar { position: fixed; left: -240px; top: 0; height: 100vh; width: 220px !important; z-index: 150; transition: left .25s ease; box-shadow: 4px 0 20px rgba(0,0,0,.25); }
+  .sidebar.mob-open { left: 0; }
+  .mob-hamburger { display: flex; }
+  .view { padding: 56px 16px 32px; }
+  /* Layout */
   .page-header { flex-direction: column; gap: 8px; }
   .page-header > div:last-child { width: 100%; }
   .search-box, .search-box input { width: 100%; }
   .filter-bar { overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; padding-bottom: 4px; }
   .sources-grid { grid-template-columns: repeat(2, 1fr); }
-  /* Table mobile: horizontal scroll + ẩn cột phụ */
+  /* Table: horizontal scroll + ẩn cột phụ */
   .task-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  .task-table { min-width: 560px; }
+  .task-table { min-width: 480px; }
   .col-hide-mobile { display: none; }
-  /* Card view cho dept sections */
+  /* Dept sections */
   .dept-section-header { padding: 10px 12px; }
   .dept-badges { gap: 4px; }
+  /* Dept progress bars — 2 dòng trên mobile */
+  .dept-progress-row { grid-template-columns: 1fr auto; grid-template-rows: auto auto; gap: 5px 8px; padding: 12px 0; }
+  .dp-name { grid-column: 1; font-size: 14px; }
+  .dp-stats { grid-column: 2; }
+  .dp-stat { font-size: 14px; }
+  .dp-bar-wrap { grid-column: 1 / -1; height: 14px; border-radius: 7px; }
+  /* Review tab mobile */
+  .rv-reporter { flex-direction: column; }
+  .rv-reporter-actions { width: 100%; display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+  .btn-appr, .btn-rejt { width: 100%; padding: 12px; font-size: 14px; border-radius: 10px; text-align: center; }
+  .review-stats { grid-template-columns: repeat(3,1fr); gap: 10px; }
+  .rv-item { padding: 14px; }
+  .rv-export-bar { flex-direction: column; }
+  .rv-export-bar button { width: 100%; justify-content: center; }
+  /* Modal */
+  .modal-bx { width: calc(100vw - 20px); padding: 20px 16px; }
+  .mactions { flex-direction: column-reverse; }
+  .mactions button { width: 100%; }
 }
-@media (max-width: 640px) {
-  /* Sidebar ẩn hoàn toàn, dùng hamburger */
-  .sidebar { position: fixed; left: -240px; top: 0; height: 100vh; width: 220px !important; z-index: 150; transition: left .25s ease; box-shadow: 4px 0 20px rgba(0,0,0,.2); }
-  .sidebar.mob-open { left: 0; }
-  .mob-hamburger { display: flex; }
-  .main { padding-top: 0; }
-  .view { padding: 56px 14px 24px; }
+@media (max-width: 480px) {
   .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
   .stat-card { padding: 14px 12px; gap: 10px; }
   .stat-num { font-size: 22px; }
   .stat-icon { font-size: 20px; }
-  .login-box { width: calc(100vw - 32px); padding: 32px 20px; }
-  /* Modal full-width trên mobile */
-  .modal-bx { width: calc(100vw - 24px); padding: 20px 16px; }
+  .login-box { width: calc(100vw - 24px); padding: 28px 16px; }
+  .review-stats { grid-template-columns: 1fr 1fr; }
 }
-@media (max-width: 400px) {
+@media (max-width: 380px) {
   .stat-icon { display: none; }
-  .dp-stats { display: none; }
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
@@ -663,6 +684,12 @@ body {
 .nav-badge{display:inline-flex;align-items:center;justify-content:center;background:#f56565;color:#fff;font-size:10px;font-weight:700;border-radius:10px;min-width:18px;height:18px;padding:0 5px;margin-left:auto;flex-shrink:0;}
 
 /* ── Review view ── */
+/* Sticky bar (mobile review summary) */
+.rv-sticky-bar{display:none;position:sticky;top:0;z-index:50;background:var(--white);border-bottom:1px solid var(--border);padding:10px 16px;gap:8px;flex-wrap:wrap;}
+.rv-chip{display:inline-flex;align-items:center;gap:4px;padding:6px 12px;border-radius:999px;font-size:13px;font-weight:500;}
+.rv-chip-pending{background:#fff3e0;color:#e65100;}
+.rv-chip-approved{background:#e8f5e9;color:#2e7d32;}
+.rv-chip-dept{background:#e3f2fd;color:#1565c0;}
 .review-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;}
 .rv-section{margin-bottom:28px;}
 .rv-section-title{font-size:15px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:10px;padding-bottom:10px;border-bottom:2px solid var(--border);}
@@ -678,7 +705,10 @@ body {
 .rv-empty{text-align:center;padding:36px 0;color:var(--muted);font-size:14px;}
 .rv-export-bar{display:flex;justify-content:flex-end;margin-top:16px;}
 @media(max-width:900px){.review-stats{grid-template-columns:1fr 1fr;}}
-@media(max-width:640px){.review-stats{grid-template-columns:1fr 1fr;}.rv-reporter{flex-direction:column;}.rv-reporter-actions{width:100%;justify-content:flex-end;}}
+@media(max-width:768px){
+  .rv-sticky-bar{display:flex;}
+  .review-stats{display:none;}
+}
 </style>
 </head>
 <body>
@@ -906,7 +936,14 @@ body {
     </div>
   </header>
 
-  <!-- KPI cards -->
+  <!-- Sticky summary bar (mobile-first) -->
+  <div class="rv-sticky-bar" id="rv-sticky-bar">
+    <span class="rv-chip rv-chip-pending">⏳ Chờ: <b id="rv-chip-pending">0</b></span>
+    <span class="rv-chip rv-chip-approved">✅ Duyệt: <b id="rv-chip-approved">0</b></span>
+    <span class="rv-chip rv-chip-dept">🏢 Phòng: <b id="rv-chip-dept">0</b></span>
+  </div>
+
+  <!-- KPI cards — hidden on mobile (sticky bar replaces) -->
   <div class="review-stats">
     <div class="stat-card" style="border-top:3px solid var(--orange);">
       <div class="stat-icon">⏳</div>
@@ -1261,10 +1298,10 @@ function initApp() {
           <div class="dp-bar-late"   style="width:${lP}%"></div>
         </div>
         <div class="dp-stats">
-          <span style="color:var(--green)">${d.done}✓</span>&nbsp;
-          <span style="color:var(--blue)">${d.active}⟳</span>&nbsp;
-          <span style="color:var(--red)">${d.late}⚠</span>&nbsp;
-          <span style="color:var(--muted)">/${d.total}</span>
+          <span class="dp-stat dp-stat-done">✓${d.done}</span>
+          <span class="dp-stat dp-stat-act">⟳${d.active}</span>
+          <span class="dp-stat dp-stat-late">⚠${d.late}</span>
+          <span class="dp-stat dp-stat-total">/${d.total}</span>
         </div>
       </div>`;
   }).join('');
@@ -1725,12 +1762,15 @@ function renderReview() {
   const pending  = fbPendingList().filter(p => !doneKeys.has(p.id + '|' + p.user));
   const depts    = new Set(pending.map(p => p.user));
 
-  // KPI
+  // KPI cards + sticky chips
   document.getElementById('rv-pending-count').textContent  = pending.length;
   document.getElementById('rv-approved-count').textContent = approved.length;
   document.getElementById('rv-depts-count').textContent    = depts.size;
   document.getElementById('rv-pending-badge').textContent  = pending.length;
   document.getElementById('rv-approved-badge').textContent = approved.length;
+  document.getElementById('rv-chip-pending').textContent   = pending.length;
+  document.getElementById('rv-chip-approved').textContent  = approved.length;
+  document.getElementById('rv-chip-dept').textContent      = depts.size;
   document.getElementById('review-subtitle').textContent   =
     pending.length
       ? pending.length + ' cập nhật đang chờ từ ' + depts.size + ' phòng ban'
