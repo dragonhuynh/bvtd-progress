@@ -1,20 +1,12 @@
 {
-  "version": "0.3",
+  "version": "0.2",
   "history": [
     {
-      "version": "0.3",
-      "ngay": "2026-05-11 06:09",
-      "loai": "check",
-      "thay_doi": [
-        "auto-apply từ dashboard"
-      ]
-    },
-    {
       "version": "0.2",
-      "ngay": "2026-05-11 05:26",
+      "ngay": "2026-05-11 13:19",
       "loai": "check",
       "thay_doi": [
-        "auto-apply từ dashboard"
+        "Task 66,67,68,69,70,71,73: tre_deadline → da_hoan_thanh (làm đúng deadline 30/01/2026)"
       ]
     },
     {
