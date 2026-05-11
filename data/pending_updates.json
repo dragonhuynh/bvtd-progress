@@ -1,24 +1,13 @@
 [
   {
-    "id": "173",
-    "ten": "Triển khai đưa vào hoạt động Phòng khám Nội thứ 3",
-    "phong": "KHTH",
-    "trang_thai": "dang_thuc_hien",
-    "ngay_ht": "",
-    "ghi_chu": "Thứ 2, thứ 3, thứ 6 hàng tuần.",
-    "user": "KHTH",
-    "user_phong": "KHTH",
-    "at": "2026-05-11"
-  },
-  {
-    "id": "177",
-    "ten": "Tăng cường giám sát tuân thủ trang phục y tế và đeo bảng tên NVYT",
-    "phong": "KHTH",
-    "trang_thai": "dang_thuc_hien",
-    "ngay_ht": "",
-    "ghi_chu": "",
-    "user": "KHTH",
-    "user_phong": "KHTH",
-    "at": "2026-05-11"
+    "at": "2026-05-11",
+    "ghi_chu": "Hoàn thành",
+    "id": "19",
+    "ngay_ht": "2026-03-20",
+    "phong": "HCQT",
+    "ten": "Đo lường kích thước khu vực WC và hành lang ngoài cho X-quang",
+    "trang_thai": "da_hoan_thanh",
+    "user": "HCQT",
+    "user_phong": "HCQT"
   }
 ]
