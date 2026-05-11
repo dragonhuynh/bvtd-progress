@@ -171,11 +171,11 @@ id,ten_dau_viec,nhom,phong_chinh,phong_phoi_hop,bat_dau,ket_thuc,trang_thai,so_l
 170,Bổ sung chi tiết rõ ràng lý do chuyển viện trong hồ sơ bệnh án,chuyen_mon,KHTH,,2026-02-04,2026-02-10,tre_deadline,1,Bác sĩ chỉ định phải theo dõi đến khi BN quay lại,Biên bản 04/02/2026
 171,Điều dưỡng liên hệ thăm hỏi nắm bắt tình trạng sức khỏe ca đã chuyển tuyến,chuyen_mon,Điều dưỡng,,2026-02-04,2026-02-10,tre_deadline,1,,Biên bản 04/02/2026
 172,Tổ chức chuyên đề sinh hoạt khoa học về Bệnh Động Kinh,chuyen_mon,KHTH,,2026-02-04,2026-02-10,tre_deadline,1,,Biên bản 04/02/2026
-173,Triển khai đưa vào hoạt động Phòng khám Nội thứ 3,chuyen_mon,KHTH,BS Bảo Anh|Điều dưỡng|HCQT,2026-02-04,2026-02-10,tre_deadline,1,,Biên bản 04/02/2026
+173,Triển khai đưa vào hoạt động Phòng khám Nội thứ 3,chuyen_mon,KHTH,BS Bảo Anh|Điều dưỡng|HCQT,2026-02-04,2026-02-10,dang_thuc_hien,1,"Thứ 2, thứ 3, thứ 6 hàng tuần.",Biên bản 04/02/2026
 174,Bố trí Hộ sinh hoặc Điều dưỡng trực chuyên môn tại Phòng khám Nội,chuyen_mon,Điều dưỡng,,2026-02-04,2026-02-10,tre_deadline,1,,Biên bản 04/02/2026
 175,Rà soát thay thế Poster chuyên nghiệp tại phòng khám Sản (hình ảnh nhân viên BV),chuyen_mon,Điều dưỡng,,2026-02-04,2026-02-10,tre_deadline,1,,Biên bản 04/02/2026
 176,Tinh gọn quy trình cấp phát thuốc còn 02 bước; bố trí lại vị trí nộp/nhận toa,chuyen_mon,Dược,KHTH,2026-02-04,2026-02-10,da_hoan_thanh,1,,Biên bản 04/02/2026
-177,Tăng cường giám sát tuân thủ trang phục y tế và đeo bảng tên NVYT,chuyen_mon,KHTH,Điều dưỡng,2026-02-04,2026-02-10,tre_deadline,1,,Biên bản 04/02/2026
+177,Tăng cường giám sát tuân thủ trang phục y tế và đeo bảng tên NVYT,chuyen_mon,KHTH,Điều dưỡng,2026-02-04,2026-02-10,dang_thuc_hien,1,,Biên bản 04/02/2026
 178,Xây dựng quy trình kỹ thuật nội soi; đăng ký DMKT nội soi với Sở Y tế,chuyen_mon,KHTH,,2026-02-04,2026-02-10,tre_deadline,1,Nội soi tiêu hóa và đường dưới,Biên bản 04/02/2026
 179,Xây dựng kịch bản và tổ chức diễn tập vận hành trước chuyển đổi khoa Nội/Ngoại/Nhi/Sản,chuyen_mon,KHTH,,2026-02-04,2026-02-10,tre_deadline,1,Role-play nhân viên đóng vai bệnh nhân,Biên bản 04/02/2026
 180,Ban hành và chuẩn hóa quy trình Báo động đỏ nội viện và Cấp cứu hàng loạt,chuyen_mon,KHTH,,2026-02-04,2026-02-10,tre_deadline,1,,Biên bản 04/02/2026
