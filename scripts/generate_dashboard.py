@@ -1745,12 +1745,12 @@ const GH_PATH      = 'data/pending_updates.json';
 function showGHTokenSetup() {
   const cur = localStorage.getItem(GH_TOKEN_KEY) || '';
   const tok = prompt(
-    'Nhập GitHub Personal Access Token\n\n' +
-    'Cách tạo token:\n' +
-    '1. Vào github.com → Settings → Developer settings\n' +
-    '2. Personal access tokens → Fine-grained tokens → Generate new\n' +
-    '3. Repository: dragonhuynh/bvtd-progress\n' +
-    '4. Permissions: Contents → Read and write\n\n' +
+    'Nhập GitHub Personal Access Token\\n\\n' +
+    'Cách tạo token:\\n' +
+    '1. Vào github.com → Settings → Developer settings\\n' +
+    '2. Personal access tokens → Fine-grained tokens → Generate new\\n' +
+    '3. Repository: dragonhuynh/bvtd-progress\\n' +
+    '4. Permissions: Contents → Read and write\\n\\n' +
     'Token hiện tại: ' + (cur ? cur.slice(0,8)+'...' : '(chưa có)'),
     cur
   );
@@ -1766,7 +1766,7 @@ async function uploadToGitHub() {
 
   let token = localStorage.getItem(GH_TOKEN_KEY) || '';
   if (!token) {
-    token = prompt('Nhập GitHub Personal Access Token\n(Chỉ cần nhập 1 lần — lưu vào bộ nhớ):') || '';
+    token = prompt('Nhập GitHub Personal Access Token\\n(Chỉ cần nhập 1 lần — lưu vào bộ nhớ):') || '';
     if (!token) return;
     localStorage.setItem(GH_TOKEN_KEY, token.trim());
     token = token.trim();
