@@ -1,6 +1,25 @@
 {
-  "version": "0.7",
+  "version": "0.8",
   "history": [
+    {
+      "version": "0.8",
+      "ngay": "2026-05-11 22:14",
+      "loai": "check",
+      "thay_doi": [
+        "8 KHTH: Đã hoàn thành",
+        "18 KHTH: Đang thực hiện",
+        "54 KHTH: Đã hoàn thành",
+        "82 KHTH: Đang thực hiện",
+        "99 KHTH: Đã hoàn thành",
+        "143 KHTH: Đã hoàn thành",
+        "167 KHTH: Đã hoàn thành",
+        "172 KHTH: Đã hoàn thành",
+        "223 KHTH: Đã hoàn thành",
+        "260 KHTH: Đang thực hiện",
+        "361 KHTH: Đã hoàn thành",
+        "387 KHTH: Đã hoàn thành"
+      ]
+    },
     {
       "version": "0.7",
       "ngay": "2026-05-11 14:59",
