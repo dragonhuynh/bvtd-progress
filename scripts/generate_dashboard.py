@@ -1405,11 +1405,18 @@ function initTasksView() {
     deptFilter.appendChild(o);
   });
   const bbFilter = document.getElementById('filter-bienban');
-  [...new Set(myTasks.map(t => t.nguon || '').filter(Boolean))].sort().forEach(bb => {
-    const o = document.createElement('option');
-    o.value = bb; o.textContent = bb.replace(/^Biên bản /, '');
-    bbFilter.appendChild(o);
-  });
+  const bbSortKey = s => {
+    const m = s.match(/(\d{2})\/(\d{2})\/(\d{2})\s*$/);
+    if (!m) return 0;
+    return parseInt(m[3]) * 10000 + parseInt(m[2]) * 100 + parseInt(m[1]);
+  };
+  [...new Set(myTasks.map(t => t.nguon || '').filter(Boolean))]
+    .sort((a, b) => bbSortKey(b) - bbSortKey(a))
+    .forEach(bb => {
+      const o = document.createElement('option');
+      o.value = bb; o.textContent = bb.replace(/^Biên bản /, '');
+      bbFilter.appendChild(o);
+    });
   // Default: chỉ hiện trễ + đang làm
   document.getElementById('filter-status').value = 'chua_xong';
   filterTasks();
