@@ -1,6 +1,14 @@
 {
-  "version": "0.2",
+  "version": "0.3",
   "history": [
+    {
+      "version": "0.3",
+      "ngay": "2026-05-11 13:38",
+      "loai": "check",
+      "thay_doi": [
+        "83 task HCQT/KHTH/Dược/CC → da_hoan_thanh (triển khai đúng deadline)"
+      ]
+    },
     {
       "version": "0.2",
       "ngay": "2026-05-11 13:19",
