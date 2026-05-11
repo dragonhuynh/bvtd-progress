@@ -1,10 +1,65 @@
 [
   {
-    "id": "1",
-    "ten": "Bổ sung 2 hàng ghế Inox (15 cái) khu chờ hành lang sảnh",
+    "id": "36",
+    "ten": "Cải tạo vườn trước phòng khám (lát tấm đan 80cm chia 5 ô)",
     "phong": "HCQT",
     "trang_thai": "da_hoan_thanh",
-    "ngay_ht": "2026-12-25",
+    "ngay_ht": "2026-01-20",
+    "ghi_chu": "",
+    "user": "HCQT",
+    "user_phong": "HCQT",
+    "at": "2026-05-11"
+  },
+  {
+    "id": "37",
+    "ten": "Cải tạo vườn trước khu nhân viên (lát tấm đan 80cm chia 2 ô)",
+    "phong": "HCQT",
+    "trang_thai": "da_hoan_thanh",
+    "ngay_ht": "2026-01-20",
+    "ghi_chu": "",
+    "user": "HCQT",
+    "user_phong": "HCQT",
+    "at": "2026-05-11"
+  },
+  {
+    "id": "38",
+    "ten": "Vận chuyển 20 ghế Inox từ Cơ sở 1 lên tăng cường",
+    "phong": "HCQT",
+    "trang_thai": "da_hoan_thanh",
+    "ngay_ht": "2026-01-20",
+    "ghi_chu": "",
+    "user": "HCQT",
+    "user_phong": "HCQT",
+    "at": "2026-05-11"
+  },
+  {
+    "id": "63",
+    "ten": "Cải tạo khu vực bồn cây trung tâm (trồng cây bông vàng-hồng + sơn bồn + tỉa cây + di dời cây bằng lăng)",
+    "phong": "HCQT",
+    "trang_thai": "da_hoan_thanh",
+    "ngay_ht": "2026-01-20",
+    "ghi_chu": "",
+    "user": "HCQT",
+    "user_phong": "HCQT",
+    "at": "2026-05-11"
+  },
+  {
+    "id": "64",
+    "ten": "Phối hợp cải tạo vườn cây thuốc Nam khu phòng khám YHCT cùng BV Y học Cổ truyền TP.HCM",
+    "phong": "HCQT",
+    "trang_thai": "da_hoan_thanh",
+    "ngay_ht": "2026-01-30",
+    "ghi_chu": "",
+    "user": "HCQT",
+    "user_phong": "HCQT",
+    "at": "2026-05-11"
+  },
+  {
+    "id": "65",
+    "ten": "Cải tạo khu nhà nghỉ nhân viên: di dời cây xanh + sân phơi đồ (đá sỏi/dây phơi/chiếu sáng/sửa nắp cống) + sân thể thao",
+    "phong": "HCQT",
+    "trang_thai": "da_hoan_thanh",
+    "ngay_ht": "2026-01-30",
     "ghi_chu": "",
     "user": "HCQT",
     "user_phong": "HCQT",
