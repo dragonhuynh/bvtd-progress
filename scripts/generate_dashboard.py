@@ -836,7 +836,6 @@ body {
       <h1>📋 Duyệt Cập Nhật</h1>
       <p class="subtitle" id="review-subtitle">Xem xét cập nhật tiến độ từ các phòng ban</p>
     </div>
-    <button class="btn-primary" id="review-export-top" onclick="exportApproved()" style="display:none">⬇ Tải file cập nhật về máy</button>
   </header>
 
   <!-- KPI cards -->
@@ -881,11 +880,11 @@ body {
         📤 Gửi lên GitHub — tự động cập nhật
       </button>
       <button onclick="exportApproved()" title="Tải file thủ công (dự phòng)"
-        style="background:none;border:1px solid var(--border);border-radius:8px;padding:9px 14px;font-size:12px;cursor:pointer;color:var(--muted);white-space:nowrap;">
+        style="background:#fff;border:2px solid var(--orange);border-radius:8px;padding:9px 16px;font-size:13px;font-weight:600;cursor:pointer;color:var(--orange);white-space:nowrap;display:flex;align-items:center;gap:6px;">
         ⬇ Tải file
       </button>
       <button onclick="showGHTokenSetup()" title="Cấu hình GitHub Token"
-        style="background:none;border:1px solid var(--border);border-radius:8px;padding:9px 10px;font-size:13px;cursor:pointer;color:var(--muted);">
+        style="background:#fff;border:2px solid var(--border);border-radius:8px;padding:9px 13px;font-size:20px;cursor:pointer;color:var(--muted);line-height:1;">
         ⚙
       </button>
     </div>
@@ -1573,8 +1572,6 @@ function renderReview() {
     pending.length
       ? pending.length + ' cập nhật đang chờ từ ' + depts.size + ' phòng ban'
       : 'Không có cập nhật nào đang chờ duyệt';
-  const topBtn = document.getElementById('review-export-top');
-  if (topBtn) topBtn.style.display = approved.length ? '' : 'none';
 
   // Pending list
   const pendEl = document.getElementById('rv-pending-list');
