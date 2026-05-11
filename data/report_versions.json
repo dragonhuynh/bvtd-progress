@@ -1,6 +1,14 @@
 {
-  "version": "0.2",
+  "version": "0.3",
   "history": [
+    {
+      "version": "0.3",
+      "ngay": "2026-05-11 06:09",
+      "loai": "check",
+      "thay_doi": [
+        "auto-apply từ dashboard"
+      ]
+    },
     {
       "version": "0.2",
       "ngay": "2026-05-11 05:26",
