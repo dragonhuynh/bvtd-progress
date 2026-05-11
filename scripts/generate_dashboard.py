@@ -291,8 +291,16 @@ body {
   width: 380px; box-shadow: 0 24px 64px rgba(0,0,0,.45);
 }
 .login-logo { text-align: center; margin-bottom: 28px; }
-.login-logo .ic { font-size: 48px; }
-.login-logo .nm { font-size: 22px; font-weight: 800; color: #0D3B7A; margin-top: 8px; }
+.login-logo .ic { display: none; }
+.brand-badge {
+  display: inline-flex; flex-direction: column; align-items: center; gap: 2px;
+  background: linear-gradient(135deg, #0D3B7A 0%, #1A5CA8 100%);
+  border-radius: 16px; padding: 14px 24px; margin-bottom: 12px;
+}
+.brand-badge .bb-name { font-size: 18px; font-weight: 800; color: #fff; letter-spacing: .02em; }
+.brand-badge .bb-sub  { font-size: 11px; font-weight: 600; color: #E91E8C; letter-spacing: .08em; text-transform: uppercase; }
+.login-logo .nm { font-size: 20px; font-weight: 800; color: #0D3B7A; margin-top: 0; }
+.login-logo .nm span { color: #E91E8C; }
 .login-logo .sub { font-size: 13px; color: #718096; margin-top: 4px; }
 .login-field { margin-bottom: 16px; }
 .login-field label { display: block; font-size: 12px; font-weight: 700; color: #4a5568; margin-bottom: 6px; text-transform: uppercase; letter-spacing: .04em; }
@@ -324,10 +332,13 @@ body {
   position: sticky; top: 0; height: 100vh;
   overflow-y: auto; flex-shrink: 0; z-index: 100;
 }
-.sidebar-logo { padding: 24px 20px 20px; border-bottom: 1px solid rgba(255,255,255,.08); }
-.logo-icon { font-size: 32px; }
-.logo-name { font-size: 15px; font-weight: 700; color: #fff; margin-top: 8px; }
-.logo-sub  { font-size: 11px; color: rgba(255,255,255,.45); margin-top: 2px; }
+.sidebar-logo { padding: 20px 16px 18px; border-bottom: 1px solid rgba(255,255,255,.10); }
+.logo-icon { display: none; }
+.sidebar-brand { display: flex; flex-direction: column; gap: 3px; }
+.sidebar-brand .sb-main { font-size: 14px; font-weight: 800; color: #fff; letter-spacing: .01em; line-height: 1.2; }
+.sidebar-brand .sb-pink { color: #E91E8C; font-weight: 700; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; margin-top: 1px; }
+.logo-name { display: none; }
+.logo-sub  { font-size: 10px; color: rgba(255,255,255,.4); margin-top: 4px; letter-spacing: .02em; }
 .nav-section { padding: 14px 0 8px; flex: 1; }
 .nav-group-label {
   font-size: 10px; font-weight: 600; color: rgba(255,255,255,.3);
@@ -343,7 +354,7 @@ body {
   text-decoration: none; user-select: none;
 }
 .nav-item:hover { background: rgba(255,255,255,.05); color: rgba(255,255,255,.9); }
-.nav-item.active { background: rgba(244,124,60,.14); border-left-color: var(--accent); color: #fff; }
+.nav-item.active { background: rgba(26,92,168,.18); border-left-color: var(--pink); color: #fff; }
 .nav-item .ni { font-size: 16px; width: 20px; text-align: center; flex-shrink: 0; }
 .sidebar-footer { padding: 12px 0 20px; border-top: 1px solid rgba(255,255,255,.07); }
 .sidebar-gen { font-size: 10px; color: rgba(255,255,255,.22); padding: 6px 20px; text-align: center; }
@@ -643,8 +654,12 @@ body {
   <div class="login-box">
     <div class="login-logo">
       <div class="ic">🏥</div>
-      <div class="nm">BVTD Cơ Sở 2</div>
-      <div class="sub">Hệ thống theo dõi tiến độ</div>
+      <div class="brand-badge">
+        <span class="bb-name">BVTD Cơ Sở 2</span>
+        <span class="bb-sub">Tu Du Hospital</span>
+      </div>
+      <div class="nm">Bệnh Viện <span>Từ Dũ</span></div>
+      <div class="sub">Hệ thống theo dõi tiến độ đầu việc</div>
     </div>
     <div class="login-field">
       <label>Tên đăng nhập</label>
@@ -657,7 +672,7 @@ body {
         autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
     </div>
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
-      <input type="checkbox" id="login-remember" style="width:auto;accent-color:#f47c3c;cursor:pointer;">
+      <input type="checkbox" id="login-remember" style="width:auto;accent-color:#1A5CA8;cursor:pointer;">
       <label for="login-remember" style="font-size:13px;color:#4a5568;margin-bottom:0;text-transform:none;letter-spacing:normal;cursor:pointer;">Ghi nhớ đăng nhập</label>
     </div>
     <div id="login-err">Sai tên đăng nhập hoặc mật khẩu. Vui lòng thử lại.</div>
@@ -673,8 +688,11 @@ body {
 <nav class="sidebar">
   <div class="sidebar-logo">
     <div class="logo-icon">🏥</div>
-    <div class="logo-name">BVTD CS2</div>
-    <div class="logo-sub">Theo dõi tiến độ</div>
+    <div class="sidebar-brand">
+      <span class="sb-main">BVTD Cơ Sở 2</span>
+      <span class="sb-pink">Tu Du Hospital</span>
+    </div>
+    <div class="logo-sub">Theo dõi tiến độ đầu việc</div>
   </div>
   <div class="nav-section">
     <div class="nav-group-label">Chính</div>
@@ -1247,7 +1265,7 @@ function initCharts(st) {
   const mCtx = document.getElementById('monthly-chart').getContext('2d');
   _monthlyChart = new Chart(mCtx, {
     type: 'bar',
-    data: { labels: monthLabels, datasets: [{ label:'Đầu việc mới', data:st.monthly_counts, backgroundColor:'#f47c3c', borderRadius:7, borderSkipped:false }] },
+    data: { labels: monthLabels, datasets: [{ label:'Đầu việc mới', data:st.monthly_counts, backgroundColor:'#1A5CA8', borderRadius:7, borderSkipped:false }] },
     options: { responsive:true, plugins:{legend:{display:false}}, scales:{ y:{beginAtZero:true,grid:{color:'#f0f0f0'},ticks:{stepSize:20}}, x:{grid:{display:false}} } }
   });
 
