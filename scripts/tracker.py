@@ -1,8 +1,10 @@
 """CSV và versioning utilities — dùng bởi tất cả scripts khác."""
 import base64
 import csv
+import io
 import json
 import re
+import socket
 from datetime import date, datetime
 from pathlib import Path
 
@@ -82,15 +84,43 @@ UPDATE_LOG = DATA / "update_log.csv"
 LOG_HEADERS = [
     "ngay_cap_nhat", "task_id", "ten_dau_viec", "phong_chinh",
     "phong_bao_cao", "user", "trang_thai_cu", "trang_thai_moi",
-    "ngay_hoan_thanh", "ghi_chu", "nguon",
+    "ngay_hoan_thanh", "ghi_chu", "nguon", "may", "ip",
 ]
+
+
+def _get_machine_info() -> tuple[str, str]:
+    try:
+        host = socket.gethostname()
+        ip = socket.gethostbyname(host)
+    except Exception:
+        host, ip = "—", "—"
+    return host, ip
+
+
+def _migrate_log_if_needed() -> None:
+    """Thêm cột may, ip vào update_log.csv cũ nếu chưa có."""
+    if not UPDATE_LOG.exists():
+        return
+    content = UPDATE_LOG.read_text(encoding="utf-8")
+    if not content.strip() or "may" in content.split("\n")[0]:
+        return
+    rows = list(csv.DictReader(io.StringIO(content)))
+    with UPDATE_LOG.open("w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=LOG_HEADERS, extrasaction="ignore", restval="")
+        w.writeheader()
+        w.writerows(rows)
 
 
 def append_update_log(rows: list[dict]) -> None:
     """Ghi rows vào update_log.csv (append, tự tạo header nếu chưa có)."""
+    _migrate_log_if_needed()
+    host, ip = _get_machine_info()
+    for r in rows:
+        r.setdefault("may", host)
+        r.setdefault("ip", ip)
     write_header = not UPDATE_LOG.exists()
     with UPDATE_LOG.open("a", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=LOG_HEADERS)
+        w = csv.DictWriter(f, fieldnames=LOG_HEADERS, extrasaction="ignore", restval="")
         if write_header:
             w.writeheader()
         w.writerows(rows)

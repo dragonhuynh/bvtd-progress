@@ -1,6 +1,7 @@
 """
 generate_dashboard.py — Sinh dashboard.html theo phong cach project management hien dai
 """
+import csv
 import json
 import re
 from pathlib import Path
@@ -47,6 +48,16 @@ def load_json_file(p: Path) -> dict:
         return json.loads(p.read_text(encoding="utf-8"))
     except (json.JSONDecodeError, OSError):
         return {}
+
+
+def load_update_log() -> list[dict]:
+    log_path = ROOT / "data" / "update_log.csv"
+    if not log_path.exists():
+        return []
+    with log_path.open(encoding="utf-8", newline="") as f:
+        rows = list(csv.DictReader(f))
+    rows.reverse()  # newest first
+    return rows
 
 
 def build_pdf_map() -> dict:
@@ -803,6 +814,31 @@ body {
   .rv-sticky-bar{display:flex;}
   .review-stats{display:none;}
 }
+/* ── Nhật Ký ────────────────────────────────────────────────── */
+.log-filterbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;align-items:center;}
+.log-filterbar select,.log-filterbar input{padding:7px 10px;border:1px solid var(--border);border-radius:8px;font-size:13px;background:var(--white);color:var(--text);min-width:0;}
+.log-filterbar input{flex:1;min-width:140px;}
+.log-table-wrap{overflow-x:auto;border-radius:var(--r);box-shadow:var(--sh);background:var(--white);}
+.log-table{width:100%;border-collapse:collapse;font-size:13px;}
+.log-table th{background:var(--sidebar);color:#fff;padding:10px 12px;text-align:left;white-space:nowrap;font-weight:600;}
+.log-table td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:top;}
+.log-table tr:last-child td{border-bottom:none;}
+.log-table tr:hover td{background:#f0f5ff;}
+.log-badge-user{display:inline-block;padding:2px 8px;border-radius:5px;font-size:11px;font-weight:700;background:#e8eaf6;color:#3949ab;}
+.log-arrow{color:var(--muted);margin:0 4px;}
+.log-status{display:inline-block;padding:2px 7px;border-radius:5px;font-size:11px;font-weight:600;}
+.log-status.done{background:#e8f5e9;color:#2e7d32;}
+.log-status.active{background:#e3f2fd;color:#1565c0;}
+.log-status.late{background:#fff3e0;color:#e65100;}
+.log-status.other{background:#f5f5f5;color:#555;}
+.log-src{font-size:11px;color:var(--muted);}
+.log-empty{text-align:center;padding:48px;color:var(--muted);font-size:14px;}
+.log-count{font-size:12px;color:var(--muted);margin-bottom:10px;}
+@media(max-width:768px){
+  .log-table th:nth-child(3),.log-table td:nth-child(3),
+  .log-table th:nth-child(5),.log-table td:nth-child(5),
+  .log-table th:nth-child(8),.log-table td:nth-child(8){display:none;}
+}
 </style>
 </head>
 <body>
@@ -898,6 +934,9 @@ body {
     <div class="nav-item" data-view="review" id="nav-review" style="display:none">
       <span class="ni">📋</span><span>Duyệt Cập Nhật</span>
       <span class="nav-badge" id="nav-review-badge" style="display:none">0</span>
+    </div>
+    <div class="nav-item" data-view="log">
+      <span class="ni">🕵</span><span>Nhật Ký</span>
     </div>
     <a class="nav-item" href="gantt.html" target="_blank" rel="noopener noreferrer">
       <span class="ni">📅</span><span>Biểu đồ Gantt</span>
@@ -1117,6 +1156,45 @@ body {
         ⚙
       </button>
     </div>
+  </div>
+</div>
+
+
+<!-- ═══ NHẬT KÝ ═══ -->
+<div id="view-log" class="view">
+  <header class="page-header">
+    <div>
+      <h1>🕵 Nhật Ký Chỉnh Sửa</h1>
+      <p class="subtitle">Lịch sử cập nhật trạng thái — ai chỉnh gì, khi nào</p>
+    </div>
+  </header>
+  <div class="log-filterbar">
+    <input id="log-search" type="search" placeholder="Tìm theo tên đầu việc hoặc ghi chú…" oninput="renderLog()">
+    <select id="log-flt-user" onchange="renderLog()"><option value="">-- Tất cả người dùng --</option></select>
+    <select id="log-flt-phong" onchange="renderLog()"><option value="">-- Tất cả phòng --</option></select>
+    <select id="log-flt-tt" onchange="renderLog()">
+      <option value="">-- Tất cả trạng thái mới --</option>
+      <option value="da_hoan_thanh">✅ Hoàn thành</option>
+      <option value="dang_thuc_hien">🔄 Đang làm</option>
+      <option value="tre_deadline">⚠️ Trễ deadline</option>
+    </select>
+  </div>
+  <div class="log-count" id="log-count"></div>
+  <div class="log-table-wrap">
+    <table class="log-table">
+      <thead><tr>
+        <th>Ngày</th>
+        <th>Người dùng</th>
+        <th>Phòng báo cáo</th>
+        <th>Đầu việc</th>
+        <th>Thay đổi trạng thái</th>
+        <th>Ghi chú</th>
+        <th>Nguồn</th>
+        <th>Thiết bị / IP</th>
+      </tr></thead>
+      <tbody id="log-tbody"></tbody>
+    </table>
+    <div class="log-empty" id="log-empty" style="display:none">Không có bản ghi nào.</div>
   </div>
 </div>
 
@@ -1728,6 +1806,104 @@ function clearDashSearch() {
   document.getElementById('dash-search-results').style.display = 'none';
 }
 
+// ── Nhật Ký ────────────────────────────────────────────────────────────────────
+let _logInited = false;
+
+function _logStatusCss(tt) {
+  if (tt === 'da_hoan_thanh') return 'done';
+  if (tt === 'dang_thuc_hien') return 'active';
+  if (tt === 'tre_deadline') return 'late';
+  return 'other';
+}
+function _logStatusLabel(tt) {
+  if (tt === 'da_hoan_thanh') return '✅ Hoàn thành';
+  if (tt === 'dang_thuc_hien') return '🔄 Đang làm';
+  if (tt === 'tre_deadline') return '⚠️ Trễ deadline';
+  return tt || '—';
+}
+
+function initLogView() {
+  const allLog = (window.__D && window.__D.log) ? window.__D.log : [];
+  // Filter by dept access (BGD sees all)
+  const myDepts = AUTH && AUTH.depts ? AUTH.depts : null;
+  const accessible = myDepts
+    ? allLog.filter(r => myDepts.includes(r.phong_bao_cao) || myDepts.includes(r.phong_chinh))
+    : allLog;
+
+  if (!_logInited) {
+    // Populate user dropdown
+    const users = [...new Set(accessible.map(r => r.user).filter(Boolean))].sort();
+    const uSel = document.getElementById('log-flt-user');
+    users.forEach(u => { const o = document.createElement('option'); o.value = u; o.textContent = u; uSel.appendChild(o); });
+
+    // Populate phong dropdown
+    const phongs = [...new Set(accessible.map(r => r.phong_bao_cao).filter(Boolean))].sort();
+    const pSel = document.getElementById('log-flt-phong');
+    phongs.forEach(p => { const o = document.createElement('option'); o.value = p; o.textContent = p; pSel.appendChild(o); });
+
+    _logInited = true;
+  }
+  window._logData = accessible;
+  renderLog();
+}
+
+function renderLog() {
+  const rows = window._logData || [];
+  const q = (document.getElementById('log-search')?.value || '').toLowerCase();
+  const fUser = document.getElementById('log-flt-user')?.value || '';
+  const fPhong = document.getElementById('log-flt-phong')?.value || '';
+  const fTT = document.getElementById('log-flt-tt')?.value || '';
+
+  const filtered = rows.filter(r => {
+    if (fUser  && r.user !== fUser) return false;
+    if (fPhong && r.phong_bao_cao !== fPhong) return false;
+    if (fTT   && r.trang_thai_moi !== fTT) return false;
+    if (q && !(
+      (r.ten_dau_viec || '').toLowerCase().includes(q) ||
+      (r.ghi_chu || '').toLowerCase().includes(q)
+    )) return false;
+    return true;
+  });
+
+  const tbody = document.getElementById('log-tbody');
+  const empty = document.getElementById('log-empty');
+  const countEl = document.getElementById('log-count');
+  if (!tbody) return;
+
+  countEl.textContent = filtered.length + ' bản ghi';
+
+  if (!filtered.length) {
+    tbody.innerHTML = '';
+    empty.style.display = '';
+    return;
+  }
+  empty.style.display = 'none';
+
+  tbody.innerHTML = filtered.map(r => {
+    const ttOld = r.trang_thai_cu ? `<span class="log-status ${_logStatusCss(r.trang_thai_cu)}">${_logStatusLabel(r.trang_thai_cu)}</span>` : '<span class="log-src">—</span>';
+    const ttNew = r.trang_thai_moi ? `<span class="log-status ${_logStatusCss(r.trang_thai_moi)}">${_logStatusLabel(r.trang_thai_moi)}</span>` : '<span class="log-src">—</span>';
+    const change = ttOld + '<span class="log-arrow">→</span>' + ttNew;
+    const taskLabel = r.task_id ? `<span style="font-size:11px;color:var(--muted)">#${r.task_id}</span> ` : '';
+    const nguonMap = {dashboard_auto:'auto', dashboard:'dashboard', check_chat:'check', apply_pending:'apply'};
+    const nguon = nguonMap[r.nguon] || (r.nguon || '—');
+    const mayVal = r.may || '';
+    const ipVal  = r.ip  || '';
+    const device = mayVal || ipVal
+      ? `<span style="font-size:11px;display:block;color:var(--text)">${mayVal}</span><span style="font-size:11px;color:var(--muted)">${ipVal}</span>`
+      : '<span class="log-src">—</span>';
+    return `<tr>
+      <td style="white-space:nowrap;font-size:12px">${r.ngay_cap_nhat || '—'}</td>
+      <td><span class="log-badge-user">${r.user || '—'}</span></td>
+      <td style="font-size:12px">${r.phong_bao_cao || '—'}</td>
+      <td>${taskLabel}<span style="font-size:12px">${r.ten_dau_viec || '—'}</span></td>
+      <td style="white-space:nowrap">${change}</td>
+      <td style="font-size:12px;color:var(--muted)">${r.ghi_chu || ''}</td>
+      <td class="log-src">${nguon}</td>
+      <td style="min-width:120px">${device}</td>
+    </tr>`;
+  }).join('');
+}
+
 // ── View routing ───────────────────────────────────────────────────────────────
 function switchView(name) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
@@ -1738,6 +1914,7 @@ function switchView(name) {
   if (n) n.classList.add('active');
   if (name === 'tasks')  initTasksView();
   if (name === 'review') renderReview();
+  if (name === 'log')    initLogView();
 }
 
 document.querySelectorAll('[data-view]').forEach(el => {
@@ -1877,7 +2054,41 @@ function showUpdMsg(msg, isErr) {
   el.style.display = 'block';
 }
 
-function submitUpd() {
+// ── Device / IP capture ────────────────────────────────────────────────────────
+function _getDeviceInfo() {
+  const ua = navigator.userAgent;
+  let os = 'Unknown';
+  if (/Windows NT/.test(ua))        os = 'Windows';
+  else if (/Mac OS X/.test(ua))     os = 'Mac';
+  else if (/Android/.test(ua))      os = 'Android';
+  else if (/iPhone|iPad/.test(ua))  os = 'iOS';
+  else if (/Linux/.test(ua))        os = 'Linux';
+  let br = 'Unknown';
+  if (/Edg\\//.test(ua))            br = 'Edge';
+  else if (/Chrome\\//.test(ua))    br = 'Chrome';
+  else if (/Firefox\\//.test(ua))   br = 'Firefox';
+  else if (/Safari\\//.test(ua))    br = 'Safari';
+  return os + ' / ' + br;
+}
+
+function _getLocalIP() {
+  return new Promise(resolve => {
+    try {
+      const pc = new RTCPeerConnection({iceServers: []});
+      pc.createDataChannel('');
+      pc.createOffer().then(o => pc.setLocalDescription(o)).catch(() => resolve('—'));
+      const found = new Set();
+      pc.onicecandidate = e => {
+        if (!e.candidate) { pc.close(); resolve(found.size ? [...found].join(', ') : '—'); return; }
+        const m = /(\\d{1,3}(?:\\.\\d{1,3}){3})/.exec(e.candidate.candidate);
+        if (m && !m[1].startsWith('127.') && !m[1].startsWith('0.')) found.add(m[1]);
+      };
+      setTimeout(() => { try { pc.close(); } catch(_){} resolve(found.size ? [...found].join(', ') : '—'); }, 1500);
+    } catch(_) { resolve('—'); }
+  });
+}
+
+async function submitUpd() {
   if (!_updTask) return;
   const tt = document.getElementById('upd-tt').value;
   let ngayRaw = document.getElementById('upd-ngay').value.trim();
@@ -1909,9 +2120,11 @@ function submitUpd() {
     finalNote = finalNote ? flag + ' | ' + finalNote : flag;
   }
   const userPhong = AUTH.depts ? AUTH.depts.join(', ') : AUTH.user;
+  const [localIP] = await Promise.all([_getLocalIP()]);
   const entry = {id:_updTask.id, ten:_updTask.ten, phong:_updTask.phong,
                  trang_thai:tt, ngay_ht:ngay, ghi_chu:finalNote, user:AUTH.user,
                  user_phong:userPhong,
+                 may:_getDeviceInfo(), ip:localIP,
                  at:new Date().toISOString().slice(0,10)};
   if (isBGD()) {
     // BGĐ → thẳng vào approved queue, xuất JSON rồi chạy /check
@@ -2317,6 +2530,7 @@ def main():
         return
 
     data = compute(tasks)
+    data["log"] = load_update_log()
 
     html_out = build_html(data)
     for fname in ("dashboard.html", "tien_do.html"):

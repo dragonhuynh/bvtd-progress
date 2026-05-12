@@ -74,6 +74,8 @@ def main() -> None:
             "ngay_hoan_thanh": p.get("ngay_ht", ""),
             "ghi_chu":         p.get("ghi_chu", ""),
             "nguon":           "dashboard_auto",
+            "may":             p.get("may", ""),
+            "ip":              p.get("ip", ""),
         })
         changes += 1
         phong = p.get("user_phong") or p.get("user", "")
