@@ -129,6 +129,8 @@ html,body{height:100%;overflow:hidden;
 .nhom-pip{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 .vdiv{width:1px;background:var(--border);height:20px;margin:0 6px;flex-shrink:0;}
 .fb-right{margin-left:auto;display:flex;gap:6px;align-items:center;}
+.fb-g1{display:flex;align-items:center;gap:4px;flex-shrink:0;}
+.fb-g2{display:flex;align-items:center;gap:4px;flex:1;}
 .nav-btn{
   height:30px;padding:0 10px;border:1px solid var(--border);border-radius:6px;
   background:var(--white);cursor:pointer;color:var(--text);font-size:12px;
@@ -278,22 +280,38 @@ html,body{height:100%;overflow:hidden;
 .tip.show{display:block;}
 .tip-title{color:#fff;font-weight:700;margin-bottom:4px;font-size:13px;}
 
-/* Bottom sheet (mobile detail) */
+/* Detail sheet */
 .sheet-overlay{
   position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.45);
   display:none;opacity:0;transition:opacity .22s;
 }
 .sheet-overlay.show{display:block;opacity:1;}
+/* Desktop: compact floating card */
 .detail-sheet{
-  position:fixed;left:0;right:0;bottom:0;z-index:9999;
-  background:#fff;border-radius:18px 18px 0 0;
-  padding:14px 20px 32px;
-  box-shadow:0 -6px 32px rgba(0,0,0,.18);
-  transform:translateY(100%);transition:transform .26s cubic-bezier(.4,0,.2,1);
-  max-height:70vh;overflow-y:auto;
+  position:fixed;left:50%;bottom:auto;top:50%;right:auto;z-index:9999;
+  background:#fff;border-radius:14px;
+  padding:18px 22px 22px;
+  box-shadow:0 8px 40px rgba(0,0,0,.22);
+  width:360px;max-width:calc(100vw - 40px);
+  transform:translate(-50%,calc(-50% - 16px));opacity:0;
+  transition:transform .22s ease,opacity .22s ease;
+  max-height:80vh;overflow-y:auto;
 }
-.detail-sheet.show{transform:translateY(0);}
-.ds-handle{width:38px;height:4px;background:#e2e8f0;border-radius:2px;margin:0 auto 16px;}
+.detail-sheet.show{transform:translate(-50%,-50%);opacity:1;}
+.ds-handle{display:none;}
+/* Mobile: bottom sheet */
+@media(max-width:768px){
+  .detail-sheet{
+    left:0;right:0;bottom:0;top:auto;width:auto;max-width:none;
+    border-radius:18px 18px 0 0;padding:14px 20px 32px;
+    box-shadow:0 -6px 32px rgba(0,0,0,.18);
+    transform:translateY(100%);opacity:1;
+    transition:transform .26s cubic-bezier(.4,0,.2,1);
+    max-height:70vh;
+  }
+  .detail-sheet.show{transform:translateY(0);opacity:1;}
+  .ds-handle{display:block;}
+}
 .ds-title{font-size:15px;font-weight:700;color:#1a202c;line-height:1.45;margin-bottom:12px;}
 .ds-row{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
 .ds-nhom{font-size:12px;color:#718096;background:#f7f8fa;padding:2px 8px;border-radius:6px;}
@@ -350,36 +368,32 @@ html,body{height:100%;overflow:hidden;
   .mob-hamburger{display:flex;}
   .main{margin-left:0;}
   .mob-toggle{display:flex;}
-  .topbar{flex-wrap:wrap;height:auto;padding:8px 14px 8px 60px;gap:6px;align-items:flex-start;}
+  .topbar{flex-wrap:wrap;height:auto;padding:8px 14px 8px 60px;gap:4px;align-items:flex-start;}
   .tb-brand{flex:0 0 auto;}
-  .tb-selects{flex:0 0 100%;order:3;overflow-x:auto;flex-wrap:nowrap;padding:0;padding-bottom:2px;}
+  .tb-selects{flex:0 0 100%;order:3;overflow-x:auto;flex-wrap:nowrap;padding:0;padding-bottom:2px;gap:6px;}
+  .tb-selects .search-box{flex:1;width:auto;min-width:100px;}
   .tb-right{flex:0 0 auto;align-self:center;}
-  .search-box{width:130px;}
-  .filterbar{
-    overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;
-    -webkit-mask-image:linear-gradient(to right,black calc(100% - 32px),transparent 100%);
-    mask-image:linear-gradient(to right,black calc(100% - 32px),transparent 100%);
-  }
+  .filterbar{flex-wrap:wrap;height:auto;padding:8px 12px;gap:0;overflow-x:visible;-webkit-mask-image:none;mask-image:none;}
+  .fb-g1,.fb-g2{flex:0 0 100%;display:flex;align-items:center;gap:4px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+  .fb-g1{padding-bottom:6px;}
+  .fb-g1::-webkit-scrollbar,.fb-g2::-webkit-scrollbar{display:none;}
   .ft{padding:4px 10px;font-size:12px;}
   .stats-strip{padding:6px 12px;gap:6px;}
   .strip{flex-wrap:wrap;height:auto;padding:8px 12px;gap:6px;}
   .tb-icon2{display:none;}
 
-  /* ── List mode (mặc định mobile) ── */
+  /* ── List mode (mặc định mobile) — 2-line rows ── */
   body.mob-list .lp{width:100%;border-right:none;}
   body.mob-list .gp{display:none;}
-  body.mob-list .tr-sub{flex:1;width:auto;}
-  body.mob-list .tr-sub-txt{
-    white-space:normal;
-    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
-    overflow:hidden;line-height:1.4;
-  }
-  body.mob-list .tr{height:auto;min-height:50px;padding:5px 0;align-items:center;}
-  body.mob-list .tr-st{display:flex;width:auto;flex-shrink:0;}
-  body.mob-list .tr-dp{display:block;width:auto;max-width:72px;font-size:10px;flex-shrink:0;}
-  body.mob-list .lh-st{display:block;width:auto;padding:0 8px;}
-  body.mob-list .lh-dp{display:block;width:72px;padding:0 8px;}
-  body.mob-list .lh-sub{flex:1;width:auto;}
+  body.mob-list .tr{flex-wrap:wrap;height:auto;min-height:54px;padding:6px 0;align-items:flex-start;}
+  body.mob-list .tr-id{flex:0 0 var(--col-id);align-self:flex-start;padding-top:4px;}
+  body.mob-list .tr-sub{flex:0 0 calc(100% - var(--col-id));min-width:0;padding-right:8px;}
+  body.mob-list .tr-sub-txt{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.4;}
+  body.mob-list .tr-st{display:flex;flex:0 0 auto;margin-left:var(--col-id);padding-top:4px;}
+  body.mob-list .tr-dp{display:block;flex:1;margin-left:8px;padding-top:4px;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  body.mob-list .lh-sub{flex:0 0 calc(100% - var(--col-id));width:auto;}
+  body.mob-list .lh-st{display:none;}
+  body.mob-list .lh-dp{display:none;}
 
   /* ── Gantt mode ── */
   body.mob-gantt .lp{width:140px;}
@@ -452,14 +466,14 @@ html,body{height:100%;overflow:hidden;
       <select id="flt-bienban" onchange="onFltChange()">
         <option value="">Tất cả biên bản</option>
       </select>
-    </div>
-    <div class="tb-right">
       <div class="search-box">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#718096" stroke-width="2.5">
           <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
         <input type="search" id="searchInput" placeholder="Tìm đầu việc, phòng...">
       </div>
+    </div>
+    <div class="tb-right">
       <div class="tb-icon2" title="Thông báo">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/>
@@ -473,23 +487,27 @@ html,body{height:100%;overflow:hidden;
 
   <!-- Filter bar -->
   <div class="filterbar">
-    <button class="ft active" id="ft-all"  onclick="setFlt('all')">Tất cả <span class="ft-cnt" id="fc-all">—</span></button>
-    <button class="ft" id="ft-done" onclick="setFlt('da_hoan_thanh')">&#x2705; Hoàn thành <span class="ft-cnt" id="fc-done">—</span></button>
-    <button class="ft" id="ft-act"  onclick="setFlt('dang_thuc_hien')">&#x1F504; Đang thực hiện <span class="ft-cnt" id="fc-act">—</span></button>
-    <button class="ft" id="ft-late" onclick="setFlt('tre_deadline')">&#x26A0;&#xFE0F; Trễ deadline <span class="ft-cnt" id="fc-late">—</span></button>
-    <div class="vdiv"></div>
-    <button class="ft" id="ft-hc" onclick="setNhom('hanh_chanh')"><span class="nhom-pip" style="background:#f6c90e;display:inline-block;margin-right:4px;"></span>Hành chính</button>
-    <button class="ft" id="ft-cm" onclick="setNhom('chuyen_mon')"><span class="nhom-pip" style="background:#a855f7;display:inline-block;margin-right:4px;"></span>Chuyên môn</button>
-    <button class="ft" id="ft-ql" onclick="setNhom('quan_ly_khac')"><span class="nhom-pip" style="background:#14b8a6;display:inline-block;margin-right:4px;"></span>Quản lý</button>
-    <div style="flex:1;min-width:8px;"></div>
-    <button type="button" class="nav-btn" onclick="shiftView(-14)" title="Lùi 2 tuần">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15,18 9,12 15,6"/></svg>
-    </button>
-    <span class="date-lbl" id="dateLbl">…</span>
-    <button type="button" class="nav-btn" onclick="shiftView(14)" title="Tiến 2 tuần">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9,18 15,12 9,6"/></svg>
-    </button>
-    <button type="button" class="nav-btn today" onclick="goToday()">Hôm nay</button>
+    <div class="fb-g1">
+      <button class="ft active" id="ft-all"  onclick="setFlt('all')">Tất cả <span class="ft-cnt" id="fc-all">—</span></button>
+      <button class="ft" id="ft-done" onclick="setFlt('da_hoan_thanh')">&#x2705; Hoàn thành <span class="ft-cnt" id="fc-done">—</span></button>
+      <button class="ft" id="ft-act"  onclick="setFlt('dang_thuc_hien')">&#x1F504; Đang thực hiện <span class="ft-cnt" id="fc-act">—</span></button>
+      <button class="ft" id="ft-late" onclick="setFlt('tre_deadline')">&#x26A0;&#xFE0F; Trễ deadline <span class="ft-cnt" id="fc-late">—</span></button>
+    </div>
+    <div class="fb-g2">
+      <div class="vdiv"></div>
+      <button class="ft" id="ft-hc" onclick="setNhom('hanh_chanh')"><span class="nhom-pip" style="background:#f6c90e;display:inline-block;margin-right:4px;"></span>Hành chính</button>
+      <button class="ft" id="ft-cm" onclick="setNhom('chuyen_mon')"><span class="nhom-pip" style="background:#a855f7;display:inline-block;margin-right:4px;"></span>Chuyên môn</button>
+      <button class="ft" id="ft-ql" onclick="setNhom('quan_ly_khac')"><span class="nhom-pip" style="background:#14b8a6;display:inline-block;margin-right:4px;"></span>Quản lý</button>
+      <div style="flex:1;min-width:8px;"></div>
+      <button type="button" class="nav-btn" onclick="shiftView(-14)" title="Lùi 2 tuần">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15,18 9,12 15,6"/></svg>
+      </button>
+      <span class="date-lbl" id="dateLbl">…</span>
+      <button type="button" class="nav-btn" onclick="shiftView(14)" title="Tiến 2 tuần">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9,18 15,12 9,6"/></svg>
+      </button>
+      <button type="button" class="nav-btn today" onclick="goToday()">Hôm nay</button>
+    </div>
   </div>
 
   <!-- Mobile view toggle -->
