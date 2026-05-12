@@ -293,97 +293,166 @@ body {
   min-height: 100vh;
 }
 
-/* ── Login overlay ── */
+/* ── Login overlay — split layout ── */
 #login-overlay {
-  position: fixed; inset: 0;
-  background: linear-gradient(160deg, #0A2E6E 0%, #1250A0 55%, #0D3B7A 100%);
-  z-index: 9999;
-  display: flex; align-items: center; justify-content: center;
-  overflow: hidden;
+  position: fixed; inset: 0; z-index: 9999;
+  display: flex; overflow: hidden;
 }
-#login-overlay::before {
+/* LEFT HERO PANEL */
+.login-hero {
+  flex: 0 0 52%; position: relative;
+  background: linear-gradient(145deg, #061D4A 0%, #0E3F8A 50%, #14307A 100%);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 48px 56px; overflow: hidden;
+}
+.login-hero::before {
   content: ''; position: absolute;
-  width: 580px; height: 580px; border-radius: 50%;
-  background: rgba(255,255,255,.055);
-  top: -200px; right: -150px; pointer-events: none;
+  width: 520px; height: 520px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(233,30,140,.18) 0%, transparent 70%);
+  top: -180px; right: -140px; pointer-events: none;
 }
-#login-overlay::after {
+.login-hero::after {
   content: ''; position: absolute;
-  width: 340px; height: 340px; border-radius: 50%;
-  background: rgba(233,30,140,.08);
-  bottom: -100px; left: -80px; pointer-events: none;
+  width: 380px; height: 380px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,.06) 0%, transparent 70%);
+  bottom: -120px; left: -100px; pointer-events: none;
 }
-.login-bg-watermark {
-  position: absolute; top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  width: 420px; height: 420px;
-  opacity: 0.07; pointer-events: none; z-index: 0;
+.lh-wave {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 120px; pointer-events: none;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 120'%3E%3Cpath fill='rgba(255,255,255,0.04)' d='M0,64 C360,110 1080,20 1440,80 L1440,120 L0,120 Z'/%3E%3C/svg%3E") bottom/cover no-repeat;
 }
-.login-bg-watermark img {
-  width: 100%; height: 100%; object-fit: contain;
-  filter: brightness(10) grayscale(1);
-}
-.login-wrapper {
-  display: flex; flex-direction: column; align-items: center;
-  width: 400px; position: relative; z-index: 1;
-}
-.login-logo-float {
-  width: 100px; height: 100px;
-  background: #fff; border-radius: 50%;
-  border: 4px solid rgba(255,255,255,.55);
-  box-shadow: 0 8px 32px rgba(0,0,0,.3), 0 0 0 8px rgba(255,255,255,.1);
+.lh-logo-ring {
+  width: 130px; height: 130px; border-radius: 50%;
+  background: rgba(255,255,255,.12);
+  border: 2px solid rgba(255,255,255,.25);
   display: flex; align-items: center; justify-content: center;
-  margin-bottom: -50px; z-index: 2; position: relative;
+  margin-bottom: 28px; position: relative; z-index: 1;
+  box-shadow: 0 0 0 16px rgba(255,255,255,.05), 0 20px 40px rgba(0,0,0,.35);
 }
-.login-logo-float img { width: 82px; height: 82px; object-fit: contain; border-radius: 50%; }
-.login-box {
+.lh-logo-ring img { width: 100px; height: 100px; object-fit: contain; border-radius: 50%; }
+.lh-brand { text-align: center; position: relative; z-index: 1; }
+.lh-brand .lh-main {
+  font-size: 32px; font-weight: 900; color: #fff; letter-spacing: -.01em; line-height: 1.15;
+}
+.lh-brand .lh-main em { color: #F472B6; font-style: normal; }
+.lh-brand .lh-cs2 {
+  display: inline-block; margin-top: 6px;
+  background: rgba(233,30,140,.25); border: 1px solid rgba(233,30,140,.4);
+  color: #F9A8D4; font-size: 11px; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase; padding: 3px 12px; border-radius: 20px;
+}
+.lh-desc {
+  margin-top: 20px; font-size: 14px; color: rgba(255,255,255,.55);
+  line-height: 1.6; text-align: center; max-width: 300px;
+  position: relative; z-index: 1;
+}
+.lh-stats {
+  display: flex; gap: 32px; margin-top: 36px;
+  position: relative; z-index: 1;
+}
+.lh-stat {
+  text-align: center;
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 12px; padding: 12px 18px;
+  min-width: 80px;
+}
+.lh-stat .lh-sn { font-size: 22px; font-weight: 800; color: #fff; }
+.lh-stat .lh-sl { font-size: 10px; color: rgba(255,255,255,.45); letter-spacing: .06em; text-transform: uppercase; margin-top: 2px; }
+
+/* RIGHT FORM PANEL */
+.login-panel {
+  flex: 1; background: #F1F5F9;
+  display: flex; align-items: center; justify-content: center;
+  padding: 40px 32px; position: relative;
+}
+.login-panel::before {
+  content: ''; position: absolute; inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%230E3F8A' fill-opacity='0.04'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+}
+.login-card {
   background: #fff; border-radius: 20px;
-  padding: 62px 36px 32px; width: 100%;
-  box-shadow: 0 20px 60px rgba(0,0,0,.35);
+  padding: 40px 36px 32px; width: 100%; max-width: 380px;
+  box-shadow: 0 4px 6px rgba(0,0,0,.04), 0 20px 48px rgba(14,63,138,.1);
+  position: relative; z-index: 1;
 }
-.login-title { text-align: center; margin-bottom: 20px; }
-.login-title .nm { font-size: 22px; font-weight: 800; color: #0D3B7A; }
-.login-title .nm span { color: #E91E8C; }
-.login-title .sub { font-size: 13px; color: #718096; margin-top: 4px; }
-.login-divider { height: 1px; background: #e8edf4; margin: 0 0 20px; }
-.login-field { margin-bottom: 14px; position: relative; }
-.login-field label { display: block; font-size: 11px; font-weight: 700; color: #4a5568; margin-bottom: 5px; text-transform: uppercase; letter-spacing: .05em; }
-.login-field .fi { position: absolute; bottom: 11px; left: 13px; font-size: 15px; pointer-events: none; line-height: 1; }
+.login-card-header { margin-bottom: 28px; }
+.login-card-header .lc-title {
+  font-size: 22px; font-weight: 800; color: #0D3B7A; letter-spacing: -.01em;
+}
+.login-card-header .lc-title span { color: #E91E8C; }
+.login-card-header .lc-sub { font-size: 13px; color: #94A3B8; margin-top: 5px; }
+.login-sep {
+  height: 2px; border-radius: 2px; margin-bottom: 24px;
+  background: linear-gradient(90deg, #0D3B7A, #E91E8C, transparent);
+}
+.login-field { margin-bottom: 16px; }
+.login-field label {
+  display: block; font-size: 11px; font-weight: 700; color: #64748B;
+  margin-bottom: 6px; text-transform: uppercase; letter-spacing: .06em;
+}
+.login-field .lf-wrap { position: relative; }
+.login-field .fi {
+  position: absolute; top: 50%; left: 14px;
+  transform: translateY(-50%); font-size: 15px; pointer-events: none; line-height: 1;
+}
 .login-field input {
-  width: 100%; padding: 11px 14px 11px 38px;
-  border: 1.5px solid #e2e8f0; border-radius: 9px;
-  font-size: 14px; outline: none; transition: border .15s, box-shadow .15s, background .15s;
-  font-family: inherit; background: #f8fafc; box-sizing: border-box;
+  width: 100%; padding: 12px 14px 12px 40px;
+  border: 1.5px solid #E2E8F0; border-radius: 10px;
+  font-size: 14px; outline: none;
+  transition: border .18s, box-shadow .18s, background .18s;
+  font-family: inherit; background: #F8FAFC; box-sizing: border-box; color: #1E293B;
 }
 .login-field input:focus {
   border-color: #1A5CA8;
-  box-shadow: 0 0 0 3px rgba(26,92,168,.12);
+  box-shadow: 0 0 0 3px rgba(26,92,168,.1);
   background: #fff;
 }
-.login-remember { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+.login-remember { display: flex; align-items: center; gap: 8px; margin-bottom: 18px; }
 .login-remember input[type=checkbox] { width: auto; accent-color: #1A5CA8; cursor: pointer; }
-.login-remember label { font-size: 13px; color: #4a5568; cursor: pointer; margin-bottom: 0; }
+.login-remember label { font-size: 13px; color: #64748B; cursor: pointer; margin-bottom: 0; }
 #login-err {
-  color: #c53030; font-size: 12px; margin-bottom: 12px; display: none;
-  padding: 8px 12px; background: #fff5f5; border-radius: 6px;
-  border-left: 3px solid #fc8181;
+  color: #C53030; font-size: 12px; margin-bottom: 14px; display: none;
+  padding: 9px 12px; background: #FFF5F5; border-radius: 8px;
+  border-left: 3px solid #FC8181; font-weight: 500;
 }
 .login-btn {
-  width: 100%; padding: 13px;
-  background: linear-gradient(90deg, #0D3B7A 0%, #1A5CA8 45%, #E91E8C 100%);
+  width: 100%; padding: 14px;
+  background: linear-gradient(90deg, #0D3B7A, #1A5CA8 40%, #C2185B);
   background-size: 200% 100%; background-position: right center;
-  color: #fff; border: none; border-radius: 9px;
-  font-size: 15px; font-weight: 700; letter-spacing: .02em;
+  color: #fff; border: none; border-radius: 10px;
+  font-size: 15px; font-weight: 700; letter-spacing: .03em;
   cursor: pointer; font-family: inherit;
-  transition: background-position .35s, transform .15s, box-shadow .15s;
+  transition: background-position .4s ease, transform .15s, box-shadow .15s;
+  box-shadow: 0 4px 14px rgba(13,59,122,.35);
 }
 .login-btn:hover {
   background-position: left center;
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(26,92,168,.4);
+  box-shadow: 0 8px 24px rgba(26,92,168,.45);
 }
-.login-btn:active { transform: translateY(0); box-shadow: none; }
-.login-hint { font-size: 11px; color: #718096; text-align: center; margin-top: 13px; }
+.login-btn:active { transform: translateY(0); box-shadow: 0 2px 8px rgba(13,59,122,.3); }
+.login-hint { font-size: 11px; color: #94A3B8; text-align: center; margin-top: 14px; }
+
+/* RESPONSIVE — collapse hero on small screens */
+@media (max-width: 768px) {
+  #login-overlay { flex-direction: column; }
+  .login-hero {
+    flex: 0 0 auto; padding: 32px 24px;
+    flex-direction: row; gap: 16px; justify-content: flex-start;
+  }
+  .lh-logo-ring { width: 64px; height: 64px; margin-bottom: 0; flex-shrink: 0; box-shadow: none; }
+  .lh-logo-ring img { width: 50px; height: 50px; }
+  .lh-brand .lh-main { font-size: 20px; }
+  .lh-cs2 { display: none !important; }
+  .lh-desc, .lh-stats { display: none; }
+  .login-hero::before, .login-hero::after, .lh-wave { display: none; }
+  .login-panel { flex: 1; padding: 24px 16px; align-items: flex-start; padding-top: 24px; }
+  .login-card { padding: 28px 20px 24px; }
+}
 
 /* ── App body ── */
 #app-body { display: none; min-height: 100vh; }
@@ -704,8 +773,7 @@ body {
   .stat-card { padding: 14px 12px; gap: 10px; }
   .stat-num { font-size: 22px; }
   .stat-icon { font-size: 20px; }
-  .login-wrapper { width: calc(100vw - 24px); }
-  .login-box { padding: 62px 18px 28px; }
+  .login-card { padding: 28px 16px 22px; }
   .review-stats { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 380px) {
@@ -778,28 +846,46 @@ body {
 
 <!-- ═══ LOGIN OVERLAY ═══ -->
 <div id="login-overlay">
-  <div class="login-bg-watermark"><img src="__LOGO_URI__" alt=""></div>
-  <div class="login-wrapper">
-    <div class="login-logo-float">
+  <!-- Left hero panel -->
+  <div class="login-hero">
+    <div class="lh-wave"></div>
+    <div class="lh-logo-ring">
       <img src="__LOGO_URI__" alt="Logo BVTD CS2">
     </div>
-    <div class="login-box">
-      <div class="login-title">
-        <div class="nm">Bệnh Viện <span>Từ Dũ</span></div>
-        <div class="sub">Cơ Sở 2 — Hệ thống theo dõi tiến độ đầu việc</div>
+    <div class="lh-brand">
+      <div class="lh-main">Bệnh Viện <em>Từ Dũ</em></div>
+      <span class="lh-cs2">Cơ Sở 2</span>
+      <div class="lh-desc">Hệ thống theo dõi tiến độ đầu việc — cập nhật theo thời gian thực</div>
+      <div class="lh-stats" id="lh-stats-box">
+        <div class="lh-stat"><div class="lh-sn" id="lh-total">—</div><div class="lh-sl">Đầu việc</div></div>
+        <div class="lh-stat"><div class="lh-sn" id="lh-depts">—</div><div class="lh-sl">Phòng ban</div></div>
+        <div class="lh-stat"><div class="lh-sn" id="lh-done">—</div><div class="lh-sl">Hoàn thành</div></div>
       </div>
-      <div class="login-divider"></div>
+    </div>
+  </div>
+  <!-- Right form panel -->
+  <div class="login-panel">
+    <div class="login-card">
+      <div class="login-card-header">
+        <div class="lc-title">Đăng nhập <span>hệ thống</span></div>
+        <div class="lc-sub">Nhập thông tin tài khoản phòng ban của bạn</div>
+      </div>
+      <div class="login-sep"></div>
       <div class="login-field">
         <label>Tên đăng nhập</label>
-        <span class="fi">👤</span>
-        <input id="login-user" type="text" placeholder="VD: HCQT, BGD, KHTH..."
-          autocomplete="username" onkeydown="if(event.key==='Enter')doLogin()">
+        <div class="lf-wrap">
+          <span class="fi">👤</span>
+          <input id="login-user" type="text" placeholder="VD: HCQT, BGD, KHTH..."
+            autocomplete="username" onkeydown="if(event.key==='Enter')doLogin()">
+        </div>
       </div>
       <div class="login-field">
         <label>Mật khẩu</label>
-        <span class="fi">🔒</span>
-        <input id="login-pass" type="password" placeholder="Nhập mật khẩu..."
-          autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+        <div class="lf-wrap">
+          <span class="fi">🔒</span>
+          <input id="login-pass" type="password" placeholder="Nhập mật khẩu..."
+            autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+        </div>
       </div>
       <div class="login-remember">
         <input type="checkbox" id="login-remember">
@@ -1137,6 +1223,18 @@ const USERS = {
 };
 
 let AUTH = null;
+
+/* Populate hero stats on login screen */
+(function() {
+  const tasks = (window.__D && window.__D.tasks) ? window.__D.tasks : [];
+  const total = tasks.length;
+  const depts = new Set(tasks.map(t => t.phong_chinh).filter(Boolean)).size;
+  const done  = tasks.filter(t => t.trang_thai === 'da_hoan_thanh').length;
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  set('lh-total', total || '—');
+  set('lh-depts', depts || '—');
+  set('lh-done',  done  || '—');
+})();
 
 function doLogin() {
   const user = (document.getElementById('login-user').value || '').trim().toUpperCase();
