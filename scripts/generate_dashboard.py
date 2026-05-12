@@ -1,7 +1,6 @@
 """
 generate_dashboard.py — Sinh dashboard.html theo phong cach project management hien dai
 """
-import base64
 import json
 import re
 from pathlib import Path
@@ -209,14 +208,6 @@ def compute(tasks):
 
 
 # ── HTML template ──────────────────────────────────────────────────────────────
-
-def _logo_data_uri() -> str:
-    for name in ("logo-tudu-footer.png", "logo-tudu.png"):
-        p = ROOT / name
-        if p.exists():
-            return "data:image/png;base64," + base64.b64encode(p.read_bytes()).decode()
-    return ""
-
 
 def build_html(data: dict) -> str:
     data_json = json.dumps(data, ensure_ascii=False).replace('</script>', r'<\/script>')
