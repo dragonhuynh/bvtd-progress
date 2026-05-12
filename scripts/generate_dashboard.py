@@ -291,44 +291,84 @@ body {
 /* ── Login overlay ── */
 #login-overlay {
   position: fixed; inset: 0;
-  background: linear-gradient(135deg, #0D3B7A 0%, #1A5CA8 100%);
+  background: linear-gradient(160deg, #0A2E6E 0%, #1250A0 55%, #0D3B7A 100%);
   z-index: 9999;
   display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
 }
+#login-overlay::before {
+  content: ''; position: absolute;
+  width: 580px; height: 580px; border-radius: 50%;
+  background: rgba(255,255,255,.055);
+  top: -200px; right: -150px; pointer-events: none;
+}
+#login-overlay::after {
+  content: ''; position: absolute;
+  width: 340px; height: 340px; border-radius: 50%;
+  background: rgba(233,30,140,.08);
+  bottom: -100px; left: -80px; pointer-events: none;
+}
+.login-wrapper {
+  display: flex; flex-direction: column; align-items: center;
+  width: 400px; position: relative; z-index: 1;
+}
+.login-logo-float {
+  width: 100px; height: 100px;
+  background: #fff; border-radius: 50%;
+  border: 4px solid rgba(255,255,255,.55);
+  box-shadow: 0 8px 32px rgba(0,0,0,.3), 0 0 0 8px rgba(255,255,255,.1);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: -50px; z-index: 2; position: relative;
+}
+.login-logo-float img { width: 82px; height: 82px; object-fit: contain; border-radius: 50%; }
 .login-box {
-  background: #fff; border-radius: 20px; padding: 44px 40px;
-  width: 380px; box-shadow: 0 24px 64px rgba(0,0,0,.45);
+  background: #fff; border-radius: 20px;
+  padding: 62px 36px 32px; width: 100%;
+  box-shadow: 0 20px 60px rgba(0,0,0,.35);
 }
-.login-logo { text-align: center; margin-bottom: 28px; }
-.login-logo .ic { display: none; }
-.brand-badge {
-  display: inline-flex; flex-direction: column; align-items: center; gap: 2px;
-  background: linear-gradient(135deg, #0D3B7A 0%, #1A5CA8 100%);
-  border-radius: 16px; padding: 14px 24px; margin-bottom: 12px;
-}
-.brand-badge .bb-name { font-size: 18px; font-weight: 800; color: #fff; letter-spacing: .02em; }
-.brand-badge .bb-sub  { font-size: 11px; font-weight: 600; color: #E91E8C; letter-spacing: .08em; text-transform: uppercase; }
-.login-logo .nm { font-size: 20px; font-weight: 800; color: #0D3B7A; margin-top: 0; }
-.login-logo .nm span { color: #E91E8C; }
-.login-logo .sub { font-size: 13px; color: #718096; margin-top: 4px; }
-.login-field { margin-bottom: 16px; }
-.login-field label { display: block; font-size: 12px; font-weight: 700; color: #4a5568; margin-bottom: 6px; text-transform: uppercase; letter-spacing: .04em; }
+.login-title { text-align: center; margin-bottom: 20px; }
+.login-title .nm { font-size: 22px; font-weight: 800; color: #0D3B7A; }
+.login-title .nm span { color: #E91E8C; }
+.login-title .sub { font-size: 13px; color: #718096; margin-top: 4px; }
+.login-divider { height: 1px; background: #e8edf4; margin: 0 0 20px; }
+.login-field { margin-bottom: 14px; position: relative; }
+.login-field label { display: block; font-size: 11px; font-weight: 700; color: #4a5568; margin-bottom: 5px; text-transform: uppercase; letter-spacing: .05em; }
+.login-field .fi { position: absolute; bottom: 11px; left: 13px; font-size: 15px; pointer-events: none; line-height: 1; }
 .login-field input {
-  width: 100%; padding: 11px 14px;
+  width: 100%; padding: 11px 14px 11px 38px;
   border: 1.5px solid #e2e8f0; border-radius: 9px;
-  font-size: 14px; outline: none; transition: border .15s;
-  font-family: inherit;
+  font-size: 14px; outline: none; transition: border .15s, box-shadow .15s, background .15s;
+  font-family: inherit; background: #f8fafc; box-sizing: border-box;
 }
-.login-field input:focus { border-color: #1A5CA8; }
-#login-err { color: #c53030; font-size: 12px; margin-bottom: 12px; display: none; padding: 8px 12px; background: #fff5f5; border-radius: 6px; }
+.login-field input:focus {
+  border-color: #1A5CA8;
+  box-shadow: 0 0 0 3px rgba(26,92,168,.12);
+  background: #fff;
+}
+.login-remember { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+.login-remember input[type=checkbox] { width: auto; accent-color: #1A5CA8; cursor: pointer; }
+.login-remember label { font-size: 13px; color: #4a5568; cursor: pointer; margin-bottom: 0; }
+#login-err {
+  color: #c53030; font-size: 12px; margin-bottom: 12px; display: none;
+  padding: 8px 12px; background: #fff5f5; border-radius: 6px;
+  border-left: 3px solid #fc8181;
+}
 .login-btn {
   width: 100%; padding: 13px;
-  background: linear-gradient(135deg, #1A5CA8 0%, #E91E8C 100%); color: #fff; border: none;
-  border-radius: 9px; font-size: 15px; font-weight: 700;
-  cursor: pointer; transition: opacity .15s; font-family: inherit;
+  background: linear-gradient(90deg, #0D3B7A 0%, #1A5CA8 45%, #E91E8C 100%);
+  background-size: 200% 100%; background-position: right center;
+  color: #fff; border: none; border-radius: 9px;
+  font-size: 15px; font-weight: 700; letter-spacing: .02em;
+  cursor: pointer; font-family: inherit;
+  transition: background-position .35s, transform .15s, box-shadow .15s;
 }
-.login-btn:hover { opacity: .88; }
-.login-hint { font-size: 11px; color: #718096; text-align: center; margin-top: 14px; }
+.login-btn:hover {
+  background-position: left center;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(26,92,168,.4);
+}
+.login-btn:active { transform: translateY(0); box-shadow: none; }
+.login-hint { font-size: 11px; color: #a0aec0; text-align: center; margin-top: 13px; }
 
 /* ── App body ── */
 #app-body { display: none; min-height: 100vh; }
@@ -643,7 +683,8 @@ body {
   .stat-card { padding: 14px 12px; gap: 10px; }
   .stat-num { font-size: 22px; }
   .stat-icon { font-size: 20px; }
-  .login-box { width: calc(100vw - 24px); padding: 28px 16px; }
+  .login-wrapper { width: calc(100vw - 24px); }
+  .login-box { padding: 62px 18px 28px; }
   .review-stats { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 380px) {
@@ -716,29 +757,36 @@ body {
 
 <!-- ═══ LOGIN OVERLAY ═══ -->
 <div id="login-overlay">
-  <div class="login-box">
-    <div class="login-logo">
-      <img src="__LOGO_URI__" alt="Logo Bệnh Viện Từ Dũ" style="width:88px;height:88px;object-fit:contain;margin-bottom:10px;">
-      <div class="nm">Bệnh Viện <span>Từ Dũ</span></div>
-      <div class="sub">Cơ Sở 2 — Hệ thống theo dõi tiến độ đầu việc</div>
+  <div class="login-wrapper">
+    <div class="login-logo-float">
+      <img src="__LOGO_URI__" alt="Logo Bệnh Viện Từ Dũ">
     </div>
-    <div class="login-field">
-      <label>Tên đăng nhập</label>
-      <input id="login-user" type="text" placeholder="VD: HCQT, BGD, KHTH..."
-        autocomplete="username" onkeydown="if(event.key==='Enter')doLogin()">
+    <div class="login-box">
+      <div class="login-title">
+        <div class="nm">Bệnh Viện <span>Từ Dũ</span></div>
+        <div class="sub">Cơ Sở 2 — Hệ thống theo dõi tiến độ đầu việc</div>
+      </div>
+      <div class="login-divider"></div>
+      <div class="login-field">
+        <label>Tên đăng nhập</label>
+        <span class="fi">👤</span>
+        <input id="login-user" type="text" placeholder="VD: HCQT, BGD, KHTH..."
+          autocomplete="username" onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      <div class="login-field">
+        <label>Mật khẩu</label>
+        <span class="fi">🔒</span>
+        <input id="login-pass" type="password" placeholder="Nhập mật khẩu..."
+          autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      <div class="login-remember">
+        <input type="checkbox" id="login-remember">
+        <label for="login-remember">Ghi nhớ đăng nhập</label>
+      </div>
+      <div id="login-err">Sai tên đăng nhập hoặc mật khẩu. Vui lòng thử lại.</div>
+      <button class="login-btn" onclick="doLogin()">Đăng nhập →</button>
+      <div class="login-hint">Liên hệ CNTT nếu quên mật khẩu</div>
     </div>
-    <div class="login-field">
-      <label>Mật khẩu</label>
-      <input id="login-pass" type="password" placeholder="Nhập mật khẩu..."
-        autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
-    </div>
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
-      <input type="checkbox" id="login-remember" style="width:auto;accent-color:#1A5CA8;cursor:pointer;">
-      <label for="login-remember" style="font-size:13px;color:#4a5568;margin-bottom:0;text-transform:none;letter-spacing:normal;cursor:pointer;">Ghi nhớ đăng nhập</label>
-    </div>
-    <div id="login-err">Sai tên đăng nhập hoặc mật khẩu. Vui lòng thử lại.</div>
-    <button class="login-btn" onclick="doLogin()">Đăng nhập →</button>
-    <div class="login-hint">Liên hệ CNTT nếu quên mật khẩu</div>
   </div>
 </div>
 
@@ -1604,7 +1652,22 @@ function lsGet(k) { try { return JSON.parse(localStorage.getItem(k)||'[]'); } ca
 function lsSave(k, v) { localStorage.setItem(k, JSON.stringify(v)); }
 function fbKey(user, id) { return user + '_' + id; }
 function fbEnabled() { return !!(FB_CFG && FB_CFG.databaseURL); }
-function fbPendingList() { return Object.values(_fbPending); }
+function normalizePending(e) {
+  // Handle legacy migration format (task_id/task_ten) and missing at/user fields
+  return {
+    id:         e.id      || e.task_id  || '',
+    ten:        e.ten     || e.task_ten || '',
+    phong:      e.phong   || '',
+    trang_thai: e.trang_thai || e.tt || '',
+    ngay_ht:    e.ngay_ht || e.ngay_hoan_thanh || '',
+    ghi_chu:    e.ghi_chu || '',
+    user:       e.user    || e.phong   || '',
+    user_phong: e.user_phong || e.phong || '',
+    at:         e.at      || (e.timestamp ? new Date(e.timestamp).toISOString().slice(0,10) : ''),
+    migrated:   e.migrated || false,
+  };
+}
+function fbPendingList() { return Object.values(_fbPending).map(normalizePending); }
 
 function fbInit() {
   if (_db) return true;
@@ -1637,16 +1700,20 @@ function migrateLocalStorage() {
   if (!confirm('Bạn có ' + myPending.length + ' báo cáo cũ chưa được đồng bộ lên hệ thống.\\nBấm OK để đẩy lên ngay, Huỷ để bỏ qua.')) return;
   let ok = 0;
   myPending.forEach(e => {
-    const key = (e.task_id || e.id || Date.now()) + '_' + (e.phong || 'unknown') + '_' + (e.timestamp || Date.now());
+    const id    = e.id || e.task_id || '';
+    const user  = e.user || e.phong || AUTH.user || '';
+    const key   = fbKey(user, id) || (Date.now() + '_' + (e.phong || 'unknown'));
     const entry = {
-      task_id: e.task_id || e.id,
-      task_ten: e.task_ten || e.ten || '',
-      phong: e.phong || '',
+      id,
+      ten:        e.ten || e.task_ten || '',
+      phong:      e.phong || '',
       trang_thai: e.trang_thai || e.tt || '',
-      ngay_hoan_thanh: e.ngay_hoan_thanh || e.ngay || '',
-      ghi_chu: e.ghi_chu || e.note || '',
-      timestamp: e.timestamp || Date.now(),
-      migrated: true
+      ngay_ht:    e.ngay_ht || e.ngay_hoan_thanh || e.ngay || '',
+      ghi_chu:    e.ghi_chu || e.note || '',
+      user,
+      user_phong: e.user_phong || e.phong || '',
+      at:         e.at || (e.timestamp ? new Date(e.timestamp).toISOString().slice(0,10) : new Date().toISOString().slice(0,10)),
+      migrated:   true,
     };
     _db.ref('bvtd_pending/' + key).set(entry).then(() => ok++);
   });
