@@ -1,6 +1,8 @@
 """CSV và versioning utilities — dùng bởi tất cả scripts khác."""
+import base64
 import csv
 import json
+import re
 from datetime import date, datetime
 from pathlib import Path
 
@@ -92,6 +94,27 @@ def append_update_log(rows: list[dict]) -> None:
         if write_header:
             w.writeheader()
         w.writerows(rows)
+
+
+# ── Shared utilities ──────────────────────────────────────────────────────────
+
+def normalize_source_name(name: str) -> str:
+    """Normalize date in source names to dd/mm/yyyy (4-digit year)."""
+    m = re.search(r'\b(\d{4})-(\d{2})-(\d{2})\b', name)
+    if m:
+        return name[:m.start()] + f"{m.group(3)}/{m.group(2)}/{m.group(1)}" + name[m.end():]
+    m = re.search(r'\b(\d{2})/(\d{2})/(\d{2})\b', name)
+    if m:
+        return name[:m.start()] + f"{m.group(1)}/{m.group(2)}/20{m.group(3)}" + name[m.end():]
+    return name
+
+
+def _logo_data_uri() -> str:
+    for name in ("logo-tudu-footer.png", "logo-tudu.png"):
+        p = ROOT / name
+        if p.exists():
+            return "data:image/png;base64," + base64.b64encode(p.read_bytes()).decode()
+    return ""
 
 
 # ── JSON helpers ──────────────────────────────────────────────────────────────

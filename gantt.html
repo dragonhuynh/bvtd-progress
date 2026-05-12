@@ -229,10 +229,7 @@ html,body{height:100%;overflow:hidden;
 /* Gantt row */
 .gr{position:relative;border-bottom:1px solid var(--border);}
 .gr:hover{background:#fdf6ee;}
-.gr-bg{position:absolute;inset:0;display:flex;pointer-events:none;}
-.gr-col{flex-shrink:0;height:100%;border-right:1px solid #f3ede7;}
-.gr-col.today-bg{background:rgba(244,124,60,.08);}
-.gr-col.wknd-bg{background:rgba(0,0,0,.018);}
+.gr-bg{position:absolute;inset:0;pointer-events:none;}
 
 /* Bar */
 .bar{
@@ -632,6 +629,24 @@ function goToday(){viewStart=addDays(today0(),-10);renderG();}
 
 function render(){renderL();renderG();}
 
+// Build CSS background for a gantt row (replaces per-column div.gr-col creation)
+function buildBgStyle(todOff,totalW){
+  const todayC='rgba(244,124,60,.08)',wkndC='rgba(0,0,0,.018)',normC='transparent';
+  const stops=[];let cur=null;
+  for(let i=0;i<VIEW_DAYS;i++){
+    const d=addDays(viewStart,i);
+    const c=(todOff>=0&&todOff<VIEW_DAYS&&i===todOff)?todayC:(d.getDay()===0||d.getDay()===6)?wkndC:normC;
+    if(c!==cur){
+      if(cur!==null)stops.push(`${cur} ${i*DAY_W}px`);
+      stops.push(`${c} ${i*DAY_W}px`);cur=c;
+    }
+  }
+  stops.push(`${cur} ${totalW}px`);
+  const colGrad=`linear-gradient(to right,${stops.join(',')})`;
+  const borderGrad=`repeating-linear-gradient(to right,transparent 0,transparent ${DAY_W-1}px,#f3ede7 ${DAY_W-1}px,#f3ede7 ${DAY_W}px)`;
+  return`${colGrad},${borderGrad}`;
+}
+
 function renderL(){
   const c=document.getElementById('lpBody');c.innerHTML='';
   if(!vis.length){c.innerHTML='<div style="padding:20px 16px;color:#718096;font-size:13px">Không có đầu việc phù hợp.</div>';return;}
@@ -690,20 +705,14 @@ function renderG(){
   const pST=body.scrollTop;body.innerHTML='';
   const totalW=VIEW_DAYS*DAY_W;
   const todOff=dDiff(viewStart,tod);
+  const bgStyle=buildBgStyle(todOff,totalW);
   vis.forEach((t,i)=>{
     const row=document.createElement('div');
     row.className='gr';row.dataset.i=i;
     row.style.cssText=`width:${totalW}px;height:${ROW_H}px;`;
-    // BG
+    // BG — single div with CSS gradient instead of per-column divs
     const bg=document.createElement('div');bg.className='gr-bg';
-    for(let j=0;j<VIEW_DAYS;j++){
-      const d2=addDays(viewStart,j);
-      const col=document.createElement('div');col.className='gr-col';
-      col.style.width=DAY_W+'px';
-      if(d2.getTime()===tod.getTime())col.classList.add('today-bg');
-      else if(d2.getDay()===0||d2.getDay()===6)col.classList.add('wknd-bg');
-      bg.appendChild(col);
-    }
+    bg.style.background=bgStyle;
     row.appendChild(bg);
     // Today vertical line
     if(todOff>=0&&todOff<VIEW_DAYS){
@@ -805,6 +814,7 @@ function hl(i,on){
 }
 function showTip(e,t){
   const tip=document.getElementById('tip');
+  const tod=today0();
   const sc=t.trang_thai||'dang_thuc_hien';
   const dept=t.phong_phoi_hop?`${esc(t.phong_chinh)} + ${t.phong_phoi_hop.split('|').join(', ')}`:`${esc(t.phong_chinh)}`;
   const endD=t.ket_thuc?pDate(t.ket_thuc):null;

@@ -1,13 +1,15 @@
 """
 generate_dashboard.py — Sinh dashboard.html theo phong cach project management hien dai
 """
-import json
-import csv
-import re
 import base64
+import json
+import re
 from pathlib import Path
-from datetime import datetime, date
+from datetime import datetime
 from collections import defaultdict
+import sys
+sys.path.insert(0, str(Path(__file__).parent))
+from tracker import load_tasks, auto_mark_overdue, normalize_source_name, _logo_data_uri
 
 ROOT = Path(__file__).parent.parent
 
@@ -61,40 +63,10 @@ def build_pdf_map() -> dict:
     return pdf_map
 
 
-def normalize_source_name(name: str) -> str:
-    """Normalize date in source names to dd/mm/yyyy (4-digit year)."""
-    # YYYY-MM-DD → dd/mm/yyyy
-    m = re.search(r'\b(\d{4})-(\d{2})-(\d{2})\b', name)
-    if m:
-        return name[:m.start()] + f"{m.group(3)}/{m.group(2)}/{m.group(1)}" + name[m.end():]
-    # dd/mm/yy → dd/mm/20yy
-    m = re.search(r'\b(\d{2}/\d{2}/)(\d{2})\b', name)
-    if m:
-        return name[:m.start(2)] + "20" + m.group(2) + name[m.end():]
-    return name
-
-
-# ── Data loading ───────────────────────────────────────────────────────────────
-
-def load_tasks() -> list[dict]:
-    p = ROOT / "data" / "tasks.csv"
-    if not p.exists():
-        return []
-    with open(p, encoding="utf-8") as f:
-        return list(csv.DictReader(f))
-
-
-def auto_overdue(tasks: list[dict]) -> None:
-    today = date.today().isoformat()
-    for t in tasks:
-        if t["trang_thai"] == "dang_thuc_hien" and t.get("ket_thuc") and t["ket_thuc"] < today:
-            t["trang_thai"] = "tre_deadline"
-
-
 # ── Stats computation ──────────────────────────────────────────────────────────
 
 def compute(tasks):
-    auto_overdue(tasks)
+    auto_mark_overdue(tasks)
 
     total = len(tasks)
     done  = sum(1 for t in tasks if t["trang_thai"] == "da_hoan_thanh")
@@ -1515,7 +1487,7 @@ function initApp() {
   updateNavBadge();
 
   // Init charts
-  setTimeout(() => initCharts(st), 100);
+  initCharts(st);
 }
 
 // ── Charts ─────────────────────────────────────────────────────────────────────
@@ -1570,6 +1542,7 @@ function buildTasksView(filtered) {
 
   let totalDepts = new Set();
   const parts = [];
+  const _pendingIds = new Set(fbPendingList().filter(p => p.user === AUTH.user).map(p => p.id));
 
   NHOM_GROUPS.forEach(nhomG => {
     const nhomTasks = filtered.filter(t => t.nhom === nhomG.key);
@@ -1599,7 +1572,6 @@ function buildTasksView(filtered) {
     });
 
     const depts = Object.keys(byDept).sort((a,b) => byDept[b].length - byDept[a].length);
-    const _pendingIds = new Set(fbPendingList().filter(p => p.user === AUTH.user).map(p => p.id));
 
     depts.forEach((dept, idx) => {
       const tasks  = byDept[dept];
@@ -1824,9 +1796,11 @@ function startFbListener() {
   if (!fbInit()) return;
   _db.ref('bvtd_pending').on('value', snap => {
     _fbPending = snap.val() || {};
-    renderPending();
-    renderReview();
     updateNavBadge();
+    if (document.getElementById('view-review')?.classList.contains('active')) {
+      renderPending();
+      renderReview();
+    }
   });
   migrateLocalStorage();
 }
@@ -1890,7 +1864,7 @@ function openUpd(id, ten, phong, phoi) {
   _updTask = {id, ten, phong, phoi: phoi || ''};
   document.getElementById('upd-sub').textContent = id + ' — ' + ten + ' (' + phong + ')';
   document.getElementById('upd-tt').value = '';
-  document.getElementById('upd-ngay').value = '';
+  document.getElementById('upd-ngay').value = new Date().toISOString().slice(0, 10);
   document.getElementById('upd-note').value = '';
   document.getElementById('upd-ngay-wrap').style.display = '';
   document.getElementById('upd-msg').style.display = 'none';
