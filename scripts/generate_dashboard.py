@@ -2495,27 +2495,24 @@ function exportApproved() {
 }
 
 // ── Boot ───────────────────────────────────────────────────────────────────────
-const savedAuth = sessionStorage.getItem('bvtd_auth') || localStorage.getItem('bvtd_auth');
-if (savedAuth) {
-  let parsedAuth = null;
-  try { parsedAuth = JSON.parse(savedAuth); }
-  catch(e) { localStorage.removeItem('bvtd_auth'); sessionStorage.removeItem('bvtd_auth'); }
-  if (parsedAuth && parsedAuth.user && parsedAuth.user in USERS) {
-    AUTH = parsedAuth;
-    document.getElementById('login-overlay').style.display = 'none';
-    document.getElementById('app-body').style.display = 'flex';
-    document.getElementById('user-badge').textContent = AUTH.user;
-    initApp();
-    switchView('dashboard');
-    // Firebase SDK loaded with defer — may not be ready when inline script runs.
-    // DOMContentLoaded fires after all deferred scripts, so Firebase is guaranteed available.
-    if (typeof firebase !== 'undefined') {
+// DOMContentLoaded fires after ALL defer scripts (Chart.js, Firebase) — guaranteed available.
+document.addEventListener('DOMContentLoaded', function() {
+  const savedAuth = sessionStorage.getItem('bvtd_auth') || localStorage.getItem('bvtd_auth');
+  if (savedAuth) {
+    let parsedAuth = null;
+    try { parsedAuth = JSON.parse(savedAuth); }
+    catch(e) { localStorage.removeItem('bvtd_auth'); sessionStorage.removeItem('bvtd_auth'); }
+    if (parsedAuth && parsedAuth.user && parsedAuth.user in USERS) {
+      AUTH = parsedAuth;
+      document.getElementById('login-overlay').style.display = 'none';
+      document.getElementById('app-body').style.display = 'flex';
+      document.getElementById('user-badge').textContent = AUTH.user;
+      initApp();
+      switchView('dashboard');
       startFbListener();
-    } else {
-      document.addEventListener('DOMContentLoaded', startFbListener);
     }
   }
-}
+});
 </script>
 </body>
 </html>""".replace("__LOGO_URI__", logo_uri)
