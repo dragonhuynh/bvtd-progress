@@ -416,32 +416,32 @@ id,ten_dau_viec,nhom,phong_chinh,phong_phoi_hop,bat_dau,ket_thuc,trang_thai,so_l
 415,Điều dưỡng chuẩn bị báo cáo CS1 về lưu đồ in toa thuốc tập trung và lưu đồ khoa khám bệnh,quan_ly_khac,Điều dưỡng,,2026-04-21,2026-04-28,tre_deadline,1,,Biên bản 2026-04-21
 416,TCCB + KHTH + Điều dưỡng + HCQT + CTXH triển khai mổ đục thủy tinh thể (CS2 chủ trì: tiếp nhận đến hậu phẫu và tư vấn tái khám),chuyen_mon,TCCB,KHTH|Điều dưỡng|HCQT|CTXH,2026-04-21,2026-04-28,da_hoan_thanh,1,⚠️ Báo cáo từ phòng phối hợp (HCQT) — cần kiểm tra lại với phòng chính (TCCB),Biên bản 2026-04-21
 417,VTTBYT + HCQT làm tờ trình vị trí đặt máy CT (phù hợp vận hành/phục vụ CC/tiết kiệm tài nguyên),quan_ly_khac,VTTBYT,HCQT,2026-05-05,2026-05-05,tre_deadline,1,,Biên bản 2026-05-05
-418,VTTBYT + HCQT quy hoạch khu Chẩn đoán hình ảnh trên bản vẽ mặt bằng (TTB/lưu đồ BN/ổ điện-mạng/bàn ghế/máy lạnh),hanh_chanh,VTTBYT,HCQT,2026-05-05,2026-05-12,dang_thuc_hien,1,,Biên bản 2026-05-05
+418,VTTBYT + HCQT quy hoạch khu Chẩn đoán hình ảnh trên bản vẽ mặt bằng (TTB/lưu đồ BN/ổ điện-mạng/bàn ghế/máy lạnh),hanh_chanh,VTTBYT,HCQT,2026-05-05,2026-05-12,tre_deadline,1,,Biên bản 2026-05-05
 419,VTTBYT sửa gấp máy CRAM báo cáo 08/05/2026,hanh_chanh,VTTBYT,,2026-05-05,2026-05-08,tre_deadline,1,,Biên bản 2026-05-05
 420,VTTBYT trang bị gấp máy Xquang Panorama và Xquang chóp răng báo cáo 08/05/2026,hanh_chanh,VTTBYT,,2026-05-05,2026-05-08,tre_deadline,1,,Biên bản 2026-05-05
-421,KHTH + VTTBYT + HCQT xây dựng phương án Can thiệp nội mạch (TTB/bố trí mặt bằng/luồng BN/nhân sự),quan_ly_khac,KHTH,VTTBYT|HCQT,2026-05-05,2026-05-12,dang_thuc_hien,1,,Biên bản 2026-05-05
-422,KHTH trình KPI nội soi tiêu hóa (ít nhất 10 ca/tuần) và ngày triển khai ca đầu tiên,quan_ly_khac,KHTH,,2026-05-05,2026-05-12,dang_thuc_hien,1,,Biên bản 2026-05-05
-423,KHTH giám sát BS GMHS khám nội (ít nhất 30% tổng số BN nội),chuyen_mon,KHTH,GMHS,2026-05-05,2026-05-12,dang_thuc_hien,1,,Biên bản 2026-05-05
-424,KHTH + BS Thúy Phượng mô tả nhiệm vụ và vị trí việc làm cụ thể của 5 BS BV TD (sáng/chiều/tối); báo cáo 12/05,quan_ly_khac,KHTH,,2026-05-05,2026-05-12,dang_thuc_hien,1,,Biên bản 2026-05-05
-425,KHTH + HCQT triển khai thêm phòng khám hội chẩn Nội (BS Nguyễn Tri Phương ≥2 ngày/tuần đông bệnh) + phương án hẹn/điều phối,chuyen_mon,KHTH,HCQT,2026-05-05,2026-05-12,dang_thuc_hien,1,,Biên bản 2026-05-05
-426,KHTH trình phương án tăng cường khám toàn diện hàng tuần (nội/ngoại trú/phân tích tuân thủ/khắc phục),quan_ly_khac,KHTH,,2026-05-05,2026-05-12,dang_thuc_hien,1,,Biên bản 2026-05-05
-427,XN + VTTBYT + KHTH + TCKT triển khai đặt máy demo khí máu động mạch và lactate phục vụ CC và ngoại trú,chuyen_mon,XN,VTTBYT|KHTH|TCKT,2026-05-05,2026-05-12,dang_thuc_hien,1,,Biên bản 2026-05-05
-428,KHTH tăng cường tầm soát ung thư (tiền liệt tuyến/UT vú/UT CTC),chuyen_mon,KHTH,,2026-05-05,2026-05-12,dang_thuc_hien,1,,Biên bản 2026-05-05
-429,KHTH triển khai điều trị trong ngày cho bệnh lý không lây,chuyen_mon,KHTH,,2026-05-05,2026-05-12,dang_thuc_hien,1,,Biên bản 2026-05-05
-430,KHTH triển khai khám dinh dưỡng và báo cáo số ca hàng tuần,chuyen_mon,KHTH,,2026-05-05,2026-05-12,dang_thuc_hien,1,,Biên bản 2026-05-05
-431,Báo cáo tuần: tóm tắt/nhận xét/đề xuất (≥3 đề xuất khả thi) được PGĐ duyệt trước khi trình GĐ,quan_ly_khac,KHTH,,2026-05-05,2026-05-12,dang_thuc_hien,1,,Biên bản 2026-05-05
-432,Báo cáo chi tiết mỗi tuần những khó khăn BHYT cần ý kiến chỉ đạo,quan_ly_khac,KHTH,,2026-05-05,2026-05-12,dang_thuc_hien,1,,Biên bản 2026-05-05
-433,Các trường hợp BHYT bị từ chối/lỗi phải xử lý xong trong 24 giờ,quan_ly_khac,KHTH,,2026-05-05,2026-05-12,dang_thuc_hien,1,,Biên bản 2026-05-05
+421,KHTH + VTTBYT + HCQT xây dựng phương án Can thiệp nội mạch (TTB/bố trí mặt bằng/luồng BN/nhân sự),quan_ly_khac,KHTH,VTTBYT|HCQT,2026-05-05,2026-05-12,tre_deadline,1,,Biên bản 2026-05-05
+422,KHTH trình KPI nội soi tiêu hóa (ít nhất 10 ca/tuần) và ngày triển khai ca đầu tiên,quan_ly_khac,KHTH,,2026-05-05,2026-05-12,tre_deadline,1,,Biên bản 2026-05-05
+423,KHTH giám sát BS GMHS khám nội (ít nhất 30% tổng số BN nội),chuyen_mon,KHTH,GMHS,2026-05-05,2026-05-12,tre_deadline,1,,Biên bản 2026-05-05
+424,KHTH + BS Thúy Phượng mô tả nhiệm vụ và vị trí việc làm cụ thể của 5 BS BV TD (sáng/chiều/tối); báo cáo 12/05,quan_ly_khac,KHTH,,2026-05-05,2026-05-12,tre_deadline,1,,Biên bản 2026-05-05
+425,KHTH + HCQT triển khai thêm phòng khám hội chẩn Nội (BS Nguyễn Tri Phương ≥2 ngày/tuần đông bệnh) + phương án hẹn/điều phối,chuyen_mon,KHTH,HCQT,2026-05-05,2026-05-12,tre_deadline,1,,Biên bản 2026-05-05
+426,KHTH trình phương án tăng cường khám toàn diện hàng tuần (nội/ngoại trú/phân tích tuân thủ/khắc phục),quan_ly_khac,KHTH,,2026-05-05,2026-05-12,tre_deadline,1,,Biên bản 2026-05-05
+427,XN + VTTBYT + KHTH + TCKT triển khai đặt máy demo khí máu động mạch và lactate phục vụ CC và ngoại trú,chuyen_mon,XN,VTTBYT|KHTH|TCKT,2026-05-05,2026-05-12,tre_deadline,1,,Biên bản 2026-05-05
+428,KHTH tăng cường tầm soát ung thư (tiền liệt tuyến/UT vú/UT CTC),chuyen_mon,KHTH,,2026-05-05,2026-05-12,tre_deadline,1,,Biên bản 2026-05-05
+429,KHTH triển khai điều trị trong ngày cho bệnh lý không lây,chuyen_mon,KHTH,,2026-05-05,2026-05-12,tre_deadline,1,,Biên bản 2026-05-05
+430,KHTH triển khai khám dinh dưỡng và báo cáo số ca hàng tuần,chuyen_mon,KHTH,,2026-05-05,2026-05-12,tre_deadline,1,,Biên bản 2026-05-05
+431,Báo cáo tuần: tóm tắt/nhận xét/đề xuất (≥3 đề xuất khả thi) được PGĐ duyệt trước khi trình GĐ,quan_ly_khac,KHTH,,2026-05-05,2026-05-12,tre_deadline,1,,Biên bản 2026-05-05
+432,Báo cáo chi tiết mỗi tuần những khó khăn BHYT cần ý kiến chỉ đạo,quan_ly_khac,KHTH,,2026-05-05,2026-05-12,tre_deadline,1,,Biên bản 2026-05-05
+433,Các trường hợp BHYT bị từ chối/lỗi phải xử lý xong trong 24 giờ,quan_ly_khac,KHTH,,2026-05-05,2026-05-12,tre_deadline,1,,Biên bản 2026-05-05
 434,KHTH trình tờ trình chương trình với 4 trạm y tế địa bàn (chuyên môn/truyền thông/xã hội nhân đạo) ngày 08/05,quan_ly_khac,KHTH,,2026-05-05,2026-05-08,tre_deadline,1,,Biên bản 2026-05-05
-435,Điều dưỡng + BS Trưởng CC cải tiến tiếp nhận CC chuyên nghiệp (đồng phục BN/người nhà/lắc tay),chuyen_mon,Điều dưỡng,K.Cấp cứu,2026-05-05,2026-05-12,dang_thuc_hien,1,,Biên bản 2026-05-05
-436,KHTH + Điều dưỡng + CNTT quản lý quy trình khám bệnh (thời gian chờ mỗi khâu/hoàn thiện QT/truyền thông thông tin),quan_ly_khac,KHTH,Điều dưỡng|CNTT|CTXH,2026-05-05,2026-05-12,dang_thuc_hien,1,,Biên bản 2026-05-05
-437,Điều dưỡng + KHTH + HCQT triển khai chăm sóc khách hàng toàn diện (giải quyết và báo cáo trong 24h),quan_ly_khac,Điều dưỡng,KHTH|HCQT,2026-05-05,2026-05-12,dang_thuc_hien,1,,Biên bản 2026-05-05
-438,Điều dưỡng tăng cường đa dạng hóa kênh tiếp cận để hiểu tâm tư người bệnh,quan_ly_khac,Điều dưỡng,,2026-05-05,2026-05-12,dang_thuc_hien,1,,Biên bản 2026-05-05
-439,KHTH đầu mối trình kế hoạch gia tăng dịch vụ (nội soi/CT/ngoại trú/khám toàn diện/khám đoàn) ngày 12/05,quan_ly_khac,KHTH,,2026-05-05,2026-05-12,dang_thuc_hien,1,,Biên bản 2026-05-05
-440,Điều dưỡng giám sát và nâng cao hình ảnh chuyên nghiệp NVYT và BN/người nhà (đặc biệt khu CC),quan_ly_khac,Điều dưỡng,,2026-05-05,2026-05-12,dang_thuc_hien,1,,Biên bản 2026-05-05
+435,Điều dưỡng + BS Trưởng CC cải tiến tiếp nhận CC chuyên nghiệp (đồng phục BN/người nhà/lắc tay),chuyen_mon,Điều dưỡng,K.Cấp cứu,2026-05-05,2026-05-12,tre_deadline,1,,Biên bản 2026-05-05
+436,KHTH + Điều dưỡng + CNTT quản lý quy trình khám bệnh (thời gian chờ mỗi khâu/hoàn thiện QT/truyền thông thông tin),quan_ly_khac,KHTH,Điều dưỡng|CNTT|CTXH,2026-05-05,2026-05-12,tre_deadline,1,,Biên bản 2026-05-05
+437,Điều dưỡng + KHTH + HCQT triển khai chăm sóc khách hàng toàn diện (giải quyết và báo cáo trong 24h),quan_ly_khac,Điều dưỡng,KHTH|HCQT,2026-05-05,2026-05-12,tre_deadline,1,,Biên bản 2026-05-05
+438,Điều dưỡng tăng cường đa dạng hóa kênh tiếp cận để hiểu tâm tư người bệnh,quan_ly_khac,Điều dưỡng,,2026-05-05,2026-05-12,tre_deadline,1,,Biên bản 2026-05-05
+439,KHTH đầu mối trình kế hoạch gia tăng dịch vụ (nội soi/CT/ngoại trú/khám toàn diện/khám đoàn) ngày 12/05,quan_ly_khac,KHTH,,2026-05-05,2026-05-12,tre_deadline,1,,Biên bản 2026-05-05
+440,Điều dưỡng giám sát và nâng cao hình ảnh chuyên nghiệp NVYT và BN/người nhà (đặc biệt khu CC),quan_ly_khac,Điều dưỡng,,2026-05-05,2026-05-12,tre_deadline,1,,Biên bản 2026-05-05
 441,TCCB bổ sung nhân sự BV TD chiếm 50% tại CC/TNT/HSCC/Mắt/RHM/TMH/PHCN/YHCT trong Q2/2026; trình phương án 08.05,quan_ly_khac,TCCB,,2026-05-05,2026-05-08,tre_deadline,1,,Biên bản 2026-05-05
 442,TCCB triển khai đào tạo nhân sự sử dụng thành thạo máy CT trước 26/05 (BV LVT/Chợ Rẫy/Hòa Hảo),quan_ly_khac,TCCB,,2026-05-05,2026-05-26,dang_thuc_hien,1,,Biên bản 2026-05-05
-443,KHTH + Điều dưỡng + TCCB vẽ sơ đồ nhân sự từng khoa (tên cụ thể BS/ĐD/HS/KTV),quan_ly_khac,KHTH,Điều dưỡng|TCCB,2026-05-05,2026-05-12,dang_thuc_hien,1,,Biên bản 2026-05-05
-444,TCCB rà soát nhân sự CS2 cần truyền tải năng lượng tích cực,quan_ly_khac,TCCB,,2026-05-05,2026-05-12,dang_thuc_hien,1,,Biên bản 2026-05-05
-445,TCCB + KHTH + Điều dưỡng bố trí lịch trực/làm việc đúng chính sách; ngày nghỉ/lễ/Tết chu đáo,quan_ly_khac,TCCB,KHTH|Điều dưỡng,2026-05-05,2026-05-12,dang_thuc_hien,1,,Biên bản 2026-05-05
-446,TCCB rà soát và giám sát nhân sự luân chuyển công tác cần có biên bản bàn giao công việc gửi về TCCB,quan_ly_khac,TCCB,,2026-05-05,2026-05-12,dang_thuc_hien,1,,Biên bản 2026-05-05
+443,KHTH + Điều dưỡng + TCCB vẽ sơ đồ nhân sự từng khoa (tên cụ thể BS/ĐD/HS/KTV),quan_ly_khac,KHTH,Điều dưỡng|TCCB,2026-05-05,2026-05-12,tre_deadline,1,,Biên bản 2026-05-05
+444,TCCB rà soát nhân sự CS2 cần truyền tải năng lượng tích cực,quan_ly_khac,TCCB,,2026-05-05,2026-05-12,tre_deadline,1,,Biên bản 2026-05-05
+445,TCCB + KHTH + Điều dưỡng bố trí lịch trực/làm việc đúng chính sách; ngày nghỉ/lễ/Tết chu đáo,quan_ly_khac,TCCB,KHTH|Điều dưỡng,2026-05-05,2026-05-12,tre_deadline,1,,Biên bản 2026-05-05
+446,TCCB rà soát và giám sát nhân sự luân chuyển công tác cần có biên bản bàn giao công việc gửi về TCCB,quan_ly_khac,TCCB,,2026-05-05,2026-05-12,tre_deadline,1,,Biên bản 2026-05-05

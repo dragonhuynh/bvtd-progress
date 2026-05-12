@@ -652,6 +652,7 @@ body {
 .status-done   { background: #f0fff4; color: #276749; }
 .status-active { background: #ebf8ff; color: #2c5282; }
 .status-late   { background: #fff5f5; color: #c53030; }
+.status-pending{ background: #fffbeb; color: #92400e; }
 .nguon-cell { font-size: 11px; color: var(--muted); white-space: nowrap; max-width: 140px; overflow: hidden; text-overflow: ellipsis; }
 
 /* Dept progress bars */
@@ -2160,7 +2161,16 @@ async function submitUpd() {
     _db.ref('bvtd_pending/' + key).set(entry)
       .then(() => {
         _fbPending[key] = entry;
-        if (_btn) { _btn.textContent = '↺ Cập nhật lại'; _btn.classList.add('btn-sent'); }
+        if (_btn) {
+          _btn.textContent = '↺ Cập nhật lại';
+          _btn.classList.add('btn-sent');
+          const pill = _btn.closest('td') && _btn.closest('td').querySelector('.status-pill');
+          if (pill) {
+            const lb = tt === 'da_hoan_thanh' ? 'Hoàn thành' : tt === 'dang_thuc_hien' ? 'Đang làm' : 'Trễ deadline';
+            pill.textContent = '⏳ ' + lb + ' — chờ duyệt';
+            pill.className = 'status-pill status-pending';
+          }
+        }
         showUpdMsg('✓ Đã gửi báo cáo. BGĐ sẽ thấy ngay trên dashboard.', false);
         setTimeout(closeUpd, 1500);
       })
