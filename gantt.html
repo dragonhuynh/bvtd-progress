@@ -446,19 +446,6 @@ html,body{height:100%;overflow:hidden;
       <div class="tb-sub" id="tbSub">BVTD Cơ Sở 2 — 12/05/2026</div>
     </div>
     <div class="tb-selects">
-      <select id="flt-nhom" onchange="onFltChange()">
-        <option value="">Tất cả nhóm</option>
-        <option value="hanh_chanh">&#x1F7E1; Hành chính</option>
-        <option value="chuyen_mon">&#x1F7E3; Chuyên môn</option>
-        <option value="quan_ly_khac">&#x1F535; Quản lý</option>
-      </select>
-      <select id="flt-status" onchange="onFltChange()">
-        <option value="all">Tất cả TT</option>
-        <option value="chua_xong">&#x23F3; Chưa xong</option>
-        <option value="da_hoan_thanh">&#x2705; Hoàn thành</option>
-        <option value="dang_thuc_hien">&#x1F504; Đang thực hiện</option>
-        <option value="tre_deadline">&#x26A0;&#xFE0F; Trễ deadline</option>
-      </select>
       <select id="flt-dept" onchange="onFltChange()">
         <option value="">Tất cả phòng</option>
       </select>
@@ -484,18 +471,23 @@ html,body{height:100%;overflow:hidden;
     </div>
   </div>
 
-  <!-- Filter bar (date navigation) -->
-  <div class="filterbar" style="justify-content:flex-end;">
+  <!-- Filter bar -->
+  <div class="filterbar">
+    <button class="ft active" id="ft-all"  onclick="setFlt('all')">Tất cả <span class="ft-cnt" id="fc-all">—</span></button>
+    <button class="ft" id="ft-done" onclick="setFlt('da_hoan_thanh')">&#x2705; Hoàn thành <span class="ft-cnt" id="fc-done">—</span></button>
+    <button class="ft" id="ft-act"  onclick="setFlt('dang_thuc_hien')">&#x1F504; Đang thực hiện <span class="ft-cnt" id="fc-act">—</span></button>
+    <button class="ft" id="ft-late" onclick="setFlt('tre_deadline')">&#x26A0;&#xFE0F; Trễ deadline <span class="ft-cnt" id="fc-late">—</span></button>
+    <div class="vdiv"></div>
+    <button class="ft" id="ft-hc" onclick="setNhom('hanh_chanh')"><span class="nhom-pip" style="background:#f6c90e;display:inline-block;margin-right:4px;"></span>Hành chính</button>
+    <button class="ft" id="ft-cm" onclick="setNhom('chuyen_mon')"><span class="nhom-pip" style="background:#a855f7;display:inline-block;margin-right:4px;"></span>Chuyên môn</button>
+    <button class="ft" id="ft-ql" onclick="setNhom('quan_ly_khac')"><span class="nhom-pip" style="background:#14b8a6;display:inline-block;margin-right:4px;"></span>Quản lý</button>
+    <div style="flex:1;min-width:8px;"></div>
     <button type="button" class="nav-btn" onclick="shiftView(-14)" title="Lùi 2 tuần">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-        <polyline points="15,18 9,12 15,6"/>
-      </svg>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15,18 9,12 15,6"/></svg>
     </button>
     <span class="date-lbl" id="dateLbl">…</span>
     <button type="button" class="nav-btn" onclick="shiftView(14)" title="Tiến 2 tuần">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-        <polyline points="9,18 15,12 9,6"/>
-      </svg>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9,18 15,12 9,6"/></svg>
     </button>
     <button type="button" class="nav-btn today" onclick="goToday()">Hôm nay</button>
   </div>
@@ -565,13 +557,30 @@ function set(id,v){const el=document.getElementById(id);if(el)el.textContent=v;}
   const bbs=[...new Set(TASKS.map(t=>t.nguon_van_ban).filter(Boolean))].sort();
   const bSel=document.getElementById('flt-bienban');
   bbs.forEach(b=>{const o=document.createElement('option');o.value=b;o.textContent=b;bSel.appendChild(o);});
+  document.getElementById('fc-all').textContent=TASKS.length;
+  document.getElementById('fc-done').textContent=TASKS.filter(t=>t.trang_thai==='da_hoan_thanh').length;
+  document.getElementById('fc-act').textContent=TASKS.filter(t=>t.trang_thai==='dang_thuc_hien').length;
+  document.getElementById('fc-late').textContent=TASKS.filter(t=>t.trang_thai==='tre_deadline').length;
 })();
 
 function onFltChange(){
-  statusF=document.getElementById('flt-status').value||'all';
-  nhomF=document.getElementById('flt-nhom').value||null;
   deptF=document.getElementById('flt-dept').value;
   bienbanF=document.getElementById('flt-bienban').value;
+  applyF();
+}
+function setFlt(v){
+  statusF=v; nhomF=null;
+  ['all','done','act','late'].forEach(k=>document.getElementById('ft-'+k).classList.remove('active'));
+  const map={all:'ft-all',da_hoan_thanh:'ft-done',dang_thuc_hien:'ft-act',tre_deadline:'ft-late'};
+  if(map[v])document.getElementById(map[v]).classList.add('active');
+  ['hc','cm','ql'].forEach(k=>document.getElementById('ft-'+k).classList.remove('active'));
+  applyF();
+}
+function setNhom(v){
+  nhomF=(nhomF===v)?null:v;
+  ['hc','cm','ql'].forEach(k=>document.getElementById('ft-'+k).classList.remove('active'));
+  const map={hanh_chanh:'ft-hc',chuyen_mon:'ft-cm',quan_ly_khac:'ft-ql'};
+  if(nhomF&&map[nhomF])document.getElementById(map[nhomF]).classList.add('active');
   applyF();
 }
 function applyF(){
