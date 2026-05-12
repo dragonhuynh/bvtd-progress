@@ -713,10 +713,20 @@ body {
   .filter-bar { flex-wrap: wrap; gap: 8px; }
   .filter-bar select, .filter-bar input { min-width: 140px; }
   .sources-grid { grid-template-columns: repeat(2, 1fr); }
-  /* Table: horizontal scroll + ẩn cột phụ */
-  .task-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  .task-table { min-width: 480px; }
+  /* Table → card layout on mobile */
+  .task-table-wrap { overflow-x: visible; }
+  .task-table { min-width: 0; width: 100%; }
+  .task-table thead { display: none; }
+  .task-table tbody { display: block; padding: 6px 10px 10px; }
+  .task-table tr { display: block; border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; padding: 10px 12px; background: var(--white); }
+  .task-table td { display: block; border: none; padding: 2px 0; }
   .col-hide-mobile { display: none; }
+  .task-id { display: inline; margin-right: 6px; }
+  .task-ten { display: inline; }
+  .task-deadline { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .task-deadline::before { content: 'Deadline: '; }
+  .task-status { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 8px; }
+  .task-status .btn-upd { flex: 1; min-width: 120px; text-align: center; }
   /* Dept sections */
   .dept-section-header { padding: 10px 12px; }
   .dept-badges { gap: 4px; }
@@ -1665,9 +1675,9 @@ function buildTasksView(filtered) {
           <td class="task-ten">${t.ten}${parseInt(t.nhac)>=2?`<span class="task-nhac">🔁${t.nhac}x</span>`:''}</td>
           <td class="col-hide-mobile"><span style="font-size:11px;color:var(--muted)">${t.phoi_hop||'—'}</span></td>
           <td class="col-hide-mobile" style="white-space:nowrap;font-size:12px">${fmtDate(t.bat_dau)}</td>
-          <td style="white-space:nowrap;font-size:12px">${t.ket_thuc?fmtDate(t.ket_thuc):'—'}</td>
+          <td class="task-deadline" style="white-space:nowrap;font-size:12px">${t.ket_thuc?fmtDate(t.ket_thuc):'—'}</td>
           <td class="nguon-cell col-hide-mobile" title="${t.nguon}">${nguonShort}</td>
-          <td>${statusPill(t.tt)}${updBtn}</td>
+          <td class="task-status">${statusPill(t.tt)}${updBtn}</td>
         </tr>`;
       }).join('');
 
