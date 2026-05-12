@@ -322,6 +322,27 @@ html,body{height:100%;overflow:hidden;
   background:rgba(244,124,60,.12);border-color:var(--accent);color:var(--accent2);
 }
 
+/* ── Stat summary strip ── */
+.stats-strip{
+  display:flex;gap:8px;padding:8px 20px;
+  background:var(--white);border-bottom:1px solid var(--border);
+  flex-shrink:0;overflow-x:auto;-webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.stats-strip::-webkit-scrollbar{display:none;}
+.stat-pill{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:7px 16px;border-radius:12px;flex-shrink:0;
+  border:1.5px solid transparent;
+}
+.stat-pill-num{font-size:20px;font-weight:800;line-height:1.1;}
+.stat-pill-lbl{font-size:10px;font-weight:500;color:var(--muted);margin-top:2px;white-space:nowrap;}
+.sp-total{background:#eff6ff;border-color:#bfdbfe;} .sp-total .stat-pill-num{color:#1d4ed8;}
+.sp-done {background:#f0fdf4;border-color:#86efac;} .sp-done  .stat-pill-num{color:#16a34a;}
+.sp-act  {background:#fff7ed;border-color:#fed7aa;} .sp-act   .stat-pill-num{color:#c2410c;}
+.sp-late {background:#fff1f2;border-color:#fecdd3;} .sp-late  .stat-pill-num{color:#be123c;}
+.sp-pct  {background:#faf5ff;border-color:#e9d5ff;} .sp-pct   .stat-pill-num{color:#7c3aed;}
+
 /* ── Mobile ── */
 @media (max-width:768px){
   .sidebar{position:fixed;left:-240px;top:0;height:100vh;width:220px !important;transition:left .25s ease;box-shadow:4px 0 20px rgba(0,0,0,.25);}
@@ -340,9 +361,8 @@ html,body{height:100%;overflow:hidden;
     mask-image:linear-gradient(to right,black calc(100% - 32px),transparent 100%);
   }
   .ft{padding:4px 10px;font-size:12px;}
-  .stats-strip{overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;}
+  .stats-strip{padding:6px 12px;gap:6px;}
   .strip{flex-wrap:wrap;height:auto;padding:8px 12px;gap:6px;}
-  .strip-filters{gap:6px;}
   .tb-icon2{display:none;}
 
   /* ── List mode (mặc định mobile) ── */
@@ -373,8 +393,7 @@ html,body{height:100%;overflow:hidden;
   .search-box{display:none;}
   .strip select{font-size:11px;height:28px;}
   .stat-pill{padding:5px 10px;}
-  .stat-pill-num{font-size:15px;}
-  .stats-strip{gap:8px;padding:8px 12px;}
+  .stat-pill-num{font-size:16px;}
 }
 </style>
 </head>
@@ -465,6 +484,15 @@ html,body{height:100%;overflow:hidden;
     </div>
   </div>
 
+  <!-- Stat summary strip -->
+  <div class="stats-strip">
+    <div class="stat-pill sp-total"><span class="stat-pill-num" id="sp-total">—</span><span class="stat-pill-lbl">Tổng đầu việc</span></div>
+    <div class="stat-pill sp-done"><span class="stat-pill-num" id="sp-done">—</span><span class="stat-pill-lbl">Hoàn thành</span></div>
+    <div class="stat-pill sp-act"><span class="stat-pill-num" id="sp-act">—</span><span class="stat-pill-lbl">Đang thực hiện</span></div>
+    <div class="stat-pill sp-late"><span class="stat-pill-num" id="sp-late">—</span><span class="stat-pill-lbl">Trễ deadline</span></div>
+    <div class="stat-pill sp-pct"><span class="stat-pill-num" id="sp-pct">—</span><span class="stat-pill-lbl">Tỉ lệ hoàn thành</span></div>
+  </div>
+
   <!-- Filter bar (date navigation) -->
   <div class="filterbar" style="justify-content:flex-end;">
     <button type="button" class="nav-btn" onclick="shiftView(-14)" title="Lùi 2 tuần">
@@ -546,6 +574,17 @@ function set(id,v){const el=document.getElementById(id);if(el)el.textContent=v;}
   const bbs=[...new Set(TASKS.map(t=>t.nguon_van_ban).filter(Boolean))].sort();
   const bSel=document.getElementById('flt-bienban');
   bbs.forEach(b=>{const o=document.createElement('option');o.value=b;o.textContent=b;bSel.appendChild(o);});
+  // Stat pills (always reflects full dataset)
+  const total=TASKS.length;
+  const done=TASKS.filter(t=>t.trang_thai==='da_hoan_thanh').length;
+  const act=TASKS.filter(t=>t.trang_thai==='dang_thuc_hien').length;
+  const late=TASKS.filter(t=>t.trang_thai==='tre_deadline').length;
+  const pct=total?Math.round(done/total*100):0;
+  document.getElementById('sp-total').textContent=total;
+  document.getElementById('sp-done').textContent=done;
+  document.getElementById('sp-act').textContent=act;
+  document.getElementById('sp-late').textContent=late;
+  document.getElementById('sp-pct').textContent=pct+'%';
 })();
 
 function onFltChange(){
