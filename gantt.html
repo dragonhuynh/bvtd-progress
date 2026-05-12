@@ -44,6 +44,10 @@ html,body{height:100%;overflow:hidden;
 .nav-item .ni{font-size:16px;width:20px;text-align:center;flex-shrink:0;}
 .sidebar-footer{padding:12px 0 20px;border-top:1px solid rgba(255,255,255,.07);}
 .sb-ver{font-size:10px;color:rgba(255,255,255,.35);padding:6px 20px;text-align:center;}
+.sb-user-info{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;margin:0 8px 4px;background:rgba(255,255,255,.07);border-radius:8px;}
+.sb-user-badge{font-size:12px;font-weight:700;color:#fff;background:var(--accent);padding:3px 10px;border-radius:5px;}
+.sb-logout-btn{font-size:11px;color:rgba(255,255,255,.4);background:none;border:none;cursor:pointer;padding:2px 4px;font-family:inherit;transition:color .15s;}
+.sb-logout-btn:hover{color:rgba(255,255,255,.9);}
 
 /* Mobile overlay + hamburger */
 .mob-overlay{
@@ -447,6 +451,10 @@ html,body{height:100%;overflow:hidden;
     </div>
   </div>
   <div class="sidebar-footer">
+    <div class="sb-user-info">
+      <span class="sb-user-badge" id="sb-user-badge">—</span>
+      <button class="sb-logout-btn" onclick="window.location.href='tien_do.html'" title="Quay lại">✕ Thoát</button>
+    </div>
     <div class="sb-ver" id="gantt-ver"></div>
   </div>
 </nav>
@@ -860,6 +868,11 @@ function setMobMode(mode){
 // Boot
 viewStart=addDays(today0(),-10);
 if(isMob()){document.body.classList.add('mob-list');}
+(function(){
+  const u=sessionStorage.getItem('bvtd_user')||localStorage.getItem('bvtd_user');
+  if(u){const el=document.getElementById('sb-user-badge');if(el)el.textContent=u;}
+  set('gantt-ver',`Cập nhật: 12/05/2026`);
+})();
 applyF();
 </script>
 </body>
