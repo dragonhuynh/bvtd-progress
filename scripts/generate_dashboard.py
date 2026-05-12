@@ -599,15 +599,14 @@ body {
 .nguon-cell { font-size: 11px; color: var(--muted); white-space: nowrap; max-width: 140px; overflow: hidden; text-overflow: ellipsis; }
 
 /* Dept progress bars */
-.dept-progress-row { display: flex; flex-direction: column; gap: 6px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.dept-progress-row { display: flex; flex-direction: row; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
 .dept-progress-row:last-child { border-bottom: none; }
-.dp-row-top { display: flex; align-items: center; gap: 10px; }
-.dp-name { font-size: 13px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 90px; max-width: 110px; flex-shrink: 0; }
-.dp-bar-wrap { flex: 0 0 70%; height: 16px; background: #dce8f5; border-radius: 8px; display: flex; overflow: hidden; }
+.dp-name { font-size: 13px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 90px; max-width: 150px; flex-shrink: 0; }
+.dp-bar-wrap { flex: 1; height: 10px; background: #dce8f5; border-radius: 5px; display: flex; overflow: hidden; }
 .dp-bar-done   { background: var(--green); height: 100%; transition: width .5s; }
 .dp-bar-active { background: var(--blue);  height: 100%; transition: width .5s; }
 .dp-bar-late   { background: var(--red);   height: 100%; transition: width .5s; }
-.dp-stats { display: flex; align-items: center; gap: 8px; flex-shrink: 0; margin-left: auto; }
+.dp-stats { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 .dp-stat { font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 2px; }
 .dp-num { min-width: 22px; text-align: right; display: inline-block; }
 .dp-stat-done  { color: var(--green); }
@@ -665,10 +664,13 @@ body {
   /* Dept sections */
   .dept-section-header { padding: 10px 12px; }
   .dept-badges { gap: 4px; }
-  /* Dept progress bars — mobile: bar 100% width */
-  .dp-bar-wrap { flex: 0 0 100%; height: 18px; border-radius: 9px; }
+  /* Dept progress bars — mobile: ẩn bar, chỉ hiện name + stats */
+  .dp-bar-wrap { display: none; }
+  .dp-stats { margin-left: auto; }
   .dp-stat { font-size: 13px; }
   .dp-num { min-width: 24px; }
+  /* Charts — prevent overflow on mobile */
+  canvas { max-width: 100%; display: block; }
   /* Review tab mobile */
   .rv-reporter { flex-direction: column; }
   .rv-reporter-actions { width: 100%; display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
@@ -1356,19 +1358,17 @@ function initApp() {
     const lP = d.total ? Math.round(d.late/d.total*100) : 0;
     return `
       <div class="dept-progress-row">
-        <div class="dp-row-top">
-          <div class="dp-name" title="${d.name}">${d.name}</div>
-          <div class="dp-stats">
-            <span class="dp-stat dp-stat-done">✅<span class="dp-num">${d.done}</span></span>
-            <span class="dp-stat dp-stat-act">🔄<span class="dp-num">${d.active}</span></span>
-            <span class="dp-stat dp-stat-late">⚠️<span class="dp-num">${d.late}</span></span>
-            <span class="dp-stat dp-stat-total">/${d.total}</span>
-          </div>
-        </div>
+        <div class="dp-name" title="${d.name}">${d.name}</div>
         <div class="dp-bar-wrap">
           <div class="dp-bar-done"   style="width:${dP}%"></div>
           <div class="dp-bar-active" style="width:${aP}%"></div>
           <div class="dp-bar-late"   style="width:${lP}%"></div>
+        </div>
+        <div class="dp-stats">
+          <span class="dp-stat dp-stat-done">✅<span class="dp-num">${d.done}</span></span>
+          <span class="dp-stat dp-stat-act">🔄<span class="dp-num">${d.active}</span></span>
+          <span class="dp-stat dp-stat-late">⚠️<span class="dp-num">${d.late}</span></span>
+          <span class="dp-stat dp-stat-total">/${d.total}</span>
         </div>
       </div>`;
   }).join('');
