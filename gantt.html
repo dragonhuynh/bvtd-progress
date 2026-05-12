@@ -484,15 +484,6 @@ html,body{height:100%;overflow:hidden;
     </div>
   </div>
 
-  <!-- Stat summary strip -->
-  <div class="stats-strip">
-    <div class="stat-pill sp-total"><span class="stat-pill-num" id="sp-total">—</span><span class="stat-pill-lbl">Tổng đầu việc</span></div>
-    <div class="stat-pill sp-done"><span class="stat-pill-num" id="sp-done">—</span><span class="stat-pill-lbl">Hoàn thành</span></div>
-    <div class="stat-pill sp-act"><span class="stat-pill-num" id="sp-act">—</span><span class="stat-pill-lbl">Đang thực hiện</span></div>
-    <div class="stat-pill sp-late"><span class="stat-pill-num" id="sp-late">—</span><span class="stat-pill-lbl">Trễ deadline</span></div>
-    <div class="stat-pill sp-pct"><span class="stat-pill-num" id="sp-pct">—</span><span class="stat-pill-lbl">Tỉ lệ hoàn thành</span></div>
-  </div>
-
   <!-- Filter bar (date navigation) -->
   <div class="filterbar" style="justify-content:flex-end;">
     <button type="button" class="nav-btn" onclick="shiftView(-14)" title="Lùi 2 tuần">
@@ -574,17 +565,6 @@ function set(id,v){const el=document.getElementById(id);if(el)el.textContent=v;}
   const bbs=[...new Set(TASKS.map(t=>t.nguon_van_ban).filter(Boolean))].sort();
   const bSel=document.getElementById('flt-bienban');
   bbs.forEach(b=>{const o=document.createElement('option');o.value=b;o.textContent=b;bSel.appendChild(o);});
-  // Stat pills (always reflects full dataset)
-  const total=TASKS.length;
-  const done=TASKS.filter(t=>t.trang_thai==='da_hoan_thanh').length;
-  const act=TASKS.filter(t=>t.trang_thai==='dang_thuc_hien').length;
-  const late=TASKS.filter(t=>t.trang_thai==='tre_deadline').length;
-  const pct=total?Math.round(done/total*100):0;
-  document.getElementById('sp-total').textContent=total;
-  document.getElementById('sp-done').textContent=done;
-  document.getElementById('sp-act').textContent=act;
-  document.getElementById('sp-late').textContent=late;
-  document.getElementById('sp-pct').textContent=pct+'%';
 })();
 
 function onFltChange(){
