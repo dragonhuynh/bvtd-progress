@@ -92,20 +92,20 @@ html,body{height:100%;overflow:hidden;
   display:flex;align-items:center;justify-content:center;
   color:#fff;font-weight:700;font-size:13px;cursor:pointer;
 }
-
-/* Stats strip */
-.stats-strip{
-  display:flex;gap:12px;padding:12px 22px;background:var(--white);
-  border-bottom:1px solid var(--border);flex-shrink:0;
+.tb-brand{flex-shrink:0;}
+.tb-selects{
+  flex:1;display:flex;gap:6px;align-items:center;padding:0 12px;
+  min-width:0;overflow-x:auto;
 }
-.stat-pill{
-  display:flex;align-items:center;gap:8px;background:var(--bg);
-  border-radius:8px;padding:7px 14px;
+.tb-selects select{
+  height:32px;padding:0 26px 0 9px;border:1.5px solid var(--border);border-radius:8px;
+  font-size:12px;font-family:inherit;color:var(--text);background:var(--bg);
+  cursor:pointer;outline:none;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23718096' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 8px center;
+  transition:border .15s;white-space:nowrap;flex-shrink:0;
 }
-.stat-pill-num{font-size:18px;font-weight:800;line-height:1;}
-.stat-pill-lbl{font-size:11px;color:var(--muted);font-weight:500;}
-.c-blue{color:var(--blue);} .c-green{color:var(--green);}
-.c-orange{color:var(--accent);} .c-red{color:var(--red);}
+.tb-selects select:focus{border-color:var(--accent);}
 
 /* Filter bar */
 .filterbar{
@@ -267,24 +267,6 @@ html,body{height:100%;overflow:hidden;
   background:var(--accent);opacity:.9;pointer-events:none;z-index:10;
 }
 
-/* Summary strip */
-.strip{
-  height:48px;background:var(--white);border-top:1px solid var(--border);
-  display:flex;align-items:center;padding:0 22px;gap:12px;flex-shrink:0;
-  box-shadow:0 -1px 4px rgba(0,0,0,.04);
-}
-.strip-count{font-size:12px;color:var(--muted);font-weight:500;white-space:nowrap;margin-right:4px;}
-.strip-count strong{font-weight:800;color:var(--text);}
-.strip-filters{display:flex;gap:8px;align-items:center;flex:1;flex-wrap:wrap;}
-.strip select{
-  height:32px;padding:0 28px 0 10px;border:1.5px solid var(--border);border-radius:8px;
-  font-size:12px;font-family:inherit;color:var(--text);background:var(--bg);
-  cursor:pointer;outline:none;appearance:none;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23718096' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 9px center;
-  transition:border .15s;
-}
-.strip select:focus{border-color:var(--accent);}
 
 /* Tooltip (desktop only) */
 .tip{
@@ -347,7 +329,10 @@ html,body{height:100%;overflow:hidden;
   .mob-hamburger{display:flex;}
   .main{margin-left:0;}
   .mob-toggle{display:flex;}
-  .topbar{padding:0 14px 0 60px;}
+  .topbar{flex-wrap:wrap;height:auto;padding:8px 14px 8px 60px;gap:6px;align-items:flex-start;}
+  .tb-brand{flex:0 0 auto;}
+  .tb-selects{flex:0 0 100%;order:3;overflow-x:auto;flex-wrap:nowrap;padding:0;padding-bottom:2px;}
+  .tb-right{flex:0 0 auto;align-self:center;}
   .search-box{width:130px;}
   .filterbar{
     overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;
@@ -414,16 +399,19 @@ html,body{height:100%;overflow:hidden;
   </div>
   <div class="nav-section">
     <div class="nav-group-label">Chính</div>
-    <div class="nav-item active">
-      <span class="ni">&#x1F4C5;</span><span>Biểu Đồ Gantt</span>
-    </div>
-    <div class="nav-group-label" style="margin-top:14px;">Liên kết</div>
     <a class="nav-item" href="dashboard.html">
       <span class="ni">&#x229E;</span><span>Tổng Quan</span>
     </a>
     <a class="nav-item" href="tien_do.html">
       <span class="ni">&#x2714;</span><span>Đầu Việc</span>
     </a>
+    <div class="nav-group-label" style="margin-top:14px;">Liên kết</div>
+    <a class="nav-item" href="dashboard.html">
+      <span class="ni">&#x1F4CB;</span><span>Duyệt Cập Nhật</span>
+    </a>
+    <div class="nav-item active">
+      <span class="ni">&#x1F4C5;</span><span>Biểu Đồ Gantt</span>
+    </div>
   </div>
   <div class="sidebar-footer">
     <div class="sb-ver" id="gantt-ver"></div>
@@ -434,8 +422,31 @@ html,body{height:100%;overflow:hidden;
 <div class="main">
   <!-- Topbar -->
   <div class="topbar">
-    <span class="tb-title">&#x1F4C5; Biểu Đồ Gantt</span>
-    <span class="tb-sub">BVTD Cơ Sở 2 — 12/05/2026</span>
+    <div class="tb-brand">
+      <div class="tb-title">&#x1F4C5; Biểu Đồ Gantt</div>
+      <div class="tb-sub" id="tbSub">BVTD Cơ Sở 2 — 12/05/2026</div>
+    </div>
+    <div class="tb-selects">
+      <select id="flt-nhom" onchange="onFltChange()">
+        <option value="">Tất cả nhóm</option>
+        <option value="hanh_chanh">&#x1F7E1; Hành chính</option>
+        <option value="chuyen_mon">&#x1F7E3; Chuyên môn</option>
+        <option value="quan_ly_khac">&#x1F535; Quản lý</option>
+      </select>
+      <select id="flt-status" onchange="onFltChange()">
+        <option value="all">Tất cả TT</option>
+        <option value="chua_xong">&#x23F3; Chưa xong</option>
+        <option value="da_hoan_thanh">&#x2705; Hoàn thành</option>
+        <option value="dang_thuc_hien">&#x1F504; Đang thực hiện</option>
+        <option value="tre_deadline">&#x26A0;&#xFE0F; Trễ deadline</option>
+      </select>
+      <select id="flt-dept" onchange="onFltChange()">
+        <option value="">Tất cả phòng</option>
+      </select>
+      <select id="flt-bienban" onchange="onFltChange()">
+        <option value="">Tất cả biên bản</option>
+      </select>
+    </div>
     <div class="tb-right">
       <div class="search-box">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#718096" stroke-width="2.5">
@@ -454,47 +465,20 @@ html,body{height:100%;overflow:hidden;
     </div>
   </div>
 
-  <!-- Stats strip -->
-  <div class="stats-strip" id="statsStrip"></div>
-
-  <!-- Filter bar -->
-  <div class="filterbar">
-    <div class="ft active" data-filter="all" onclick="setFilter('all',this)">
-      Tất cả <span class="ft-cnt" id="cnt-all">—</span>
-    </div>
-    <div class="ft" data-filter="da_hoan_thanh" onclick="setFilter('da_hoan_thanh',this)">
-      &#x2705; Hoàn thành <span class="ft-cnt" id="cnt-done">—</span>
-    </div>
-    <div class="ft" data-filter="dang_thuc_hien" onclick="setFilter('dang_thuc_hien',this)">
-      &#x1F504; Đang thực hiện <span class="ft-cnt" id="cnt-inp">—</span>
-    </div>
-    <div class="ft" data-filter="tre_deadline" onclick="setFilter('tre_deadline',this)">
-      &#x26A0;&#xFE0F; Trễ deadline <span class="ft-cnt" id="cnt-late">—</span>
-    </div>
-    <div class="vdiv"></div>
-    <div class="ft" data-nhom="hanh_chanh" onclick="setNhom('hanh_chanh',this)">
-      <span class="nhom-pip" style="background:#f59e0b"></span>Hành chính
-    </div>
-    <div class="ft" data-nhom="chuyen_mon" onclick="setNhom('chuyen_mon',this)">
-      <span class="nhom-pip" style="background:#8b5cf6"></span>Chuyên môn
-    </div>
-    <div class="ft" data-nhom="quan_ly_khac" onclick="setNhom('quan_ly_khac',this)">
-      <span class="nhom-pip" style="background:#06b6d4"></span>Quản lý
-    </div>
-    <div class="fb-right">
-      <button type="button" class="nav-btn" onclick="shiftView(-14)" title="Lùi 2 tuần">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <polyline points="15,18 9,12 15,6"/>
-        </svg>
-      </button>
-      <span class="date-lbl" id="dateLbl">…</span>
-      <button type="button" class="nav-btn" onclick="shiftView(14)" title="Tiến 2 tuần">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <polyline points="9,18 15,12 9,6"/>
-        </svg>
-      </button>
-      <button type="button" class="nav-btn today" onclick="goToday()">Hôm nay</button>
-    </div>
+  <!-- Filter bar (date navigation) -->
+  <div class="filterbar" style="justify-content:flex-end;">
+    <button type="button" class="nav-btn" onclick="shiftView(-14)" title="Lùi 2 tuần">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <polyline points="15,18 9,12 15,6"/>
+      </svg>
+    </button>
+    <span class="date-lbl" id="dateLbl">…</span>
+    <button type="button" class="nav-btn" onclick="shiftView(14)" title="Tiến 2 tuần">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <polyline points="9,18 15,12 9,6"/>
+      </svg>
+    </button>
+    <button type="button" class="nav-btn today" onclick="goToday()">Hôm nay</button>
   </div>
 
   <!-- Mobile view toggle -->
@@ -522,30 +506,6 @@ html,body{height:100%;overflow:hidden;
     </div>
   </div>
 
-  <!-- Summary strip -->
-  <div class="strip">
-    <div class="strip-filters">
-      <select id="flt-nhom" onchange="onFltChange()">
-        <option value="">Tất cả nhóm</option>
-        <option value="hanh_chanh">🟡 Hành chính</option>
-        <option value="chuyen_mon">🟣 Chuyên môn</option>
-        <option value="quan_ly_khac">🔵 Quản lý</option>
-      </select>
-      <select id="flt-status" onchange="onFltChange()">
-        <option value="all">Tất cả TT</option>
-        <option value="chua_xong">⏳ Chưa xong</option>
-        <option value="da_hoan_thanh">✅ Hoàn thành</option>
-        <option value="dang_thuc_hien">🔄 Đang thực hiện</option>
-        <option value="tre_deadline">⚠️ Trễ deadline</option>
-      </select>
-      <select id="flt-dept" onchange="onFltChange()">
-        <option value="">Tất cả phòng</option>
-      </select>
-      <select id="flt-bienban" onchange="onFltChange()">
-        <option value="">Tất cả biên bản</option>
-      </select>
-    </div>
-  </div>
 </div>
 
 <div class="tip" id="tip"></div>
@@ -578,56 +538,22 @@ function fmt(d){return d?`${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`:'
 function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function set(id,v){const el=document.getElementById(id);if(el)el.textContent=v;}
 
-// Init stats + populate footer dropdowns
+// Init: populate header dropdowns
 (function(){
-  const done =TASKS.filter(t=>t.trang_thai==='da_hoan_thanh').length;
-  const inp  =TASKS.filter(t=>t.trang_thai==='dang_thuc_hien').length;
-  const late =TASKS.filter(t=>t.trang_thai==='tre_deadline').length;
-  const pct  =TASKS.length?Math.round(done/TASKS.length*100):0;
-  document.getElementById('statsStrip').innerHTML=`
-    <div class="stat-pill"><div><div class="stat-pill-num c-blue">${TASKS.length}</div><div class="stat-pill-lbl">Tổng đầu việc</div></div></div>
-    <div class="stat-pill"><div><div class="stat-pill-num c-green">${done}</div><div class="stat-pill-lbl">Hoàn thành</div></div></div>
-    <div class="stat-pill"><div><div class="stat-pill-num c-orange">${inp}</div><div class="stat-pill-lbl">Đang thực hiện</div></div></div>
-    <div class="stat-pill"><div><div class="stat-pill-num c-red">${late}</div><div class="stat-pill-lbl">Trễ deadline</div></div></div>
-    <div class="stat-pill"><div><div class="stat-pill-num" style="color:#9f7aea">${pct}%</div><div class="stat-pill-lbl">Tỉ lệ hoàn thành</div></div></div>
-  `;
-  set('cnt-all', TASKS.length);
-  set('cnt-done',done); set('cnt-inp',inp); set('cnt-late',late);
-  // Populate Phòng dropdown
   const depts=[...new Set(TASKS.map(t=>t.phong_chinh).filter(Boolean))].sort();
   const dSel=document.getElementById('flt-dept');
   depts.forEach(d=>{const o=document.createElement('option');o.value=d;o.textContent=d;dSel.appendChild(o);});
-  // Populate Biên bản dropdown
   const bbs=[...new Set(TASKS.map(t=>t.nguon_van_ban).filter(Boolean))].sort();
   const bSel=document.getElementById('flt-bienban');
   bbs.forEach(b=>{const o=document.createElement('option');o.value=b;o.textContent=b;bSel.appendChild(o);});
 })();
 
-function setFilter(s,el){
-  document.querySelectorAll('[data-filter]').forEach(e=>e.classList.remove('active'));
-  el.classList.add('active'); statusF=s;
-  syncFltDropdowns(); applyF();
-}
-function setNhom(n,el){
-  if(nhomF===n){document.querySelectorAll('[data-nhom]').forEach(e=>e.classList.remove('active'));nhomF=null;}
-  else{document.querySelectorAll('[data-nhom]').forEach(e=>e.classList.remove('active'));el.classList.add('active');nhomF=n;}
-  syncFltDropdowns(); applyF();
-}
 function onFltChange(){
   statusF=document.getElementById('flt-status').value||'all';
   nhomF=document.getElementById('flt-nhom').value||null;
   deptF=document.getElementById('flt-dept').value;
   bienbanF=document.getElementById('flt-bienban').value;
-  // sync top bar buttons
-  document.querySelectorAll('[data-filter]').forEach(e=>e.classList.toggle('active',e.dataset.filter===statusF));
-  document.querySelectorAll('[data-nhom]').forEach(e=>e.classList.toggle('active',nhomF&&e.dataset.nhom===nhomF));
   applyF();
-}
-function syncFltDropdowns(){
-  const fs=document.getElementById('flt-status');
-  const fn=document.getElementById('flt-nhom');
-  if(fs) fs.value=statusF==='all'?'all':statusF;
-  if(fn) fn.value=nhomF||'';
 }
 function applyF(){
   const q=document.getElementById('searchInput').value.toLowerCase();
@@ -640,6 +566,8 @@ function applyF(){
     if(q&&!t.ten_dau_viec.toLowerCase().includes(q)&&!t.phong_chinh.toLowerCase().includes(q))return false;
     return true;
   });
+  const sub=document.getElementById('tbSub');
+  if(sub){const depts=new Set(vis.map(t=>t.phong_chinh).filter(Boolean));sub.textContent=`${vis.length} đầu việc · ${depts.size} phòng ban`;}
   render();
 }
 document.getElementById('searchInput').addEventListener('input',applyF);
