@@ -32,3 +32,8 @@ ngay_cap_nhat,task_id,ten_dau_viec,phong_chinh,phong_bao_cao,user,trang_thai_cu,
 2026-05-11,260,KHTH + HCQT lắp đặt biển chỉ dẫn đường bộ 3 vị trí đến BVTD CS2,KHTH,KHTH,KHTH,tre_deadline,dang_thuc_hien,,Phối hợp HCQT liên hệ địa phương : thống nhất vị trí lắp đặt,dashboard_auto
 2026-05-11,361,"KHTH + Điều dưỡng + HCQT rà soát chỉnh sửa bảng thông tin phòng họp Cấp cứu (BN nặng, số NB và NV toàn viện từng khoa theo ngày)",KHTH,KHTH,KHTH,tre_deadline,da_hoan_thanh,2026-04-17,Thực hiện mỗi ngày,dashboard_auto
 2026-05-11,387,KHTH + Điều dưỡng + HCQT làm bảng thông tin trực phòng họp CC (lãnh đạo/BS/ĐD/hotline),KHTH,KHTH,KHTH,tre_deadline,da_hoan_thanh,2026-04-17,Đã hoàn thành,dashboard_auto
+2026-05-12,159,Thay mới bản lề cửa cuối hành lang Khoa Ngoại,HCQT,HCQT,HCQT,tre_deadline,da_hoan_thanh,2026-04-19,Hoàn thành,dashboard_auto
+2026-05-12,160,Sơn lại lan can khu Cấp cứu/khu Phòng khám/khu C,HCQT,HCQT,HCQT,tre_deadline,da_hoan_thanh,2026-02-10,Hoàn thành,dashboard_auto
+2026-05-12,161,Sơn trắng cửa sắt tủ điện/tủ mạng tại hành lang các khoa,HCQT,HCQT,HCQT,tre_deadline,da_hoan_thanh,2026-02-26,Hoàn thành,dashboard_auto
+2026-05-12,162,Chuẩn hóa nội dung và hướng mũi tên bảng chỉ dẫn khu CC và Khoa Ngoại,HCQT,HCQT,HCQT,tre_deadline,da_hoan_thanh,2026-02-18,Hoàn thành,dashboard_auto
+2026-05-12,219,Sửa chữa tường bị thủng ở lối ra bên hông phòng khám,HCQT,HCQT,HCQT,tre_deadline,da_hoan_thanh,2026-03-05,Hoàn thành,dashboard_auto

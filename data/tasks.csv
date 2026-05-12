@@ -157,10 +157,10 @@ id,ten_dau_viec,nhom,phong_chinh,phong_phoi_hop,bat_dau,ket_thuc,trang_thai,so_l
 156,Thiết kế và niêm yết Poster quy trình cấp phát thuốc; phân định ô nộp toa và ô nhận thuốc,hanh_chanh,Điều dưỡng,HCQT|Dược,2026-02-04,2026-02-10,tre_deadline,1,Poster khổ lớn tại Khoa Dược,Biên bản 04/02/2026
 157,Lắp đặt TV và ấn phẩm TTGDSK tại khu vực X-quang,hanh_chanh,HCQT,Điều dưỡng,2026-02-04,2026-02-10,da_hoan_thanh,1,,Biên bản 04/02/2026
 158,Thay hệ thống ống tưới cây nhựa bằng ống kẽm/sắt chống nứt vỡ rò rỉ,hanh_chanh,HCQT,,2026-02-04,2026-02-10,da_hoan_thanh,1,,Biên bản 04/02/2026
-159,Thay mới bản lề cửa cuối hành lang Khoa Ngoại,hanh_chanh,HCQT,,2026-02-04,2026-02-10,tre_deadline,1,,Biên bản 04/02/2026
-160,Sơn lại lan can khu Cấp cứu/khu Phòng khám/khu C,hanh_chanh,HCQT,Đoàn Thanh niên,2026-02-04,2026-02-10,tre_deadline,1,,Biên bản 04/02/2026
-161,Sơn trắng cửa sắt tủ điện/tủ mạng tại hành lang các khoa,hanh_chanh,HCQT,Đoàn Thanh niên,2026-02-04,2026-02-10,tre_deadline,1,Hiện trạng màu xám,Biên bản 04/02/2026
-162,Chuẩn hóa nội dung và hướng mũi tên bảng chỉ dẫn khu CC và Khoa Ngoại,hanh_chanh,HCQT,Điều dưỡng,2026-02-04,2026-02-10,tre_deadline,1,,Biên bản 04/02/2026
+159,Thay mới bản lề cửa cuối hành lang Khoa Ngoại,hanh_chanh,HCQT,,2026-02-04,2026-04-19,da_hoan_thanh,1,Hoàn thành,Biên bản 04/02/2026
+160,Sơn lại lan can khu Cấp cứu/khu Phòng khám/khu C,hanh_chanh,HCQT,Đoàn Thanh niên,2026-02-04,2026-02-10,da_hoan_thanh,1,Hoàn thành,Biên bản 04/02/2026
+161,Sơn trắng cửa sắt tủ điện/tủ mạng tại hành lang các khoa,hanh_chanh,HCQT,Đoàn Thanh niên,2026-02-04,2026-02-26,da_hoan_thanh,1,Hoàn thành,Biên bản 04/02/2026
+162,Chuẩn hóa nội dung và hướng mũi tên bảng chỉ dẫn khu CC và Khoa Ngoại,hanh_chanh,HCQT,Điều dưỡng,2026-02-04,2026-02-18,da_hoan_thanh,1,Hoàn thành,Biên bản 04/02/2026
 163,Thay toàn bộ ghế nhựa xanh bằng ghế Inox tại khu CC và Khoa Ngoại,hanh_chanh,HCQT,,2026-02-04,2026-02-10,da_hoan_thanh,1,,Biên bản 04/02/2026
 164,Tháo dỡ toàn bộ quạt tại khu vực Cấp cứu,hanh_chanh,HCQT,,2026-02-04,2026-02-10,da_hoan_thanh,1,,Biên bản 04/02/2026
 165,Đồng bộ sử dụng khăn trải giường màu trắng,hanh_chanh,Điều dưỡng,,2026-02-04,2026-02-10,tre_deadline,1,,Biên bản 04/02/2026
@@ -217,7 +217,7 @@ id,ten_dau_viec,nhom,phong_chinh,phong_phoi_hop,bat_dau,ket_thuc,trang_thai,so_l
 216,Rà soát thống nhất tên biển hiệu phòng chức năng Khoa Ngoại trú (Phòng nghỉ/Phòng trực/HC),quan_ly_khac,KHTH,HCQT,2026-02-04,2026-02-10,tre_deadline,1,,Biên bản 04/02/2026
 217,VTTBYT báo cáo tiến độ lắp đặt và vận hành máy CT Scanner,quan_ly_khac,VTTBYT,,2026-02-04,2026-02-10,tre_deadline,2,Ông Toàn phụ trách; nhắc lại,Biên bản 04/02/2026
 218,Bảo đảm an toàn; che chắn khu vực bồn nước sau cổng Phan Trọng Tuệ,hanh_chanh,HCQT,,2026-02-10,2026-02-13,tre_deadline,1,,Biên bản 10/02/2026
-219,Sửa chữa tường bị thủng ở lối ra bên hông phòng khám,hanh_chanh,HCQT,,2026-02-10,2026-02-13,tre_deadline,1,,Biên bản 10/02/2026
+219,Sửa chữa tường bị thủng ở lối ra bên hông phòng khám,hanh_chanh,HCQT,,2026-02-10,2026-03-05,da_hoan_thanh,1,Hoàn thành,Biên bản 10/02/2026
 220,Cải tạo 2 bồn cây trên mặt đất trước phòng khám YHCT,hanh_chanh,HCQT,,2026-02-10,2026-02-13,tre_deadline,2,Nhắc lại từ BB 04/02,Biên bản 10/02/2026
 221,Bổ sung bảng cấm hút thuốc tại sảnh ngoài và dọc lối lên cấp cứu,hanh_chanh,HCQT,,2026-02-10,2026-02-13,da_hoan_thanh,1,,Biên bản 10/02/2026
 222,Dọn dẹp 5S; di dời xe CC cũ hư; trang bị TV lớn phòng họp CC; làm quầy nước; bổ sung ảnh BGĐ,hanh_chanh,HCQT,,2026-02-10,2026-02-13,da_hoan_thanh,1,,Biên bản 10/02/2026
