@@ -1,57 +1,26 @@
 [
   {
-    "at": "2026-05-12",
-    "ghi_chu": "Hoàn thành",
-    "id": "159",
-    "ngay_ht": "2026-04-19",
+    "id": "37",
+    "ten": "Cải tạo vườn trước khu nhân viên (lát tấm đan 80cm chia 2 ô)",
     "phong": "HCQT",
-    "ten": "Thay mới bản lề cửa cuối hành lang Khoa Ngoại",
     "trang_thai": "da_hoan_thanh",
+    "ngay_ht": "",
+    "ghi_chu": "Hoàn thành",
     "user": "HCQT",
-    "user_phong": "HCQT"
+    "user_phong": "HCQT",
+    "at": "2026-05-12",
+    "migrated": true
   },
   {
-    "at": "2026-05-12",
-    "ghi_chu": "Hoàn thành",
-    "id": "160",
-    "ngay_ht": "2026-02-10",
+    "id": "65",
+    "ten": "Cải tạo khu nhà nghỉ nhân viên: di dời cây xanh + sân phơi đồ (đá sỏi/dây phơi/chiếu sáng/sửa nắp cống) + sân thể thao",
     "phong": "HCQT",
-    "ten": "Sơn lại lan can khu Cấp cứu/khu Phòng khám/khu C",
     "trang_thai": "da_hoan_thanh",
-    "user": "HCQT",
-    "user_phong": "HCQT"
-  },
-  {
-    "at": "2026-05-12",
+    "ngay_ht": "",
     "ghi_chu": "Hoàn thành",
-    "id": "161",
-    "ngay_ht": "2026-02-26",
-    "phong": "HCQT",
-    "ten": "Sơn trắng cửa sắt tủ điện/tủ mạng tại hành lang các khoa",
-    "trang_thai": "da_hoan_thanh",
     "user": "HCQT",
-    "user_phong": "HCQT"
-  },
-  {
+    "user_phong": "HCQT",
     "at": "2026-05-12",
-    "ghi_chu": "Hoàn thành",
-    "id": "162",
-    "ngay_ht": "2026-02-18",
-    "phong": "HCQT",
-    "ten": "Chuẩn hóa nội dung và hướng mũi tên bảng chỉ dẫn khu CC và Khoa Ngoại",
-    "trang_thai": "da_hoan_thanh",
-    "user": "HCQT",
-    "user_phong": "HCQT"
-  },
-  {
-    "at": "2026-05-12",
-    "ghi_chu": "Hoàn thành",
-    "id": "219",
-    "ngay_ht": "2026-03-05",
-    "phong": "HCQT",
-    "ten": "Sửa chữa tường bị thủng ở lối ra bên hông phòng khám",
-    "trang_thai": "da_hoan_thanh",
-    "user": "HCQT",
-    "user_phong": "HCQT"
+    "migrated": true
   }
 ]
