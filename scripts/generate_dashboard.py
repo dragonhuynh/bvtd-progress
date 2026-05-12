@@ -935,7 +935,7 @@ body {
       <span class="ni">📋</span><span>Duyệt Cập Nhật</span>
       <span class="nav-badge" id="nav-review-badge" style="display:none">0</span>
     </div>
-    <div class="nav-item" data-view="log">
+    <div class="nav-item" data-view="log" id="nav-log" style="display:none">
       <span class="ni">🕵</span><span>Nhật Ký</span>
     </div>
     <a class="nav-item" href="gantt.html" target="_blank" rel="noopener noreferrer">
@@ -1823,9 +1823,10 @@ function _logStatusLabel(tt) {
 }
 
 function initLogView() {
+  if (!isBGD()) { switchView('dashboard'); return; }
   const allLog = (window.__D && window.__D.log) ? window.__D.log : [];
-  // Filter by dept access (BGD sees all)
-  const myDepts = AUTH && AUTH.depts ? AUTH.depts : null;
+  // BGD sees all
+  const myDepts = null;
   const accessible = myDepts
     ? allLog.filter(r => myDepts.includes(r.phong_bao_cao) || myDepts.includes(r.phong_chinh))
     : allLog;
@@ -2264,8 +2265,14 @@ function renderReview() {
 function updateNavBadge() {
   const navEl = document.getElementById('nav-review');
   const badge = document.getElementById('nav-review-badge');
-  if (!isBGD()) { if (navEl) { navEl.style.display = 'none'; navEl.setAttribute('aria-hidden','true'); } return; }
-  if (navEl) { navEl.style.display = 'flex'; navEl.removeAttribute('aria-hidden'); }
+  const navLog = document.getElementById('nav-log');
+  if (!isBGD()) {
+    if (navEl)  { navEl.style.display  = 'none'; navEl.setAttribute('aria-hidden','true');  }
+    if (navLog) { navLog.style.display = 'none'; navLog.setAttribute('aria-hidden','true'); }
+    return;
+  }
+  if (navEl)  { navEl.style.display  = 'flex'; navEl.removeAttribute('aria-hidden');  }
+  if (navLog) { navLog.style.display = 'flex'; navLog.removeAttribute('aria-hidden'); }
   const approved  = lsGet(AK);
   const doneKeys  = new Set(approved.map(a => a.id + '|' + a.user));
   const count     = fbPendingList().filter(p => !doneKeys.has(p.id + '|' + p.user)).length;
