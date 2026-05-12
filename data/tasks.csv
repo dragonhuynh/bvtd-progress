@@ -199,7 +199,7 @@ id,ten_dau_viec,nhom,phong_chinh,phong_phoi_hop,bat_dau,ket_thuc,trang_thai,so_l
 198,Diễn tập cấp cứu hàng loạt (KHTH chủ trì),chuyen_mon,KHTH,,2026-02-04,2026-02-10,tre_deadline,2,Nhắc lại từ biên bản 29/01,Biên bản 04/02/2026
 199,Diễn tập nhận bệnh và hoạt động sau khi chuyển đổi khoa Nội/Ngoại/Sản/Nhi,chuyen_mon,KHTH,,2026-02-04,2026-02-10,tre_deadline,1,,Biên bản 04/02/2026
 200,Tầm soát bệnh lý toàn diện cho BN lão khoa/sản khoa/CC/thận nhân tạo,chuyen_mon,KHTH,,2026-02-04,2026-02-10,tre_deadline,1,,Biên bản 04/02/2026
-201,Khoa Dược quản lý Kho tổng CS2 theo quy trình tương đương CS1,quan_ly_khac,Dược,,2026-02-04,2026-02-10,tre_deadline,1,,Biên bản 04/02/2026
+201,Khoa Dược quản lý Kho tổng CS2 theo quy trình tương đương CS1,quan_ly_khac,Dược,,2026-02-04,2026-02-10,dang_thuc_hien,1,,Biên bản 04/02/2026
 202,Dược + VTTBYT + HCQT phân loại quy hoạch vật tư cùng nhóm vào chung một kho,quan_ly_khac,Dược,VTTBYT|HCQT,2026-02-04,2026-02-10,da_hoan_thanh,1,,Biên bản 04/02/2026
 203,Thu gom kệ/tủ không còn sử dụng toàn viện để trang bị kho vật tư,quan_ly_khac,HCQT,,2026-02-04,2026-02-10,tre_deadline,1,,Biên bản 04/02/2026
 204,Thu hồi bình Oxy di động và sơn lại vỏ bình theo quy chuẩn kỹ thuật an toàn,quan_ly_khac,VTTBYT,HCQT|Đoàn Thanh niên,2026-02-04,2026-02-10,da_hoan_thanh,1,⚠️ Báo cáo từ phòng phối hợp (HCQT) — cần kiểm tra lại với phòng chính (VTTBYT),Biên bản 04/02/2026
@@ -296,7 +296,7 @@ id,ten_dau_viec,nhom,phong_chinh,phong_phoi_hop,bat_dau,ket_thuc,trang_thai,so_l
 295,HCQT cung cấp tủ locker sơn trắng tại khu Cấp cứu cho bệnh nhân để đồ,hanh_chanh,HCQT,,2026-03-10,2026-03-17,da_hoan_thanh,1,,Biên bản 2026-03-10
 296,HCQT kiểm tra sửa chữa thang rác,hanh_chanh,HCQT,,2026-03-10,2026-03-17,tre_deadline,1,,Biên bản 2026-03-10
 297,HCQT bố trí thêm bàn và ghế trước các khoa nội trú cho bệnh nhân và thân nhân ngồi ăn,hanh_chanh,HCQT,,2026-03-10,2026-03-17,tre_deadline,1,,Biên bản 2026-03-10
-298,HCQT bố trí thêm 15-20 ghế tiện ích cho người nhà nội trú,hanh_chanh,HCQT,,2026-03-10,2026-03-17,tre_deadline,1,,Biên bản 2026-03-10
+298,HCQT bố trí thêm 15-20 ghế tiện ích cho người nhà nội trú,hanh_chanh,HCQT,,2026-03-10,2026-05-12,da_hoan_thanh,1,,Biên bản 2026-03-10
 299,HCQT rà soát hệ thống nước phòng mổ bị rò rỉ tại khu vực vệ sinh,hanh_chanh,HCQT,,2026-03-10,2026-03-17,da_hoan_thanh,1,,Biên bản 2026-03-10
 300,HCQT + K.XN dán decal hoặc lắp rèm lưới tại cửa sổ phòng xét nghiệm (chắn nắng không cản thông khí),hanh_chanh,HCQT,XN,2026-03-10,2026-03-17,da_hoan_thanh,1,,Biên bản 2026-03-10
 301,"K.XN thực hiện nghiêm ngặt tiêu chuẩn 5S: tuân thủ quy chuẩn chất lượng XN, vệ sinh gầm bàn/hộc tủ, chuẩn hóa bồn rửa tay (chỉ dán hướng dẫn rửa tay BYT)",chuyen_mon,XN,,2026-03-10,2026-03-17,tre_deadline,1,,Biên bản 2026-03-10
