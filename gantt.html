@@ -294,11 +294,11 @@ html,body{height:100%;overflow:hidden;
   padding:18px 22px 22px;
   box-shadow:0 8px 40px rgba(0,0,0,.22);
   width:360px;max-width:calc(100vw - 40px);
-  transform:translate(-50%,calc(-50% - 16px));opacity:0;
+  transform:translate(-50%,calc(-50% - 16px));opacity:0;pointer-events:none;
   transition:transform .22s ease,opacity .22s ease;
   max-height:80vh;overflow-y:auto;
 }
-.detail-sheet.show{transform:translate(-50%,-50%);opacity:1;}
+.detail-sheet.show{transform:translate(-50%,-50%);opacity:1;pointer-events:auto;}
 .ds-handle{display:none;}
 /* Mobile: bottom sheet */
 @media(max-width:768px){
