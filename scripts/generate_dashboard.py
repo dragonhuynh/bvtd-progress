@@ -29,7 +29,10 @@ def normalize_dept(d: str) -> str:
 
 
 def extract_date_key(name: str) -> str | None:
-    """Extract YYMMDD from a name containing dd/mm/yy pattern."""
+    """Extract YYMMDD from a name containing dd/mm/yyyy or dd/mm/yy pattern."""
+    m = re.search(r'\b(\d{2})/(\d{2})/(\d{4})\b', name)
+    if m:
+        return m.group(3)[2:] + m.group(2) + m.group(1)
     m = re.search(r'\b(\d{2})/(\d{2})/(\d{2})\b', name)
     if m:
         return m.group(3) + m.group(2) + m.group(1)
@@ -59,16 +62,15 @@ def build_pdf_map() -> dict:
 
 
 def normalize_source_name(name: str) -> str:
-    """Convert YYYY-MM-DD → dd/mm/yy and dd/mm/yyyy → dd/mm/yy in source names."""
-    # YYYY-MM-DD pattern
+    """Normalize date in source names to dd/mm/yyyy (4-digit year)."""
+    # YYYY-MM-DD → dd/mm/yyyy
     m = re.search(r'\b(\d{4})-(\d{2})-(\d{2})\b', name)
     if m:
-        y, mo, d = m.group(1)[2:], m.group(2), m.group(3)
-        return name[:m.start()] + f"{d}/{mo}/{y}" + name[m.end():]
-    # dd/mm/yyyy pattern (4-digit year → 2-digit)
-    m = re.search(r'\b(\d{2}/\d{2}/)(\d{4})\b', name)
+        return name[:m.start()] + f"{m.group(3)}/{m.group(2)}/{m.group(1)}" + name[m.end():]
+    # dd/mm/yy → dd/mm/20yy
+    m = re.search(r'\b(\d{2}/\d{2}/)(\d{2})\b', name)
     if m:
-        return name[:m.start(2)] + m.group(2)[2:] + name[m.end():]
+        return name[:m.start(2)] + "20" + m.group(2) + name[m.end():]
     return name
 
 
@@ -1587,7 +1589,7 @@ function initTasksView() {
   });
   const bbFilter = document.getElementById('filter-bienban');
   const bbSortKey = s => {
-    const m = s.match(/(\\d{2})\\/(\\d{2})\\/(\\d{2})\\s*$/);
+    const m = s.match(/(\\d{2})\\/(\\d{2})\\/(\\d{4})\\s*$/);
     if (!m) return 0;
     return parseInt(m[3]) * 10000 + parseInt(m[2]) * 100 + parseInt(m[1]);
   };
