@@ -39,3 +39,8 @@ ngay_cap_nhat,task_id,ten_dau_viec,phong_chinh,phong_bao_cao,user,trang_thai_cu,
 2026-05-12,219,Sửa chữa tường bị thủng ở lối ra bên hông phòng khám,HCQT,HCQT,HCQT,tre_deadline,da_hoan_thanh,2026-03-05,Hoàn thành,dashboard_auto
 2026-05-12,37,Cải tạo vườn trước khu nhân viên (lát tấm đan 80cm chia 2 ô),HCQT,HCQT,HCQT,da_hoan_thanh,da_hoan_thanh,,Hoàn thành,dashboard_auto
 2026-05-12,65,Cải tạo khu nhà nghỉ nhân viên: di dời cây xanh + sân phơi đồ (đá sỏi/dây phơi/chiếu sáng/sửa nắp cống) + sân thể thao,HCQT,HCQT,HCQT,da_hoan_thanh,da_hoan_thanh,,Hoàn thành,dashboard_auto
+2026-05-12,178,Xây dựng quy trình kỹ thuật nội soi; đăng ký DMKT nội soi với Sở Y tế,KHTH,KHTH,KHTH,tre_deadline,da_hoan_thanh,2026-04-28,đã hoàn thành,dashboard_auto
+2026-05-12,240,KHTH báo cáo phân tích chi tiết tình hình chuyển viện và theo dấu người bệnh,KHTH,KHTH,KHTH,tre_deadline,dang_thuc_hien,,,dashboard_auto
+2026-05-12,243,KHTH triển khai diễn tập hàng tuần: báo động đỏ và đa chấn thương,KHTH,KHTH,KHTH,tre_deadline,dang_thuc_hien,,đang thực hiện,dashboard_auto
+2026-05-12,263,KHTH khẩn trương đăng ký bổ sung DMKT nội soi TMH và tiêu hóa (trên và dưới) với Sở Y tế,KHTH,KHTH,KHTH,tre_deadline,da_hoan_thanh,2026-04-15,,dashboard_auto
+2026-05-12,264,KHTH + Điều dưỡng tổ chức gói khám tầm soát chuyên sâu cho nhóm nguy cơ cao,KHTH,KHTH,KHTH,tre_deadline,dang_thuc_hien,,,dashboard_auto
