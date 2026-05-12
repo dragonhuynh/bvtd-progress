@@ -961,7 +961,7 @@ body {
     </div>
     <div style="display:flex;gap:10px;align-items:center;">
       <div class="search-box">
-        <input type="text" id="dash-search" placeholder="Tìm kiếm đầu việc..." aria-label="Tìm kiếm đầu việc" oninput="handleDashSearch(this.value)">
+        <input type="text" id="dash-search" placeholder="Tìm kiếm đầu việc..." aria-label="Tìm kiếm đầu việc" oninput="_dbSearch(this.value)">
       </div>
       <button class="btn-primary" onclick="switchView('tasks')">Xem tất cả →</button>
     </div>
@@ -1080,7 +1080,7 @@ body {
       <select id="filter-bienban" onchange="filterTasks()">
         <option value="">Tất cả biên bản</option>
       </select>
-      <input type="text" id="filter-search" placeholder="Tìm kiếm..." aria-label="Tìm kiếm đầu việc" oninput="filterTasks()">
+      <input type="text" id="filter-search" placeholder="Tìm kiếm..." aria-label="Tìm kiếm đầu việc" oninput="_dbFilter()">
     </div>
   </header>
   <div id="tasks-by-nhom"></div>
@@ -1720,6 +1720,11 @@ function initTasksView() {
   }
   filterTasks();
 }
+
+// ── Debounce helpers ───────────────────────────────────────────────────────────
+let _dbSearchT, _dbFilterT;
+function _dbSearch(v) { clearTimeout(_dbSearchT); _dbSearchT = setTimeout(() => handleDashSearch(v), 200); }
+function _dbFilter()  { clearTimeout(_dbFilterT); _dbFilterT = setTimeout(filterTasks, 200); }
 
 // ── Dashboard search ───────────────────────────────────────────────────────────
 function handleDashSearch(val) {
