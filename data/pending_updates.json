@@ -1,26 +1,62 @@
 [
   {
-    "id": "37",
-    "ten": "Cải tạo vườn trước khu nhân viên (lát tấm đan 80cm chia 2 ô)",
-    "phong": "HCQT",
+    "id": "178",
+    "ten": "Xây dựng quy trình kỹ thuật nội soi; đăng ký DMKT nội soi với Sở Y tế",
+    "phong": "KHTH",
     "trang_thai": "da_hoan_thanh",
-    "ngay_ht": "",
-    "ghi_chu": "Hoàn thành",
-    "user": "HCQT",
-    "user_phong": "HCQT",
+    "ngay_ht": "2026-04-28",
+    "ghi_chu": "đã hoàn thành",
+    "user": "KHTH",
+    "user_phong": "KHTH",
     "at": "2026-05-12",
-    "migrated": true
+    "migrated": false
   },
   {
-    "id": "65",
-    "ten": "Cải tạo khu nhà nghỉ nhân viên: di dời cây xanh + sân phơi đồ (đá sỏi/dây phơi/chiếu sáng/sửa nắp cống) + sân thể thao",
-    "phong": "HCQT",
-    "trang_thai": "da_hoan_thanh",
+    "id": "240",
+    "ten": "KHTH báo cáo phân tích chi tiết tình hình chuyển viện và theo dấu người bệnh",
+    "phong": "KHTH",
+    "trang_thai": "dang_thuc_hien",
     "ngay_ht": "",
-    "ghi_chu": "Hoàn thành",
-    "user": "HCQT",
-    "user_phong": "HCQT",
+    "ghi_chu": "",
+    "user": "KHTH",
+    "user_phong": "KHTH",
     "at": "2026-05-12",
-    "migrated": true
+    "migrated": false
+  },
+  {
+    "id": "243",
+    "ten": "KHTH triển khai diễn tập hàng tuần: báo động đỏ và đa chấn thương",
+    "phong": "KHTH",
+    "trang_thai": "dang_thuc_hien",
+    "ngay_ht": "",
+    "ghi_chu": "đang thực hiện",
+    "user": "KHTH",
+    "user_phong": "KHTH",
+    "at": "2026-05-12",
+    "migrated": false
+  },
+  {
+    "id": "263",
+    "ten": "KHTH khẩn trương đăng ký bổ sung DMKT nội soi TMH và tiêu hóa (trên và dưới) với Sở Y tế",
+    "phong": "KHTH",
+    "trang_thai": "da_hoan_thanh",
+    "ngay_ht": "2026-04-15",
+    "ghi_chu": "",
+    "user": "KHTH",
+    "user_phong": "KHTH",
+    "at": "2026-05-12",
+    "migrated": false
+  },
+  {
+    "id": "264",
+    "ten": "KHTH + Điều dưỡng tổ chức gói khám tầm soát chuyên sâu cho nhóm nguy cơ cao",
+    "phong": "KHTH",
+    "trang_thai": "dang_thuc_hien",
+    "ngay_ht": "",
+    "ghi_chu": "",
+    "user": "KHTH",
+    "user_phong": "KHTH",
+    "at": "2026-05-12",
+    "migrated": false
   }
 ]
