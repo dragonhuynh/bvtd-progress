@@ -1,7 +1,10 @@
 """
 generate_dashboard.py — Sinh dashboard.html theo phong cach project management hien dai
 """
-import json, csv, re, base64
+import json
+import csv
+import re
+import base64
 from pathlib import Path
 from datetime import datetime, date
 from collections import defaultdict
@@ -21,7 +24,7 @@ DEPT_NORMALIZE = {
     "K.PHCN":            "K.PHCN",
 }
 
-def normalize_dept(d):
+def normalize_dept(d: str) -> str:
     return DEPT_NORMALIZE.get(d, d)
 
 
@@ -71,7 +74,7 @@ def normalize_source_name(name: str) -> str:
 
 # ── Data loading ───────────────────────────────────────────────────────────────
 
-def load_tasks():
+def load_tasks() -> list[dict]:
     p = ROOT / "data" / "tasks.csv"
     if not p.exists():
         return []
@@ -79,7 +82,7 @@ def load_tasks():
         return list(csv.DictReader(f))
 
 
-def auto_overdue(tasks):
+def auto_overdue(tasks: list[dict]) -> None:
     today = date.today().isoformat()
     for t in tasks:
         if t["trang_thai"] == "dang_thuc_hien" and t.get("ket_thuc") and t["ket_thuc"] < today:
@@ -256,9 +259,9 @@ def build_html(data: dict) -> str:
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 <style>
 :root {
   --bg:      #EBF4FF;
@@ -368,7 +371,7 @@ body {
   box-shadow: 0 6px 20px rgba(26,92,168,.4);
 }
 .login-btn:active { transform: translateY(0); box-shadow: none; }
-.login-hint { font-size: 11px; color: #a0aec0; text-align: center; margin-top: 13px; }
+.login-hint { font-size: 11px; color: #718096; text-align: center; margin-top: 13px; }
 
 /* ── App body ── */
 #app-body { display: none; min-height: 100vh; }
@@ -406,7 +409,7 @@ body {
 .nav-item.active { background: rgba(26,92,168,.18); border-left-color: var(--pink); color: #fff; }
 .nav-item .ni { font-size: 16px; width: 20px; text-align: center; flex-shrink: 0; }
 .sidebar-footer { padding: 12px 0 20px; border-top: 1px solid rgba(255,255,255,.07); }
-.sidebar-gen { font-size: 10px; color: rgba(255,255,255,.22); padding: 6px 20px; text-align: center; }
+.sidebar-gen { font-size: 10px; color: rgba(255,255,255,.55); padding: 6px 20px; text-align: center; }
 .user-info {
   display: flex; align-items: center; justify-content: space-between;
   padding: 10px 16px; margin: 0 8px 4px;
@@ -482,7 +485,7 @@ body {
 .card-header {
   display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;
 }
-.card-header h3 { font-size: 15px; font-weight: 700; }
+.card-header h2 { font-size: 15px; font-weight: 700; margin: 0; }
 .see-more { font-size: 12px; color: var(--accent); cursor: pointer; font-weight: 600; text-decoration: none; }
 .see-more:hover { text-decoration: underline; }
 
@@ -650,7 +653,8 @@ body {
   .page-header { flex-direction: column; gap: 8px; }
   .page-header > div:last-child { width: 100%; }
   .search-box, .search-box input { width: 100%; }
-  .filter-bar { overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; padding-bottom: 4px; }
+  .filter-bar { flex-wrap: wrap; gap: 8px; }
+  .filter-bar select, .filter-bar input { min-width: 140px; }
   .sources-grid { grid-template-columns: repeat(2, 1fr); }
   /* Table: horizontal scroll + ẩn cột phụ */
   .task-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
@@ -677,6 +681,9 @@ body {
   .modal-bx { width: calc(100vw - 20px); padding: 20px 16px; }
   .mactions { flex-direction: column-reverse; }
   .mactions button { width: 100%; }
+  /* Font-size tối thiểu để đọc được trên mobile */
+  .status-pill, .badge { font-size: 13px; }
+  .urgent-phong, .task-nhac, .nhac-badge { font-size: 12px; }
 }
 @media (max-width: 480px) {
   .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
@@ -700,9 +707,9 @@ body {
 .pending-info{flex:1;min-width:0;font-size:12px;}
 .pending-name{font-size:13px;font-weight:600;margin:2px 0;}
 .pending-meta{color:var(--muted);margin-top:2px;}
-.btn-appr{background:#f0fff4;border:1px solid var(--green);color:#276749;border-radius:6px;padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;}
-.btn-rejt{background:#fff5f5;border:1px solid var(--red);color:#c53030;border-radius:6px;padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;}
-.btn-upd{background:none;border:1px solid var(--pink);border-radius:6px;padding:3px 9px;font-size:11px;font-weight:600;cursor:pointer;color:var(--pink);transition:all .15s;margin-top:4px;display:inline-block;}
+.btn-appr{background:#f0fff4;border:1px solid var(--green);color:#276749;border-radius:6px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;min-height:36px;}
+.btn-rejt{background:#fff5f5;border:1px solid var(--red);color:#c53030;border-radius:6px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;min-height:36px;}
+.btn-upd{background:none;border:1px solid var(--pink);border-radius:6px;padding:7px 12px;font-size:13px;font-weight:600;cursor:pointer;color:var(--pink);transition:all .15s;margin-top:4px;display:inline-block;min-height:36px;}
 .btn-upd:hover{background:var(--pink);color:#fff;}
 .btn-sent{background:#f0fff4;border-color:#68d391;color:#276749;}
 .btn-sent:hover{background:#dcfce7;}
@@ -759,7 +766,7 @@ body {
 <div id="login-overlay">
   <div class="login-wrapper">
     <div class="login-logo-float">
-      <img src="__LOGO_URI__" alt="Logo Bệnh Viện Từ Dũ">
+      <img src="__LOGO_URI__" alt="Logo BVTD CS2">
     </div>
     <div class="login-box">
       <div class="login-title">
@@ -799,14 +806,18 @@ body {
 </button>
 <div class="mob-overlay" id="mob-overlay" onclick="toggleSidebar()"></div>
 
+<!-- Firebase warning banner (hidden by default) -->
+<div id="fb-warn-banner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:300;background:#fffaf0;border-bottom:2px solid #dd6b20;color:#7b341e;padding:10px 20px;font-size:13px;font-weight:600;text-align:center;">
+  ⚠️ Firebase chưa cấu hình — báo cáo từ phòng ban sẽ không được đồng bộ theo thời gian thực.
+</div>
+
 <!-- Sidebar -->
 <nav class="sidebar">
   <div class="sidebar-logo">
     <div style="display:flex;align-items:center;gap:10px;">
-      <img src="__LOGO_URI__" alt="Logo BVTD" style="width:40px;height:40px;object-fit:contain;border-radius:50%;background:#fff;padding:2px;flex-shrink:0;">
+      <img src="__LOGO_URI__" alt="Logo BVTD CS2" style="width:40px;height:40px;object-fit:contain;border-radius:50%;background:#fff;padding:2px;flex-shrink:0;">
       <div>
-        <div class="logo-name">BVTD Cơ Sở 2</div>
-        <div class="logo-sub" style="display:block !important;">Tu Du Hospital</div>
+        <div class="logo-name">BVTD CS2</div>
       </div>
     </div>
   </div>
@@ -875,7 +886,7 @@ body {
     </div>
     <div class="stat-card stat-rate">
       <div class="stat-icon">📈</div>
-      <div><div class="stat-num" id="s-rate">—%</div><div class="stat-label">Hoàn thành</div></div>
+      <div><div class="stat-num" id="s-rate">—%</div><div class="stat-label">% Hoàn thành</div></div>
     </div>
   </div>
 
@@ -922,11 +933,11 @@ body {
   <!-- Row 3: Charts -->
   <div class="two-col mt-16">
     <div class="card">
-      <div class="card-header"><h3>Đầu Việc Theo Tháng</h3></div>
+      <div class="card-header"><h2>Đầu Việc Theo Tháng</h2></div>
       <canvas id="monthly-chart" height="220"></canvas>
     </div>
     <div class="card">
-      <div class="card-header"><h3>Phân Loại Nhóm</h3></div>
+      <div class="card-header"><h2>Phân Loại Nhóm</h2></div>
       <canvas id="nhom-chart" height="220"></canvas>
     </div>
   </div>
@@ -1061,7 +1072,7 @@ body {
     </div>
     <div class="mfield" id="upd-ngay-wrap">
       <label>Ngày hoàn thành (bắt buộc nếu chọn "Hoàn thành")</label>
-      <input type="text" id="upd-ngay" placeholder="dd/mm/yyyy" maxlength="10" pattern="\\d{2}/\\d{2}/\\d{4}" oninput="fmtDateInput(this)">
+      <input type="date" id="upd-ngay">
     </div>
     <div class="mfield">
       <label>Ghi chú / Tình trạng</label>
@@ -1263,6 +1274,12 @@ function initApp() {
   tasksRendered = false;
   const _tn = document.getElementById('tasks-by-nhom'); if (_tn) _tn.innerHTML = '';
 
+  // Cảnh báo Firebase chưa cấu hình ngay khi mount
+  if (!fbEnabled()) {
+    const wb = document.getElementById('fb-warn-banner');
+    if (wb) wb.style.display = 'block';
+  }
+
   const tasks = getMyTasks();
   const st    = computeFromTasks(tasks);
   window._myTasks = tasks;
@@ -1346,9 +1363,9 @@ function initApp() {
           <div class="dp-bar-late"   style="width:${lP}%"></div>
         </div>
         <div class="dp-stats">
-          <span class="dp-stat dp-stat-done">✓${d.done}</span>
-          <span class="dp-stat dp-stat-act">⟳${d.active}</span>
-          <span class="dp-stat dp-stat-late">⚠${d.late}</span>
+          <span class="dp-stat dp-stat-done">✅${d.done}</span>
+          <span class="dp-stat dp-stat-act">🔄${d.active}</span>
+          <span class="dp-stat dp-stat-late">⚠️${d.late}</span>
           <span class="dp-stat dp-stat-total">/${d.total}</span>
         </div>
       </div>`;
@@ -1372,8 +1389,7 @@ function initApp() {
       return `
         <div class="source-card${hasPdf ? ' clickable' : ''}" ${clickAttr}>
           <div class="source-name">${s.name || ('Biên bản ' + fmtDate(s.date))}</div>
-          <div class="source-count">${s.count}</div>
-          <div class="source-date">đầu việc</div>
+          <div class="source-count">${s.count} <span class="source-date">đầu việc</span></div>
           ${pdfIcon}
         </div>`;
     }).join('');
@@ -1478,7 +1494,7 @@ function buildTasksView(filtered) {
       const color  = avatarColor(dept);
       const rows = tasks.map(t => {
         const nguonShort = t.nguon ? t.nguon.replace(/^Biên bản /, '') : '—';
-        const canUpd = AUTH && (t.tt === 'tre_deadline' || t.tt === 'dang_thuc_hien');
+        const canUpd = AUTH && (t.tt === 'tre_deadline' || t.tt === 'dang_thuc_hien' || (isBGD() && t.tt === 'da_hoan_thanh'));
         const updLabel = isBGD() ? '✏ Cập nhật' : '✏ Báo cáo';
         const alreadySent = !isBGD() && canUpd && _pendingIds.has(t.id);
         const updBtn = canUpd
@@ -1582,6 +1598,10 @@ function initTasksView() {
     });
   // Default: chỉ hiện trễ + đang làm
   document.getElementById('filter-status').value = 'chua_xong';
+  // Auto-select phòng khi user chỉ thuộc 1 phòng
+  if (AUTH && AUTH.depts && AUTH.depts.length === 1) {
+    deptFilter.value = AUTH.depts[0];
+  }
   filterTasks();
 }
 
@@ -1690,6 +1710,23 @@ function startFbListener() {
   migrateLocalStorage();
 }
 
+function showBanner(msg, isOk) {
+  let b = document.getElementById('_toast-banner');
+  if (!b) {
+    b = document.createElement('div');
+    b.id = '_toast-banner';
+    b.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:400;padding:12px 20px;border-radius:8px;font-size:13px;font-weight:600;box-shadow:0 4px 12px rgba(0,0,0,.15);max-width:90vw;text-align:center;transition:opacity .3s;';
+    document.body.appendChild(b);
+  }
+  b.style.background = isOk ? '#f0fff4' : '#fff5f5';
+  b.style.color = isOk ? '#276749' : '#c53030';
+  b.style.border = isOk ? '1px solid #9ae6b4' : '1px solid #feb2b2';
+  b.style.opacity = '1';
+  b.textContent = msg;
+  clearTimeout(b._t);
+  b._t = setTimeout(() => { b.style.opacity = '0'; }, 3500);
+}
+
 function migrateLocalStorage() {
   const OLD_KEY = 'bvtd_pending';
   let old = [];
@@ -1697,7 +1734,7 @@ function migrateLocalStorage() {
   if (!Array.isArray(old) || old.length === 0) return;
   const myPending = old.filter(e => e.phong === AUTH.user || (AUTH.depts && AUTH.depts.includes(e.phong)));
   if (myPending.length === 0) { localStorage.removeItem(OLD_KEY); return; }
-  if (!confirm('Bạn có ' + myPending.length + ' báo cáo cũ chưa được đồng bộ lên hệ thống.\\nBấm OK để đẩy lên ngay, Huỷ để bỏ qua.')) return;
+  showBanner('🔄 Đang đồng bộ ' + myPending.length + ' báo cáo cũ lên Firebase…', true);
   let ok = 0;
   myPending.forEach(e => {
     const id    = e.id || e.task_id || '';
@@ -1718,7 +1755,7 @@ function migrateLocalStorage() {
     _db.ref('bvtd_pending/' + key).set(entry).then(() => ok++);
   });
   localStorage.removeItem(OLD_KEY);
-  setTimeout(() => alert('Đã đồng bộ ' + myPending.length + ' báo cáo lên Firebase thành công!'), 1000);
+  setTimeout(() => showBanner('✅ Đã đồng bộ ' + myPending.length + ' báo cáo lên Firebase thành công!', true), 1000);
 }
 
 function fmtDateInput(el) {
@@ -1762,11 +1799,10 @@ function submitUpd() {
   if (tt === 'da_hoan_thanh' && !ngayRaw) { showUpdMsg('Vui lòng nhập ngày hoàn thành.', true); return; }
   let ngay = '';
   if (ngayRaw) {
-    if (/^\\d{2}\\/\\d{2}\\/\\d{4}$/.test(ngayRaw)) {
-      const [d,m,y] = ngayRaw.split('/');
-      ngay = y + '-' + m + '-' + d;
+    if (/^\\d{4}-\\d{2}-\\d{2}$/.test(ngayRaw)) {
+      ngay = ngayRaw;
     } else {
-      showUpdMsg('Ngày không hợp lệ. Vui lòng nhập đúng định dạng dd/mm/yyyy.', true); return;
+      showUpdMsg('Ngày không hợp lệ. Vui lòng chọn ngày từ lịch.', true); return;
     }
     // Kiểm tra ngày HT >= ngày nhắc cuối (task nhắc >= 2 lần)
     const _tr = (window._myTasks || D.tasks).find(t => t.id === _updTask.id);
@@ -1928,8 +1964,8 @@ function renderReview() {
 function updateNavBadge() {
   const navEl = document.getElementById('nav-review');
   const badge = document.getElementById('nav-review-badge');
-  if (!isBGD()) { if (navEl) navEl.style.display = 'none'; return; }
-  if (navEl) navEl.style.display = 'flex';
+  if (!isBGD()) { if (navEl) { navEl.style.display = 'none'; navEl.setAttribute('aria-hidden','true'); } return; }
+  if (navEl) { navEl.style.display = 'flex'; navEl.removeAttribute('aria-hidden'); }
   const approved  = lsGet(AK);
   const doneKeys  = new Set(approved.map(a => a.id + '|' + a.user));
   const count     = fbPendingList().filter(p => !doneKeys.has(p.id + '|' + p.user)).length;
@@ -1950,7 +1986,10 @@ function renderPending() {
   let h = '<div class="pending-panel">';
 
   if (pendingItems.length) {
-    h += `<div class="pending-hdr" style="margin-bottom:8px;">⏳ Chờ duyệt — ${pendingItems.length} cập nhật từ phòng ban</div>`;
+    h += `<div class="pending-hdr" style="margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;">
+      <span>⏳ Chờ duyệt — ${pendingItems.length} cập nhật từ phòng ban</span>
+      ${pendingItems.length > 2 ? `<button class="btn-appr" onclick="approveAll()" style="font-size:12px;padding:5px 12px;">✅ Duyệt tất cả</button>` : ''}
+    </div>`;
     // Group theo task ID
     const grouped = {};
     pendingItems.forEach(p => { if (!grouped[p.id]) grouped[p.id] = []; grouped[p.id].push(p); });
@@ -2126,6 +2165,13 @@ function approveUpd(id, user) {
   if (idx >= 0) appr[idx] = norm; else appr.push(norm);
   lsSave(AK, appr);
   renderPending(); renderReview();
+}
+
+function approveAll() {
+  const approvedItems = lsGet(AK);
+  const doneKeys2 = new Set(approvedItems.map(a => a.id + '|' + a.user));
+  const pendingItems = fbPendingList().filter(p => !doneKeys2.has(p.id + '|' + p.user));
+  pendingItems.forEach(p => approveUpd(p.id, p.user));
 }
 
 function rejectUpd(id, user) {

@@ -73,6 +73,26 @@ TRANG_THAI = {
     "tre_deadline": "Trễ deadline",
 }
 
+# ── Update log ─────────────────────────────────────────────────────────────────
+
+UPDATE_LOG = DATA / "update_log.csv"
+
+LOG_HEADERS = [
+    "ngay_cap_nhat", "task_id", "ten_dau_viec", "phong_chinh",
+    "phong_bao_cao", "user", "trang_thai_cu", "trang_thai_moi",
+    "ngay_hoan_thanh", "ghi_chu", "nguon",
+]
+
+
+def append_update_log(rows: list[dict]) -> None:
+    """Ghi rows vào update_log.csv (append, tự tạo header nếu chưa có)."""
+    write_header = not UPDATE_LOG.exists()
+    with UPDATE_LOG.open("a", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=LOG_HEADERS)
+        if write_header:
+            w.writeheader()
+        w.writerows(rows)
+
 
 # ── JSON helpers ──────────────────────────────────────────────────────────────
 

@@ -3,33 +3,20 @@ Auto-apply pending_updates.json vào tasks.csv (không tương tác).
 Được gọi bởi GitHub Actions khi BGĐ upload file lên repo.
 """
 import sys
-import csv
 import json
+import logging
 from pathlib import Path
 from datetime import date
+
+logging.basicConfig(stream=sys.stderr, level=logging.WARNING, format="%(levelname)s: %(message)s")
+log = logging.getLogger(__name__)
 
 ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from tracker import load_tasks, save_tasks, bump_version
+from tracker import load_tasks, save_tasks, bump_version, append_update_log
 
 PENDING_FILE = ROOT / "data" / "pending_updates.json"
-LOG_CSV      = ROOT / "data" / "update_log.csv"
-
-LOG_HEADERS = [
-    "ngay_cap_nhat", "task_id", "ten_dau_viec", "phong_chinh",
-    "phong_bao_cao", "user", "trang_thai_cu", "trang_thai_moi",
-    "ngay_hoan_thanh", "ghi_chu", "nguon",
-]
-
-
-def _append_log(rows: list[dict]) -> None:
-    write_header = not LOG_CSV.exists()
-    with LOG_CSV.open("a", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=LOG_HEADERS)
-        if write_header:
-            w.writeheader()
-        w.writerows(rows)
 
 
 def main() -> None:
@@ -40,7 +27,7 @@ def main() -> None:
     try:
         pending = json.loads(PENDING_FILE.read_text(encoding="utf-8"))
     except (json.JSONDecodeError, OSError) as e:
-        print(f"[LỖI] Không đọc được pending_updates.json: {e}")
+        log.error("Không đọc được pending_updates.json: %s", e)
         sys.exit(1)
 
     if not pending:
@@ -94,7 +81,7 @@ def main() -> None:
 
     save_tasks(tasks)
     if log_rows:
-        _append_log(log_rows)
+        append_update_log(log_rows)
 
     PENDING_FILE.unlink()
 
