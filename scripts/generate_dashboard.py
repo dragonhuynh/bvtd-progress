@@ -2106,21 +2106,30 @@ function removeApproved(id) {
   renderPending(); renderReview();
 }
 
+function _resolveFbKey(id, user) {
+  const direct = fbKey(user, id);
+  if (_fbPending[direct]) return direct;
+  // Fallback: tìm theo field id (data migrate cũ có key format khác)
+  const found = Object.entries(_fbPending).find(([k,v]) => String(v.id||v.task_id||'') === String(id));
+  return found ? found[0] : direct;
+}
+
 function approveUpd(id, user) {
-  const key = fbKey(user, id);
+  const key = _resolveFbKey(id, user);
   const item = _fbPending[key];
-  if (!item) return;
+  if (!item) { alert('Không tìm thấy mục này trong danh sách chờ.'); return; }
   if (fbInit()) _db.ref('bvtd_pending/' + key).remove();
   delete _fbPending[key];
+  const norm = normalizePending(item);
   const appr = lsGet(AK);
-  const idx = appr.findIndex(a => a.id === id && a.user === user);
-  if (idx >= 0) appr[idx] = item; else appr.push(item);
+  const idx = appr.findIndex(a => String(a.id) === String(id));
+  if (idx >= 0) appr[idx] = norm; else appr.push(norm);
   lsSave(AK, appr);
   renderPending(); renderReview();
 }
 
 function rejectUpd(id, user) {
-  const key = fbKey(user, id);
+  const key = _resolveFbKey(id, user);
   if (fbInit()) _db.ref('bvtd_pending/' + key).remove();
   delete _fbPending[key];
   renderPending(); renderReview();
