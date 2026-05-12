@@ -453,7 +453,7 @@ html,body{height:100%;overflow:hidden;
   <div class="sidebar-footer">
     <div class="sb-user-info">
       <span class="sb-user-badge" id="sb-user-badge">—</span>
-      <button class="sb-logout-btn" onclick="window.location.href='tien_do.html'" title="Quay lại">✕ Thoát</button>
+      <button class="sb-logout-btn" onclick="doGanttLogout()" title="Đăng xuất">✕ Thoát</button>
     </div>
     <div class="sb-ver" id="gantt-ver"></div>
   </div>
@@ -866,12 +866,20 @@ function setMobMode(mode){
   render();
 }
 
+function doGanttLogout(){
+  localStorage.removeItem('bvtd_auth');
+  sessionStorage.removeItem('bvtd_auth');
+  window.location.href='tien_do.html';
+}
+
 // Boot
 viewStart=addDays(today0(),-10);
 if(isMob()){document.body.classList.add('mob-list');}
 (function(){
-  const u=sessionStorage.getItem('bvtd_user')||localStorage.getItem('bvtd_user');
-  if(u){const el=document.getElementById('sb-user-badge');if(el)el.textContent=u;}
+  const authRaw=sessionStorage.getItem('bvtd_auth')||localStorage.getItem('bvtd_auth');
+  let authUser='—';
+  if(authRaw){try{const a=JSON.parse(authRaw);if(a&&a.user)authUser=a.user;}catch(e){}}
+  const el=document.getElementById('sb-user-badge');if(el)el.textContent=authUser;
   set('gantt-ver',`Cập nhật: 12/05/2026`);
 })();
 applyF();

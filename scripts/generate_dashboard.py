@@ -313,6 +313,16 @@ body {
   background: rgba(233,30,140,.08);
   bottom: -100px; left: -80px; pointer-events: none;
 }
+.login-bg-watermark {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 420px; height: 420px;
+  opacity: 0.07; pointer-events: none; z-index: 0;
+}
+.login-bg-watermark img {
+  width: 100%; height: 100%; object-fit: contain;
+  filter: brightness(10) grayscale(1);
+}
 .login-wrapper {
   display: flex; flex-direction: column; align-items: center;
   width: 400px; position: relative; z-index: 1;
@@ -768,6 +778,7 @@ body {
 
 <!-- ═══ LOGIN OVERLAY ═══ -->
 <div id="login-overlay">
+  <div class="login-bg-watermark"><img src="__LOGO_URI__" alt=""></div>
   <div class="login-wrapper">
     <div class="login-logo-float">
       <img src="__LOGO_URI__" alt="Logo BVTD CS2">
@@ -1150,6 +1161,7 @@ function doLogin() {
   document.getElementById('app-body').style.display = 'flex';
   document.getElementById('user-badge').textContent = AUTH.user;
   initApp();
+  switchView('dashboard');
   startFbListener();
 }
 
@@ -1157,6 +1169,8 @@ function doLogout() {
   sessionStorage.removeItem('bvtd_auth');
   localStorage.removeItem('bvtd_auth');
   AUTH = null;
+  if (_monthlyChart) { try { _monthlyChart.destroy(); } catch(e) {} _monthlyChart = null; }
+  if (_nhomChart)    { try { _nhomChart.destroy();    } catch(e) {} _nhomChart = null; }
   chartsInited = false; tasksRendered = false;
   window._myTasks = null; window._myStats = null;
   const deptFilter = document.getElementById('filter-dept');
@@ -2210,6 +2224,7 @@ if (savedAuth) {
     document.getElementById('app-body').style.display = 'flex';
     document.getElementById('user-badge').textContent = AUTH.user;
     initApp();
+    switchView('dashboard');
     startFbListener();
   }
 }
