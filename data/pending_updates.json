@@ -1,13 +1,26 @@
 [
   {
-    "id": "16",
-    "ten": "Thay thế giường Inox bằng bàn khám Inox chuyên dụng (Khám Nhi)",
-    "phong": "VTTBYT",
+    "id": "201",
+    "ten": "Khoa Dược quản lý Kho tổng CS2 theo quy trình tương đương CS1",
+    "phong": "Dược",
+    "trang_thai": "dang_thuc_hien",
+    "ngay_ht": "",
+    "ghi_chu": "",
+    "user": "BGD",
+    "user_phong": "BGD",
+    "may": "Windows / Edge",
+    "ip": "—",
+    "at": "2026-05-12"
+  },
+  {
+    "id": "298",
+    "ten": "HCQT bố trí thêm 15-20 ghế tiện ích cho người nhà nội trú",
+    "phong": "HCQT",
     "trang_thai": "da_hoan_thanh",
     "ngay_ht": "2026-05-12",
     "ghi_chu": "",
-    "user": "VTTBYT",
-    "user_phong": "VTTBYT",
+    "user": "HCQT",
+    "user_phong": "HCQT",
     "at": "2026-05-12",
     "migrated": false
   }
