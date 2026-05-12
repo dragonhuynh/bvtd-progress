@@ -248,16 +248,22 @@ html,body{height:100%;overflow:hidden;
 
 /* Summary strip */
 .strip{
-  height:40px;background:var(--white);border-top:1px solid var(--border);
-  display:flex;align-items:center;padding:0 22px;gap:20px;flex-shrink:0;
+  height:48px;background:var(--white);border-top:1px solid var(--border);
+  display:flex;align-items:center;padding:0 22px;gap:12px;flex-shrink:0;
   box-shadow:0 -1px 4px rgba(0,0,0,.04);
 }
-.si{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);font-weight:500;}
-.si strong{font-weight:800;}
-.si.g{color:#276749;} .si.b{color:#2b6cb0;} .si.r{color:#c53030;}
-.legend{display:flex;gap:14px;align-items:center;margin-left:auto;}
-.li{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);font-weight:500;}
-.li-dot{width:10px;height:10px;border-radius:3px;}
+.strip-count{font-size:12px;color:var(--muted);font-weight:500;white-space:nowrap;margin-right:4px;}
+.strip-count strong{font-weight:800;color:var(--text);}
+.strip-filters{display:flex;gap:8px;align-items:center;flex:1;flex-wrap:wrap;}
+.strip select{
+  height:32px;padding:0 28px 0 10px;border:1.5px solid var(--border);border-radius:8px;
+  font-size:12px;font-family:inherit;color:var(--text);background:var(--bg);
+  cursor:pointer;outline:none;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23718096' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 9px center;
+  transition:border .15s;
+}
+.strip select:focus{border-color:var(--accent);}
 
 /* Tooltip */
 .tip{
@@ -297,7 +303,8 @@ html,body{height:100%;overflow:hidden;
   }
   .ft{padding:4px 10px;font-size:12px;}
   .stats-strip{overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;}
-  .strip .legend{display:none;}
+  .strip{flex-wrap:wrap;height:auto;padding:8px 12px;gap:6px;}
+  .strip-filters{gap:6px;}
   .tb-icon2{display:none;}
 
   /* ── List mode (mặc định mobile) ── */
@@ -326,7 +333,7 @@ html,body{height:100%;overflow:hidden;
 @media (max-width:480px){
   :root{--col-id:36px;}
   .search-box{display:none;}
-  .strip{gap:6px;font-size:11px;}
+  .strip select{font-size:11px;height:28px;}
   .stat-pill{padding:5px 10px;}
   .stat-pill-num{font-size:15px;}
   .stats-strip{gap:8px;padding:8px 12px;}
@@ -466,14 +473,27 @@ html,body{height:100%;overflow:hidden;
 
   <!-- Summary strip -->
   <div class="strip">
-    <div class="si">Tổng: <strong id="totC">—</strong> đầu việc hiển thị</div>
-    <div class="si g">&#x2705; Hoàn thành: <strong id="doneC">—</strong></div>
-    <div class="si b">&#x1F504; Đang thực hiện: <strong id="inpC">—</strong></div>
-    <div class="si r">&#x26A0; Trễ deadline: <strong id="lateC">—</strong></div>
-    <div class="legend">
-      <div class="li"><div class="li-dot" style="background:#f59e0b"></div>Hành chính</div>
-      <div class="li"><div class="li-dot" style="background:#8b5cf6"></div>Chuyên môn</div>
-      <div class="li"><div class="li-dot" style="background:#06b6d4"></div>Quản lý</div>
+    <span class="strip-count"><strong id="totC">—</strong> đầu việc hiển thị</span>
+    <div class="strip-filters">
+      <select id="flt-nhom" onchange="onFltChange()">
+        <option value="">Tất cả nhóm</option>
+        <option value="hanh_chanh">🟡 Hành chính</option>
+        <option value="chuyen_mon">🟣 Chuyên môn</option>
+        <option value="quan_ly_khac">🔵 Quản lý</option>
+      </select>
+      <select id="flt-status" onchange="onFltChange()">
+        <option value="all">Tất cả TT</option>
+        <option value="chua_xong">⏳ Chưa xong</option>
+        <option value="da_hoan_thanh">✅ Hoàn thành</option>
+        <option value="dang_thuc_hien">🔄 Đang thực hiện</option>
+        <option value="tre_deadline">⚠️ Trễ deadline</option>
+      </select>
+      <select id="flt-dept" onchange="onFltChange()">
+        <option value="">Tất cả phòng</option>
+      </select>
+      <select id="flt-bienban" onchange="onFltChange()">
+        <option value="">Tất cả biên bản</option>
+      </select>
     </div>
   </div>
 </div>
@@ -490,7 +510,7 @@ const MONTHS  = ['Th1','Th2','Th3','Th4','Th5','Th6','Th7','Th8','Th9','Th10','T
 const ST_LBL  = {da_hoan_thanh:'Hoàn thành',dang_thuc_hien:'Đang thực hiện',tre_deadline:'Trễ deadline'};
 const NM_LBL  = {hanh_chanh:'Hành chính',chuyen_mon:'Chuyên môn',quan_ly_khac:'Quản lý khác'};
 
-let vis=[], statusF='all', nhomF=null, viewStart=null;
+let vis=[], statusF='all', nhomF=null, deptF='', bienbanF='', viewStart=null;
 
 function pDate(s){
   if(!s||!s.trim()) return null;
@@ -506,7 +526,7 @@ function fmt(d){return d?`${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`:'
 function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function set(id,v){const el=document.getElementById(id);if(el)el.textContent=v;}
 
-// Init stats
+// Init stats + populate footer dropdowns
 (function(){
   const done =TASKS.filter(t=>t.trang_thai==='da_hoan_thanh').length;
   const inp  =TASKS.filter(t=>t.trang_thai==='dang_thuc_hien').length;
@@ -521,22 +541,50 @@ function set(id,v){const el=document.getElementById(id);if(el)el.textContent=v;}
   `;
   set('cnt-all', TASKS.length);
   set('cnt-done',done); set('cnt-inp',inp); set('cnt-late',late);
+  // Populate Phòng dropdown
+  const depts=[...new Set(TASKS.map(t=>t.phong_chinh).filter(Boolean))].sort();
+  const dSel=document.getElementById('flt-dept');
+  depts.forEach(d=>{const o=document.createElement('option');o.value=d;o.textContent=d;dSel.appendChild(o);});
+  // Populate Biên bản dropdown
+  const bbs=[...new Set(TASKS.map(t=>t.nguon_van_ban).filter(Boolean))].sort();
+  const bSel=document.getElementById('flt-bienban');
+  bbs.forEach(b=>{const o=document.createElement('option');o.value=b;o.textContent=b;bSel.appendChild(o);});
 })();
 
 function setFilter(s,el){
   document.querySelectorAll('[data-filter]').forEach(e=>e.classList.remove('active'));
-  el.classList.add('active'); statusF=s; applyF();
+  el.classList.add('active'); statusF=s;
+  syncFltDropdowns(); applyF();
 }
 function setNhom(n,el){
   if(nhomF===n){document.querySelectorAll('[data-nhom]').forEach(e=>e.classList.remove('active'));nhomF=null;}
   else{document.querySelectorAll('[data-nhom]').forEach(e=>e.classList.remove('active'));el.classList.add('active');nhomF=n;}
+  syncFltDropdowns(); applyF();
+}
+function onFltChange(){
+  statusF=document.getElementById('flt-status').value||'all';
+  nhomF=document.getElementById('flt-nhom').value||null;
+  deptF=document.getElementById('flt-dept').value;
+  bienbanF=document.getElementById('flt-bienban').value;
+  // sync top bar buttons
+  document.querySelectorAll('[data-filter]').forEach(e=>e.classList.toggle('active',e.dataset.filter===statusF));
+  document.querySelectorAll('[data-nhom]').forEach(e=>e.classList.toggle('active',nhomF&&e.dataset.nhom===nhomF));
   applyF();
+}
+function syncFltDropdowns(){
+  const fs=document.getElementById('flt-status');
+  const fn=document.getElementById('flt-nhom');
+  if(fs) fs.value=statusF==='all'?'all':statusF;
+  if(fn) fn.value=nhomF||'';
 }
 function applyF(){
   const q=document.getElementById('searchInput').value.toLowerCase();
   vis=TASKS.filter(t=>{
-    if(statusF!=='all'&&t.trang_thai!==statusF)return false;
+    if(statusF==='chua_xong'){if(t.trang_thai==='da_hoan_thanh')return false;}
+    else if(statusF!=='all'&&t.trang_thai!==statusF)return false;
     if(nhomF&&t.nhom!==nhomF)return false;
+    if(deptF&&t.phong_chinh!==deptF)return false;
+    if(bienbanF&&(t.nguon_van_ban||'')!==bienbanF)return false;
     if(q&&!t.ten_dau_viec.toLowerCase().includes(q)&&!t.phong_chinh.toLowerCase().includes(q))return false;
     return true;
   });
@@ -552,10 +600,7 @@ function render(){renderL();renderG();}
 function renderL(){
   const c=document.getElementById('lpBody');c.innerHTML='';
   if(!vis.length){c.innerHTML='<div style="padding:20px 16px;color:#718096;font-size:13px">Không có đầu việc phù hợp.</div>';return;}
-  const done=vis.filter(t=>t.trang_thai==='da_hoan_thanh').length;
-  const inp=vis.filter(t=>t.trang_thai==='dang_thuc_hien').length;
-  const late=vis.filter(t=>t.trang_thai==='tre_deadline').length;
-  set('totC',vis.length);set('doneC',done);set('inpC',inp);set('lateC',late);
+  set('totC',vis.length);
   vis.forEach((t,i)=>{
     const sc=t.trang_thai||'dang_thuc_hien';
     const div=document.createElement('div');
