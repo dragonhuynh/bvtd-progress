@@ -711,6 +711,7 @@ function renderG(){
               bar.addEventListener('mouseenter',e=>showTip(e,t));
               bar.addEventListener('mousemove',e=>moveTip(e));
               bar.addEventListener('mouseleave',hideTip);
+              bar.addEventListener('click',()=>{hideTip();showDetail(t);});
               bar.addEventListener('touchstart',e=>{e.preventDefault();showDetail(t);},{passive:false});
               row.appendChild(bar);
             }
@@ -725,6 +726,7 @@ function renderG(){
             ov.addEventListener('mouseenter',e=>showTip(e,t));
             ov.addEventListener('mousemove',e=>moveTip(e));
             ov.addEventListener('mouseleave',hideTip);
+            ov.addEventListener('click',()=>{hideTip();showDetail(t);});
             ov.addEventListener('touchstart',e=>{e.preventDefault();showDetail(t);},{passive:false});
             row.appendChild(ov);
           }
@@ -745,6 +747,7 @@ function renderG(){
             bar.addEventListener('mouseenter',e=>showTip(e,t));
             bar.addEventListener('mousemove',e=>moveTip(e));
             bar.addEventListener('mouseleave',hideTip);
+            bar.addEventListener('click',()=>{hideTip();showDetail(t);});
             bar.addEventListener('touchstart',e=>{e.preventDefault();showDetail(t);},{passive:false});
             row.appendChild(bar);
           }
