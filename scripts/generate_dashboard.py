@@ -445,7 +445,7 @@ body {
   display: flex; align-items: center; gap: 12px;
   padding: 11px 20px; cursor: pointer;
   border-left: 3px solid transparent;
-  transition: all .15s;
+  transition: background-color .15s, color .15s, border-left-color .15s;
   color: rgba(255,255,255,.58); font-size: 13.5px; font-weight: 500;
   text-decoration: none; user-select: none;
 }
@@ -465,7 +465,8 @@ body {
 }
 .logout-btn {
   font-size: 11px; color: rgba(255,255,255,.4);
-  background: none; border: none; cursor: pointer; padding: 2px 4px;
+  background: none; border: none; cursor: pointer;
+  padding: 10px 12px; min-height: 44px; min-width: 44px;
   font-family: inherit; transition: color .15s;
 }
 .logout-btn:hover { color: rgba(255,255,255,.9); }
@@ -681,7 +682,7 @@ body {
   background: var(--sidebar); border: none; cursor: pointer;
   flex-direction: column; align-items: center; justify-content: center; gap: 5px;
 }
-.mob-hamburger span { display: block; width: 20px; height: 2px; background: #fff; border-radius: 2px; transition: all .2s; }
+.mob-hamburger span { display: block; width: 20px; height: 2px; background: #fff; border-radius: 2px; transition: transform .2s, opacity .2s; }
 
 @media (max-width: 1100px) { .stats-grid { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 900px) {
@@ -754,7 +755,7 @@ body {
 .pending-meta{color:var(--muted);margin-top:2px;}
 .btn-appr{background:#f0fff4;border:1px solid var(--green);color:#276749;border-radius:6px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;min-height:36px;}
 .btn-rejt{background:#fff5f5;border:1px solid var(--red);color:#c53030;border-radius:6px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;min-height:36px;}
-.btn-upd{background:none;border:1px solid var(--pink);border-radius:6px;padding:7px 12px;font-size:13px;font-weight:600;cursor:pointer;color:var(--pink);transition:all .15s;margin-top:4px;display:inline-block;min-height:36px;}
+.btn-upd{background:none;border:1px solid var(--pink);border-radius:6px;padding:7px 12px;font-size:13px;font-weight:600;cursor:pointer;color:var(--pink);transition:background-color .15s,color .15s,border-color .15s;margin-top:4px;display:inline-block;min-height:36px;}
 .btn-upd:hover{background:var(--pink);color:#fff;}
 .btn-sent{background:#f0fff4;border-color:#68d391;color:#276749;}
 .btn-sent:hover{background:#dcfce7;}
@@ -2293,7 +2294,13 @@ if (savedAuth) {
     document.getElementById('user-badge').textContent = AUTH.user;
     initApp();
     switchView('dashboard');
-    startFbListener();
+    // Firebase SDK loaded with defer — may not be ready when inline script runs.
+    // DOMContentLoaded fires after all deferred scripts, so Firebase is guaranteed available.
+    if (typeof firebase !== 'undefined') {
+      startFbListener();
+    } else {
+      document.addEventListener('DOMContentLoaded', startFbListener);
+    }
   }
 }
 </script>
