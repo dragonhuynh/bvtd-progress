@@ -17,8 +17,20 @@ VERSIONS_JSON = DATA / "report_versions.json"
 FIELDNAMES = [
     "id", "ten_dau_viec", "nhom", "phong_chinh", "phong_phoi_hop",
     "bat_dau", "ket_thuc", "trang_thai", "so_lan_nhac",
-    "ghi_chu", "nguon_van_ban"
+    "ghi_chu", "nguon_van_ban", "dinh_ky"
 ]
+
+# Từ khóa xác định task định kỳ (lặp lại thường xuyên, không bao giờ "xong")
+_DINH_KY_PATTERNS = re.compile(
+    r"hàng\s+(tuần|ngày|tháng|quý)"
+    r"|mỗi\s+(tuần|ngày|tháng|quý)"
+    r"|định\s*kỳ\s+(hàng|mỗi)"
+    r"|\d+\s*lần\s*/\s*(ngày|tuần|tháng)",
+    re.IGNORECASE
+)
+
+def detect_dinh_ky(ten: str) -> bool:
+    return bool(_DINH_KY_PATTERNS.search(ten))
 
 # ── Nhóm công tác ──────────────────────────────────────────────────────────────
 
@@ -164,7 +176,10 @@ def load_tasks() -> list[dict]:
     if not TASKS_CSV.exists():
         return []
     with open(TASKS_CSV, newline="", encoding="utf-8") as f:
-        return list(csv.DictReader(f))
+        tasks = list(csv.DictReader(f))
+    for t in tasks:
+        t.setdefault("dinh_ky", "0")
+    return tasks
 
 def save_tasks(tasks: list[dict]) -> None:
     with open(TASKS_CSV, "w", newline="", encoding="utf-8") as f:
@@ -252,6 +267,7 @@ def auto_mark_overdue(tasks: list[dict]) -> list[str]:
     changed = []
     for t in tasks:
         if (t["trang_thai"] == "dang_thuc_hien"
+                and t.get("dinh_ky", "0") != "1"   # task định kỳ không bao giờ trễ
                 and t["ket_thuc"]
                 and t["ket_thuc"] < today):
             t["trang_thai"] = "tre_deadline"

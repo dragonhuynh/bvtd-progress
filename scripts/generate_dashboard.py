@@ -166,6 +166,7 @@ def compute(tasks):
             "bat_dau": t.get("bat_dau") or "",
             "ket_thuc": t.get("ket_thuc") or "",
             "tt":      t["trang_thai"],
+            "dk":      t.get("dinh_ky", "0"),
             "nhac":    t.get("so_lan_nhac") or "1",
             "ghi_chu": t.get("ghi_chu") or "",
             "nguon":   normalize_source_name((t.get("nguon_van_ban") or "").strip()),
@@ -649,9 +650,10 @@ body {
 .task-ten { line-height: 1.45; max-width: 320px; }
 .task-nhac { font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 4px; background: #fef3c7; color: #92400e; margin-left: 5px; }
 .status-pill { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; white-space: nowrap; display: inline-block; }
-.status-done   { background: #f0fff4; color: #276749; }
-.status-active { background: #ebf8ff; color: #2c5282; }
-.status-late   { background: #fff5f5; color: #c53030; }
+.status-done      { background: #f0fff4; color: #276749; }
+.status-active    { background: #ebf8ff; color: #2c5282; }
+.status-late      { background: #fff5f5; color: #c53030; }
+.status-recurring { background: #f0fdf4; color: #166534; }
 .status-pending{ background: #fffbeb; color: #92400e; }
 .nguon-cell { font-size: 11px; color: var(--muted); white-space: nowrap; max-width: 140px; overflow: hidden; text-overflow: ellipsis; }
 
@@ -1365,9 +1367,12 @@ function avatarColor(name) {
   return AC[Math.abs(h) % AC.length];
 }
 
-function statusPill(tt) {
+function statusPill(tt, dk) {
   if (tt === 'da_hoan_thanh')  return '<span class="status-pill status-done">✅ Hoàn thành</span>';
-  if (tt === 'dang_thuc_hien') return '<span class="status-pill status-active">🔄 Đang thực hiện</span>';
+  if (tt === 'dang_thuc_hien') {
+    if (dk === '1') return '<span class="status-pill status-recurring">↻ Định kỳ</span>';
+    return '<span class="status-pill status-active">🔄 Đang thực hiện</span>';
+  }
   return '<span class="status-pill status-late">⚠️ Trễ deadline</span>';
 }
 
@@ -1511,7 +1516,7 @@ function initApp() {
           </div>
           <div class="urgent-right">
             <span class="nhac-badge">🔁 ${t.nhac}x nhắc</span>
-            ${statusPill(t.tt)}
+            ${statusPill(t.tt, t.dk)}
           </div>
         </li>`;
     }).join('');
@@ -1678,7 +1683,7 @@ function buildTasksView(filtered) {
           <td class="col-hide-mobile" style="white-space:nowrap;font-size:12px">${fmtDate(t.bat_dau)}</td>
           <td class="task-deadline" style="white-space:nowrap;font-size:12px">${t.ket_thuc?fmtDate(t.ket_thuc):'—'}</td>
           <td class="nguon-cell col-hide-mobile" title="${t.nguon}">${nguonShort}</td>
-          <td class="task-status">${statusPill(t.tt)}${updBtn}</td>
+          <td class="task-status">${statusPill(t.tt, t.dk)}${updBtn}</td>
         </tr>`;
       }).join('');
 
@@ -1805,7 +1810,7 @@ function handleDashSearch(val) {
       <td style="font-size:12px">${t.phong}</td>
       <td style="font-size:12px;white-space:nowrap">${fmtDate(t.ket_thuc)}</td>
       <td class="nguon-cell">${nguonShort}</td>
-      <td>${statusPill(t.tt)}</td>
+      <td>${statusPill(t.tt, t.dk)}</td>
     </tr>`;
   });
   html += '</tbody></table>';
@@ -2210,7 +2215,7 @@ function renderReview() {
     pendEl.innerHTML = Object.values(grouped).map(grp => {
       const first = grp[0];
       const task  = D.tasks.find(t => t.id === first.id);
-      const curTT = task ? statusPill(task.tt) : '';
+      const curTT = task ? statusPill(task.tt, task.dk) : '';
       const taskMeta = task ? [
         task.ket_thuc ? `⏰ Deadline: <b>${fmtDate(task.ket_thuc)}</b>` : `<span style="color:var(--muted)">Không có deadline</span>`,
         task.bat_dau  ? `📅 Giao: ${fmtDate(task.bat_dau)}` : '',
