@@ -10,5 +10,17 @@
     "user_phong": "Điều dưỡng, Công Đoàn, CSKH, Đoàn Thanh Niên",
     "at": "2026-05-15",
     "migrated": false
+  },
+  {
+    "id": "248",
+    "ten": "Điều dưỡng quản lý giấy chuyển viện",
+    "phong": "Điều dưỡng",
+    "trang_thai": "da_hoan_thanh",
+    "ngay_ht": "2026-10-02",
+    "ghi_chu": "Phối hợp phòng KHTH + Điều dưỡng",
+    "user": "DD",
+    "user_phong": "Điều dưỡng, Công Đoàn, CSKH, Đoàn Thanh Niên",
+    "at": "2026-05-15",
+    "migrated": false
   }
 ]
