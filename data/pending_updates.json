@@ -1,7 +1,43 @@
 [
   {
-    "id": "406",
-    "ten": "Điều dưỡng + CTXH thiết kế Poster nuôi con bằng sữa mẹ Human Milk (dạ dày trẻ sơ sinh tại hậu sản/GMHS/Nhi)",
+    "id": "7",
+    "ten": "Thiết lập trạm CSKH thành điểm in tập trung",
+    "phong": "CSKH",
+    "trang_thai": "da_hoan_thanh",
+    "ngay_ht": "2026-02-01",
+    "ghi_chu": "",
+    "user": "DD",
+    "user_phong": "Điều dưỡng, Công Đoàn, CSKH, Đoàn Thanh Niên",
+    "at": "2026-05-15",
+    "migrated": false
+  },
+  {
+    "id": "52",
+    "ten": "Tăng cường truyền thông dịch vụ và tiếp đón tư vấn người bệnh",
+    "phong": "CSKH",
+    "trang_thai": "da_hoan_thanh",
+    "ngay_ht": "2026-01-12",
+    "ghi_chu": "",
+    "user": "DD",
+    "user_phong": "Điều dưỡng, Công Đoàn, CSKH, Đoàn Thanh Niên",
+    "at": "2026-05-15",
+    "migrated": false
+  },
+  {
+    "id": "408",
+    "ten": "Điều dưỡng + HCQT giám sát đồng phục NB (áo người bệnh) và người nhà (áo vàng) đúng quy định",
+    "phong": "Điều dưỡng",
+    "trang_thai": "da_hoan_thanh",
+    "ngay_ht": "2026-04-21",
+    "ghi_chu": "",
+    "user": "DD",
+    "user_phong": "Điều dưỡng, Công Đoàn, CSKH, Đoàn Thanh Niên",
+    "at": "2026-05-15",
+    "migrated": false
+  },
+  {
+    "id": "415",
+    "ten": "Điều dưỡng chuẩn bị báo cáo CS1 về lưu đồ in toa thuốc tập trung và lưu đồ khoa khám bệnh",
     "phong": "Điều dưỡng",
     "trang_thai": "da_hoan_thanh",
     "ngay_ht": "2026-04-21",
