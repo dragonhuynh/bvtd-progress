@@ -5,7 +5,7 @@ id,ten_dau_viec,nhom,phong_chinh,phong_phoi_hop,bat_dau,ket_thuc,trang_thai,so_l
 4,Rà soát quy cách và vị trí đặt thùng rác,chuyen_mon,KSNK,Điều dưỡng,2025-12-16,2025-12-30,tre_deadline,1,Đã đi khảo sát và lên kế hoạch kiểm soát,BC Tiến độ họp BS Ngọc Hải 16/12/2025,0
 5,Triển khai in toa thuốc tại nhà thuốc (theo mẫu khu N),quan_ly_khac,KHTH,CNTT,2025-12-16,2026-01-02,tre_deadline,3,Đã lên quy trình đang làm việc với K.Dược CNTT,BC Tiến độ họp BS Ngọc Hải 16/12/2025,0
 6,Giải phóng máy in phòng khám - chuyển in chỉ định ra ngoài,quan_ly_khac,KHTH,CNTT,2025-12-16,2025-12-30,tre_deadline,1,Đã lên quy trình đang làm việc với K.Dược CNTT KHTH,BC Tiến độ họp BS Ngọc Hải 16/12/2025,0
-7,Thiết lập trạm CSKH thành điểm in tập trung,quan_ly_khac,CSKH,CNTT,2025-12-16,2026-01-02,tre_deadline,2,Đã làm tờ trình,BC Tiến độ họp BS Ngọc Hải 16/12/2025,0
+7,Thiết lập trạm CSKH thành điểm in tập trung,quan_ly_khac,CSKH,CNTT,2025-12-16,2026-02-01,da_hoan_thanh,2,Đã làm tờ trình,BC Tiến độ họp BS Ngọc Hải 16/12/2025,0
 8,Vẽ lại sơ đồ quy trình khám bệnh mới (tối ưu hóa luồng),chuyen_mon,KHTH,Điều dưỡng,2025-12-16,2026-04-15,da_hoan_thanh,1,Đã phối hợp hoàn thành,BC Tiến độ họp BS Ngọc Hải 16/12/2025,0
 9,Bố trí lại vị trí công việc theo thứ tự tải trọng,hanh_chanh,Điều dưỡng,,2025-12-16,2025-12-30,da_hoan_thanh,1,,BC Tiến độ họp BS Ngọc Hải 16/12/2025,0
 10,Mở cửa hông cho các phòng khám đông (Nội Ngoại),hanh_chanh,HCQT,,2025-12-16,2025-12-30,da_hoan_thanh,1,,BC Tiến độ họp BS Ngọc Hải 16/12/2025,0
@@ -50,7 +50,7 @@ id,ten_dau_viec,nhom,phong_chinh,phong_phoi_hop,bat_dau,ket_thuc,trang_thai,so_l
 49,Báo cáo phương án phối hợp/xử trí với Đơn vị 115,quan_ly_khac,KHTH,,2025-12-16,2025-12-30,tre_deadline,1,KHTH gửi CV xin ý kiến SYT,BC Tiến độ họp BS Ngọc Hải 16/12/2025,0
 50,Báo cáo phân tích vị trí kho tổng (HC VTTB Dược HS),quan_ly_khac,HCQT,VTTBYT|KHTH,2025-12-16,2025-12-22,da_hoan_thanh,1,,BC Tiến độ họp BS Ngọc Hải 16/12/2025,0
 51,Tổ chức giao ban và phản hồi ý kiến bệnh viện đối tác,quan_ly_khac,KHTH,,2025-12-29,2026-01-12,dang_thuc_hien,1,Đầu mối tiếp nhận - phản hồi ý kiến BV Lê Văn Thịnh/YHCT/Da Liễu,Kết luận họp BS Ngọc Hải 29/12/2025,1
-52,Tăng cường truyền thông dịch vụ và tiếp đón tư vấn người bệnh,quan_ly_khac,CSKH,,2025-12-29,2026-01-12,tre_deadline,1,CSKH là đầu mối,Kết luận họp BS Ngọc Hải 29/12/2025,0
+52,Tăng cường truyền thông dịch vụ và tiếp đón tư vấn người bệnh,quan_ly_khac,CSKH,,2025-12-29,2026-01-12,da_hoan_thanh,1,CSKH là đầu mối,Kết luận họp BS Ngọc Hải 29/12/2025,0
 53,Hoàn thành quy trình nhập viện và in/đeo lắc tay người bệnh,quan_ly_khac,KHTH,K.Cấp cứu,2025-12-29,2026-01-12,tre_deadline,1,Ngay khi NB nhập viện phải in và đeo lắc tay đúng quy định,Kết luận họp BS Ngọc Hải 29/12/2025,0
 54,Tái bố trí nhân sự Nội/Ngoại/Sản/Cấp cứu theo định hướng trực tập trung,hanh_chanh,KHTH,K.Cấp cứu,2025-12-29,2026-02-15,da_hoan_thanh,1,"Thông báo về việc trực tập trung, giám sát mỗi đợt nhân sự mới",Kết luận họp BS Ngọc Hải 29/12/2025,0
 55,Thực hiện quy trình chuyển viện qua bến phà Bình Khánh,quan_ly_khac,KHTH,HCQT,2025-12-29,2026-01-01,tre_deadline,1,Tối ưu thời gian xe cứu thương - đường Huỳnh Tấn Phát,Kết luận họp BS Ngọc Hải 29/12/2025,0
@@ -406,14 +406,14 @@ id,ten_dau_viec,nhom,phong_chinh,phong_phoi_hop,bat_dau,ket_thuc,trang_thai,so_l
 405,KHTH + Dược + YHCT triển khai thuốc thang/thuốc bốc tại CS2 (quy trình/vận chuyển/lưu trữ/hẹn BN),chuyen_mon,KHTH,Dược|YHCT,2026-04-21,2026-04-28,tre_deadline,1,,Biên bản 2026-04-21,0
 406,Điều dưỡng + CTXH thiết kế Poster nuôi con bằng sữa mẹ Human Milk (dạ dày trẻ sơ sinh tại hậu sản/GMHS/Nhi),quan_ly_khac,Điều dưỡng,CTXH,2026-04-21,2026-04-21,da_hoan_thanh,1,,Biên bản 2026-04-21,0
 407,KHTH + Điều dưỡng + HCQT + VTTBYT rà soát TB KL họp T1-4/2026 và báo cáo hạng mục chưa/đang triển khai,quan_ly_khac,KHTH,Điều dưỡng|HCQT|VTTBYT,2026-04-21,2026-04-28,tre_deadline,1,⚠️ Báo cáo từ phòng phối hợp (HCQT) — cần kiểm tra lại với phòng chính (KHTH),Biên bản 2026-04-21,0
-408,Điều dưỡng + HCQT giám sát đồng phục NB (áo người bệnh) và người nhà (áo vàng) đúng quy định,quan_ly_khac,Điều dưỡng,HCQT,2026-04-21,2026-04-28,dang_thuc_hien,1,,Biên bản 2026-04-21,1
+408,Điều dưỡng + HCQT giám sát đồng phục NB (áo người bệnh) và người nhà (áo vàng) đúng quy định,quan_ly_khac,Điều dưỡng,HCQT,2026-04-21,2026-04-21,da_hoan_thanh,1,,Biên bản 2026-04-21,1
 409,VTTBYT + HCQT rà soát kho TTB không nhận - niêm phong và khóa (ghi ngày + chữ ký),hanh_chanh,VTTBYT,HCQT,2026-04-21,2026-04-28,tre_deadline,1,,Biên bản 2026-04-21,0
 410,VTTBYT rà soát TTB phòng mổ và chuyển vào phòng mổ,hanh_chanh,VTTBYT,,2026-04-21,2026-04-28,tre_deadline,1,,Biên bản 2026-04-21,0
 411,VTTBYT + HCQT làm tờ trình di dời máy CT scan (nội dung/ai thực hiện/thời gian/chi phí/phương án bảo quản),hanh_chanh,VTTBYT,HCQT,2026-04-21,2026-04-28,tre_deadline,1,,Biên bản 2026-04-21,0
 412,KHTH báo cáo ca chuyển viện có thể giữ lại sau khi CT hoạt động và đánh giá hiệu quả Q2/Q3,quan_ly_khac,KHTH,,2026-04-21,2026-04-28,tre_deadline,1,,Biên bản 2026-04-21,0
 413,KHTH + Điều dưỡng + CTXH trình kế hoạch có bệnh nhân dùng máy CT (tính khả thi và thực tế),quan_ly_khac,KHTH,Điều dưỡng|CTXH,2026-04-21,2026-04-28,tre_deadline,1,,Biên bản 2026-04-21,0
 414,KSNK + VTTBYT học tập BV LVT xử lý đồ vải; báo cáo công suất CS2 và khả năng nâng công suất,quan_ly_khac,KSNK,VTTBYT,2026-04-21,2026-04-28,tre_deadline,1,,Biên bản 2026-04-21,0
-415,Điều dưỡng chuẩn bị báo cáo CS1 về lưu đồ in toa thuốc tập trung và lưu đồ khoa khám bệnh,quan_ly_khac,Điều dưỡng,,2026-04-21,2026-04-28,tre_deadline,1,,Biên bản 2026-04-21,0
+415,Điều dưỡng chuẩn bị báo cáo CS1 về lưu đồ in toa thuốc tập trung và lưu đồ khoa khám bệnh,quan_ly_khac,Điều dưỡng,,2026-04-21,2026-04-21,da_hoan_thanh,1,,Biên bản 2026-04-21,0
 416,TCCB + KHTH + Điều dưỡng + HCQT + CTXH triển khai mổ đục thủy tinh thể (CS2 chủ trì: tiếp nhận đến hậu phẫu và tư vấn tái khám),chuyen_mon,TCCB,KHTH|Điều dưỡng|HCQT|CTXH,2026-04-21,2026-04-28,da_hoan_thanh,1,⚠️ Báo cáo từ phòng phối hợp (HCQT) — cần kiểm tra lại với phòng chính (TCCB),Biên bản 2026-04-21,0
 417,VTTBYT + HCQT làm tờ trình vị trí đặt máy CT (phù hợp vận hành/phục vụ CC/tiết kiệm tài nguyên),quan_ly_khac,VTTBYT,HCQT,2026-05-05,2026-05-05,tre_deadline,1,,Biên bản 2026-05-05,0
 418,VTTBYT + HCQT quy hoạch khu Chẩn đoán hình ảnh trên bản vẽ mặt bằng (TTB/lưu đồ BN/ổ điện-mạng/bàn ghế/máy lạnh),hanh_chanh,VTTBYT,HCQT,2026-05-05,2026-05-12,tre_deadline,1,,Biên bản 2026-05-05,0
