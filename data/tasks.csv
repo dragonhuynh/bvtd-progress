@@ -246,7 +246,7 @@ id,ten_dau_viec,nhom,phong_chinh,phong_phoi_hop,bat_dau,ket_thuc,trang_thai,so_l
 245,TCCB + KHTH + ĐD chia lịch; phối hợp HCQT + ĐTN lập lịch cải tạo vệ sinh khu vực làm việc,quan_ly_khac,TCCB,KHTH|Điều dưỡng|HCQT|Đoàn Thanh niên,2026-02-10,2026-02-13,tre_deadline,1,,Biên bản 10/02/2026,0
 246,ĐTN phối hợp HCQT lên lịch chăm sóc vườn thuốc và vườn cây sau Tết,quan_ly_khac,Đoàn Thanh niên,HCQT|Điều dưỡng,2026-02-10,2026-02-13,tre_deadline,1,,Biên bản 10/02/2026,0
 247,KHTH + TCCB lên lịch và giám sát BS trực các khoa tập trung tại CC ca tối,quan_ly_khac,KHTH,TCCB,2026-02-10,2026-02-13,dang_thuc_hien,1,,Biên bản 10/02/2026,1
-248,Điều dưỡng quản lý giấy chuyển viện,quan_ly_khac,Điều dưỡng,,2026-02-10,2026-02-13,dang_thuc_hien,1,,Biên bản 10/02/2026,1
+248,Điều dưỡng quản lý giấy chuyển viện,quan_ly_khac,Điều dưỡng,,2026-02-10,2026-10-02,da_hoan_thanh,1,Phối hợp phòng KHTH + Điều dưỡng,Biên bản 10/02/2026,1
 249,KHTH + CTXH học tập khám đoàn tại BV Lê Văn Thịnh trước Tết; báo cáo GĐ sau Tết,quan_ly_khac,KHTH,CTXH,2026-02-10,2026-02-13,tre_deadline,2,Nhắc lại từ BB 04/02,Biên bản 10/02/2026,0
 250,TCCB rà soát triển khai nhân sự đi từ 3 tháng trở lên (không đi 1 tháng hay tuần),quan_ly_khac,TCCB,,2026-02-10,2026-02-13,tre_deadline,3,Nhắc lại BB 05/05/2026: quyết định thời gian công tác ít nhất 3 tháng đặc biệt cấp trưởng/lãnh đạo,Biên bản 10/02/2026,0
 251,TCCB + KHTH + Điều dưỡng rà soát lịch trực Tết; đặc biệt Thận nhân tạo,quan_ly_khac,TCCB,KHTH|Điều dưỡng,2026-02-10,2026-02-13,tre_deadline,1,,Biên bản 10/02/2026,0
