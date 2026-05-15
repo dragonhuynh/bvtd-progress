@@ -1,23 +1,11 @@
 [
   {
-    "id": "209",
-    "ten": "Điều dưỡng trưởng rà soát và khắc phục đồng phục NVYT (size không chuẩn)",
+    "id": "406",
+    "ten": "Điều dưỡng + CTXH thiết kế Poster nuôi con bằng sữa mẹ Human Milk (dạ dày trẻ sơ sinh tại hậu sản/GMHS/Nhi)",
     "phong": "Điều dưỡng",
     "trang_thai": "da_hoan_thanh",
-    "ngay_ht": "2026-04-02",
+    "ngay_ht": "2026-02-10",
     "ghi_chu": "",
-    "user": "DD",
-    "user_phong": "Điều dưỡng, Công Đoàn, CSKH, Đoàn Thanh Niên",
-    "at": "2026-05-15",
-    "migrated": false
-  },
-  {
-    "id": "248",
-    "ten": "Điều dưỡng quản lý giấy chuyển viện",
-    "phong": "Điều dưỡng",
-    "trang_thai": "da_hoan_thanh",
-    "ngay_ht": "2026-10-02",
-    "ghi_chu": "Phối hợp phòng KHTH + Điều dưỡng",
     "user": "DD",
     "user_phong": "Điều dưỡng, Công Đoàn, CSKH, Đoàn Thanh Niên",
     "at": "2026-05-15",
