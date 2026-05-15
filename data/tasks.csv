@@ -404,7 +404,7 @@ id,ten_dau_viec,nhom,phong_chinh,phong_phoi_hop,bat_dau,ket_thuc,trang_thai,so_l
 403,KHTH rà soát bảng checklist khám toàn diện (phối hợp các bộ phận và phòng khám CK),chuyen_mon,KHTH,,2026-04-21,2026-04-28,tre_deadline,1,,Biên bản 2026-04-21,0
 404,KHTH xây dựng bộ CLS thường quy theo triệu chứng/ICD bệnh,chuyen_mon,KHTH,,2026-04-21,2026-04-28,tre_deadline,1,,Biên bản 2026-04-21,0
 405,KHTH + Dược + YHCT triển khai thuốc thang/thuốc bốc tại CS2 (quy trình/vận chuyển/lưu trữ/hẹn BN),chuyen_mon,KHTH,Dược|YHCT,2026-04-21,2026-04-28,tre_deadline,1,,Biên bản 2026-04-21,0
-406,Điều dưỡng + CTXH thiết kế Poster nuôi con bằng sữa mẹ Human Milk (dạ dày trẻ sơ sinh tại hậu sản/GMHS/Nhi),quan_ly_khac,Điều dưỡng,CTXH,2026-04-21,2026-04-28,tre_deadline,1,,Biên bản 2026-04-21,0
+406,Điều dưỡng + CTXH thiết kế Poster nuôi con bằng sữa mẹ Human Milk (dạ dày trẻ sơ sinh tại hậu sản/GMHS/Nhi),quan_ly_khac,Điều dưỡng,CTXH,2026-04-21,2026-04-21,da_hoan_thanh,1,,Biên bản 2026-04-21,0
 407,KHTH + Điều dưỡng + HCQT + VTTBYT rà soát TB KL họp T1-4/2026 và báo cáo hạng mục chưa/đang triển khai,quan_ly_khac,KHTH,Điều dưỡng|HCQT|VTTBYT,2026-04-21,2026-04-28,tre_deadline,1,⚠️ Báo cáo từ phòng phối hợp (HCQT) — cần kiểm tra lại với phòng chính (KHTH),Biên bản 2026-04-21,0
 408,Điều dưỡng + HCQT giám sát đồng phục NB (áo người bệnh) và người nhà (áo vàng) đúng quy định,quan_ly_khac,Điều dưỡng,HCQT,2026-04-21,2026-04-28,dang_thuc_hien,1,,Biên bản 2026-04-21,1
 409,VTTBYT + HCQT rà soát kho TTB không nhận - niêm phong và khóa (ghi ngày + chữ ký),hanh_chanh,VTTBYT,HCQT,2026-04-21,2026-04-28,tre_deadline,1,,Biên bản 2026-04-21,0
