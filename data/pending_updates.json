@@ -1,26 +1,15 @@
 [
   {
-    "id": "322",
-    "ten": "Điều dưỡng + HCQT điều chỉnh kê nhiều nhất 2 giường trong 1 phòng khoa Sản",
-    "phong": "Điều dưỡng",
-    "trang_thai": "da_hoan_thanh",
-    "ngay_ht": "2026-03-16",
-    "ghi_chu": "",
-    "user": "DD",
-    "user_phong": "Điều dưỡng, Công Đoàn, CSKH, Đoàn Thanh Niên",
-    "at": "2026-05-18",
-    "migrated": false
-  },
-  {
     "id": "166",
     "ten": "Tăng cường bố trí Poster tuyên truyền TTGDSK tại khu Cấp cứu",
     "phong": "Điều dưỡng",
-    "trang_thai": "dang_thuc_hien",
-    "ngay_ht": "",
-    "ghi_chu": "Phối hợp Phòng CTXH",
-    "user": "DD",
-    "user_phong": "Điều dưỡng, Công Đoàn, CSKH, Đoàn Thanh Niên",
-    "at": "2026-05-18",
-    "migrated": false
+    "trang_thai": "da_hoan_thanh",
+    "ngay_ht": "2026-05-18",
+    "ghi_chu": "",
+    "user": "BGD",
+    "user_phong": "BGD",
+    "may": "Windows / Edge",
+    "ip": "—",
+    "at": "2026-05-18"
   }
 ]
