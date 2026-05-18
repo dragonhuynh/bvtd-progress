@@ -196,7 +196,7 @@ id,ten_dau_viec,nhom,phong_chinh,phong_phoi_hop,bat_dau,ket_thuc,trang_thai,so_l
 195,Hoàn thiện thủ tục công bố đủ điều kiện tiêm chủng với cơ quan chức năng,chuyen_mon,KHTH,,2026-02-04,2026-02-10,tre_deadline,1,,Biên bản 04/02/2026,0
 196,Xây dựng kế hoạch điểm tiêm chủng TUDU Vaccine mô hình dịch vụ chất lượng cao,chuyen_mon,Dược,KHTH|Điều dưỡng,2026-02-04,2026-02-10,da_hoan_thanh,1,,Biên bản 04/02/2026,0
 197,Diễn tập báo động đỏ nội viện (KHTH chủ trì),chuyen_mon,KHTH,,2026-02-04,2026-02-10,tre_deadline,2,Nhắc lại từ biên bản 29/01,Biên bản 04/02/2026,0
-198,Diễn tập cấp cứu hàng loạt (KHTH chủ trì),chuyen_mon,KHTH,,2026-02-04,2026-02-10,tre_deadline,2,Nhắc lại từ biên bản 29/01,Biên bản 04/02/2026,0
+198,Diễn tập cấp cứu hàng loạt (KHTH chủ trì),chuyen_mon,KHTH,,2026-02-04,2026-04-17,da_hoan_thanh,2,Nhắc lại từ biên bản 29/01,Biên bản 04/02/2026,0
 199,Diễn tập nhận bệnh và hoạt động sau khi chuyển đổi khoa Nội/Ngoại/Sản/Nhi,chuyen_mon,KHTH,,2026-02-04,2026-02-10,tre_deadline,1,,Biên bản 04/02/2026,0
 200,Tầm soát bệnh lý toàn diện cho BN lão khoa/sản khoa/CC/thận nhân tạo,chuyen_mon,KHTH,,2026-02-04,2026-02-10,tre_deadline,1,,Biên bản 04/02/2026,0
 201,Khoa Dược quản lý Kho tổng CS2 theo quy trình tương đương CS1,quan_ly_khac,Dược,,2026-02-04,2026-02-10,tre_deadline,1,,Biên bản 04/02/2026,0
@@ -235,7 +235,7 @@ id,ten_dau_viec,nhom,phong_chinh,phong_phoi_hop,bat_dau,ket_thuc,trang_thai,so_l
 234,Làm công văn gửi BV Ung Bướu phối hợp điều trị các ca ung thư tại CS2,chuyen_mon,KHTH,,2026-02-10,2026-02-13,tre_deadline,1,,Biên bản 10/02/2026,0
 235,Làm bảng kiểm trước chuyển tuyến; theo dấu và gọi điện BN chuyển tuyến,chuyen_mon,KHTH,Điều dưỡng,2026-02-10,2026-02-13,tre_deadline,2,Nhắc lại; bảng kiểm gồm lý do/theo dõi/hình thức/quyền lợi NB,Biên bản 10/02/2026,0
 236,BS KHTH + BS Trưởng CC xuống khám lại các ca chuyển tuyến,chuyen_mon,KHTH,K.Cấp cứu,2026-02-10,2026-02-13,tre_deadline,1,,Biên bản 10/02/2026,0
-237,KHTH + BS Trưởng CC liên hệ BV Lê Văn Thịnh về nhân sự thực hiện nội soi,chuyen_mon,KHTH,K.Cấp cứu,2026-02-10,2026-02-13,tre_deadline,1,,Biên bản 10/02/2026,0
+237,KHTH + BS Trưởng CC liên hệ BV Lê Văn Thịnh về nhân sự thực hiện nội soi,chuyen_mon,KHTH,K.Cấp cứu,2026-02-10,2026-05-18,da_hoan_thanh,1,,Biên bản 10/02/2026,0
 238,GMHS + KHTH triển khai nội soi tiêu hóa không đau; học tập và đào tạo tại BV Lê Văn Thịnh,chuyen_mon,GMHS,KHTH,2026-02-10,2026-02-13,tre_deadline,1,Tiêu hóa trên và tiêu hóa dưới,Biên bản 10/02/2026,0
 239,KHTH ưu tiên trình gấp các DMKT cần thiết,chuyen_mon,KHTH,,2026-02-10,2026-02-13,tre_deadline,1,,Biên bản 10/02/2026,0
 240,KHTH báo cáo phân tích chi tiết tình hình chuyển viện và theo dấu người bệnh,chuyen_mon,KHTH,,2026-02-10,2026-02-13,tre_deadline,2,Nhắc lại; phân tích chi tiết hơn,Biên bản 10/02/2026,0
