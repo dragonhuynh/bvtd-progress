@@ -1,15 +1,26 @@
 [
   {
-    "id": "166",
-    "ten": "Tăng cường bố trí Poster tuyên truyền TTGDSK tại khu Cấp cứu",
-    "phong": "Điều dưỡng",
+    "id": "198",
+    "ten": "Diễn tập cấp cứu hàng loạt (KHTH chủ trì)",
+    "phong": "KHTH",
+    "trang_thai": "da_hoan_thanh",
+    "ngay_ht": "2026-04-17",
+    "ghi_chu": "",
+    "user": "KHTH",
+    "user_phong": "KHTH",
+    "at": "2026-05-18",
+    "migrated": false
+  },
+  {
+    "id": "237",
+    "ten": "KHTH + BS Trưởng CC liên hệ BV Lê Văn Thịnh về nhân sự thực hiện nội soi",
+    "phong": "KHTH",
     "trang_thai": "da_hoan_thanh",
     "ngay_ht": "2026-05-18",
     "ghi_chu": "",
-    "user": "BGD",
-    "user_phong": "BGD",
-    "may": "Windows / Edge",
-    "ip": "—",
-    "at": "2026-05-18"
+    "user": "KHTH",
+    "user_phong": "KHTH",
+    "at": "2026-05-18",
+    "migrated": false
   }
 ]
