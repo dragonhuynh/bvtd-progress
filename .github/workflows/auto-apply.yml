@@ -8,6 +8,9 @@ on:
 jobs:
   apply:
     runs-on: ubuntu-latest
+    concurrency:
+      group: auto-apply
+      cancel-in-progress: false
     permissions:
       contents: write
 
@@ -32,4 +35,5 @@ jobs:
                   tien_do.html || true
           git diff --cached --quiet \
             || git commit -m "auto: áp dụng cập nhật dashboard $(date +'%d/%m/%Y %H:%M')"
+          git pull --rebase origin main
           git push

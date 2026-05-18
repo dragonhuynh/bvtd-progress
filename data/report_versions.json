@@ -1,6 +1,14 @@
 {
-  "version": "0.25",
+  "version": "0.26",
   "history": [
+    {
+      "version": "0.26",
+      "ngay": "2026-05-18 16:31",
+      "loai": "check",
+      "thay_doi": [
+        "manual fix task 266 từ 2b734fc"
+      ]
+    },
     {
       "version": "0.25",
       "ngay": "2026-05-18 09:06",
