@@ -5,10 +5,46 @@
     "phong": "Điều dưỡng",
     "trang_thai": "dang_thuc_hien",
     "ngay_ht": "",
-    "ghi_chu": "phối hợp với phòng CTXH",
+    "ghi_chu": "Đang phối hợp với phòng CTXH",
     "user": "DD",
     "user_phong": "Điều dưỡng, Công Đoàn, CSKH, Đoàn Thanh Niên",
-    "at": "2026-05-15",
+    "at": "2026-05-18",
+    "migrated": false
+  },
+  {
+    "id": "293",
+    "ten": "Điều dưỡng + KHTH + CTXH phối hợp Hội Phụ nữ địa phương triển khai truyền thông chiến dịch tiêm chủng và khám sức khỏe tại cộng đồng (xã, ấp)",
+    "phong": "Điều dưỡng",
+    "trang_thai": "da_hoan_thanh",
+    "ngay_ht": "2026-04-17",
+    "ghi_chu": "",
+    "user": "DD",
+    "user_phong": "Điều dưỡng, Công Đoàn, CSKH, Đoàn Thanh Niên",
+    "at": "2026-05-18",
+    "migrated": false
+  },
+  {
+    "id": "329",
+    "ten": "KHTH + TCKT triển khai giảm đau sản khoa (đẻ không đau) được thanh toán BHYT",
+    "phong": "KHTH",
+    "trang_thai": "da_hoan_thanh",
+    "ngay_ht": "2026-04-14",
+    "ghi_chu": "Bs Ngọc Hải đã duyệt Tờ trình chủ  trương",
+    "user": "KHTH",
+    "user_phong": "KHTH",
+    "at": "2026-05-18",
+    "migrated": false
+  },
+  {
+    "id": "379",
+    "ten": "Công đoàn + Điều dưỡng phát động phong trào thể dục thể thao (bóng đá, nhảy dây); chuẩn bị Hội thao chào mừng lễ 30/04",
+    "phong": "Công Đoàn",
+    "trang_thai": "da_hoan_thanh",
+    "ngay_ht": "2026-04-24",
+    "ghi_chu": "",
+    "user": "DD",
+    "user_phong": "Điều dưỡng, Công Đoàn, CSKH, Đoàn Thanh Niên",
+    "at": "2026-05-18",
     "migrated": false
   }
 ]
