@@ -112,7 +112,7 @@ id,ten_dau_viec,nhom,phong_chinh,phong_phoi_hop,bat_dau,ket_thuc,trang_thai,so_l
 111,Bs Bảo Anh (KHTH) triển khai tiếp nhận Thận nhân tạo với BV Lê Văn Thinh,quan_ly_khac,KHTH,,2026-01-06,2026-01-09,tre_deadline,1,Bs Bảo Anh chủ trì - báo cáo GĐ,Biên bản 06/01/2026,0
 112,HCQT trang bị FaceID điểm danh phòng họp lớn giao ban bệnh viện,hanh_chanh,HCQT,TCCB|Điều dưỡng,2026-01-06,2026-01-15,da_hoan_thanh,1,Điều dưỡng điểm danh tạm trong lúc chờ,Biên bản 06/01/2026,0
 113,Điều dưỡng + HCQT bố trí bàn ăn ngoài hành lang - không ăn trong phòng,hanh_chanh,Điều dưỡng,HCQT,2026-01-06,2026-01-09,da_hoan_thanh,1,,Biên bản 06/01/2026,0
-114,KHTH tờ trình chuyển Khoa Sanh + phòng khám (Mắt/RHM/TMH) xuống tầng trệt,hanh_chanh,KHTH,HCQT|VTTBYT,2026-01-06,2026-01-09,tre_deadline,1,,Biên bản 06/01/2026,0
+114,KHTH tờ trình chuyển Khoa Sanh + phòng khám (Mắt/RHM/TMH) xuống tầng trệt,hanh_chanh,KHTH,HCQT|VTTBYT,2026-01-06,2026-05-18,da_hoan_thanh,1,,Biên bản 06/01/2026,0
 115,KHTH báo cáo số liệu và tour trực CS2 vào giao ban sáng tại CS1,quan_ly_khac,KHTH,,2026-01-06,2026-01-09,dang_thuc_hien,1,Thực hiện từ 07/01/2026,Biên bản 06/01/2026,1
 116,TCCB + HCQT + Điều dưỡng thiết kế đồng phục bảo vệ (nón + giày + dây lưng) trình GĐ,quan_ly_khac,TCCB,HCQT|Điều dưỡng,2026-01-13,2026-01-14,da_hoan_thanh,1,⚠️ Báo cáo từ phòng phối hợp (HCQT) — cần kiểm tra lại với phòng chính (TCCB),Biên bản 13/01/2026,0
 117,HCQT quy hoạch cây xanh toàn khuôn viên (cau + bằng lăng + xoài + hoa vàng),hanh_chanh,HCQT,,2026-01-13,2026-01-20,da_hoan_thanh,1,,Biên bản 13/01/2026,0
@@ -260,7 +260,7 @@ id,ten_dau_viec,nhom,phong_chinh,phong_phoi_hop,bat_dau,ket_thuc,trang_thai,so_l
 259,HCQT + CNTT bố trí khu họp và sạc điện TTB tại CC; lưu ý PCCC,quan_ly_khac,HCQT,CNTT,2026-02-10,2026-02-13,da_hoan_thanh,1,,Biên bản 10/02/2026,0
 260,KHTH + HCQT lắp đặt biển chỉ dẫn đường bộ 3 vị trí đến BVTD CS2,hanh_chanh,KHTH,HCQT,2026-02-25,2026-03-03,tre_deadline,1,Phối hợp HCQT liên hệ địa phương : thống nhất vị trí lắp đặt,Biên bản 25/02/2026,0
 261,HCQT + KHTH thiết kế và lắp bảng thông tin khổ lớn tại cổng chính (Tiêm chủng + KSK),hanh_chanh,HCQT,KHTH,2026-02-25,2026-03-03,da_hoan_thanh,1,Giới thiệu Từ Dũ Vaccine và dịch vụ khám sức khỏe tổng quát,Biên bản 25/02/2026,0
-262,KHTH ký kết MOU với Trạm Y tế xã huyện Cần Giờ về chuyển tuyến và chia sẻ CLS,chuyen_mon,KHTH,,2026-02-25,2026-03-03,tre_deadline,1,,Biên bản 25/02/2026,0
+262,KHTH ký kết MOU với Trạm Y tế xã huyện Cần Giờ về chuyển tuyến và chia sẻ CLS,chuyen_mon,KHTH,,2026-02-25,2026-03-03,dang_thuc_hien,1,Đã làm tờ trình xin chủ trương,Biên bản 25/02/2026,0
 263,KHTH khẩn trương đăng ký bổ sung DMKT nội soi TMH và tiêu hóa (trên và dưới) với Sở Y tế,chuyen_mon,KHTH,,2026-02-25,2026-04-15,da_hoan_thanh,2,Nhắc lại; mở rộng thêm nội soi TMH,Biên bản 25/02/2026,0
 264,KHTH + Điều dưỡng tổ chức gói khám tầm soát chuyên sâu cho nhóm nguy cơ cao,chuyen_mon,KHTH,Điều dưỡng,2026-02-25,2026-03-03,tre_deadline,1,NCT/PHCN/YHCT/Sản-Phụ khoa,Biên bản 25/02/2026,0
 265,Áp dụng mô hình luân chuyển khép kín: PK tổng quát → CK → tổng hợp kết thúc hồ sơ,chuyen_mon,KHTH,CTXH,2026-02-25,2026-03-03,tre_deadline,1,Phối hợp CTXH triển khai truyền thông,Biên bản 25/02/2026,0
@@ -329,7 +329,7 @@ id,ten_dau_viec,nhom,phong_chinh,phong_phoi_hop,bat_dau,ket_thuc,trang_thai,so_l
 328,KHTH + Điều dưỡng triển khai 100% khám sức khỏe toàn diện vào 01/04/2026; thông báo giao ban và báo cáo BGĐ mỗi tuần,chuyen_mon,KHTH,Điều dưỡng,2026-03-16,2026-04-01,dang_thuc_hien,1,,Biên bản 2026-03-16,1
 329,KHTH + TCKT triển khai giảm đau sản khoa (đẻ không đau) được thanh toán BHYT,chuyen_mon,KHTH,TCKT,2026-03-16,2026-04-14,da_hoan_thanh,1,Bs Ngọc Hải đã duyệt Tờ trình chủ  trương,Biên bản 2026-03-16,0
 330,HCQT + VTTBYT triển khai cơ sở vật chất và trang thiết bị phục vụ Nội soi TMH và Nội soi Tiêu hóa trên/dưới,hanh_chanh,HCQT,VTTBYT,2026-03-16,2026-03-24,da_hoan_thanh,1,,Biên bản 2026-03-16,0
-331,Các ca chuyển viện: KHTH cho bệnh nhân ký phiếu cam kết đã được tư vấn đầy đủ nhưng vẫn muốn chuyển,chuyen_mon,KHTH,,2026-03-16,2026-03-24,tre_deadline,1,,Biên bản 2026-03-16,0
+331,Các ca chuyển viện: KHTH cho bệnh nhân ký phiếu cam kết đã được tư vấn đầy đủ nhưng vẫn muốn chuyển,chuyen_mon,KHTH,,2026-03-16,2026-05-18,da_hoan_thanh,1,Đã triển khai theo chỉ đạo.,Biên bản 2026-03-16,0
 332,"TCCB + ban điều hành trình kế hoạch phát triển dịch vụ trước 01/04/2026 (mục tiêu Q3/2026: 1000 BN/ngày, 5000 KSK/tháng) có cam kết KPI",quan_ly_khac,TCCB,,2026-03-16,2026-04-01,tre_deadline,1,,Biên bản 2026-03-16,0
 333,KHTH + TCCB ban hành văn bản bắt buộc BN trên 65 tuổi sau khám Nội phải hội chẩn với YHCT và PHCN; đánh giá KPI và báo cáo giao ban CS1 mỗi ngày,quan_ly_khac,KHTH,TCCB,2026-03-16,2026-03-24,dang_thuc_hien,1,,Biên bản 2026-03-16,1
 334,VTTBYT rà soát và đề xuất sử dụng lại các máy phun khí thành máy phun muỗi tại bệnh viện,hanh_chanh,VTTBYT,,2026-03-24,2026-03-31,tre_deadline,1,,Biên bản 2026-03-24,0
@@ -391,11 +391,12 @@ id,ten_dau_viec,nhom,phong_chinh,phong_phoi_hop,bat_dau,ket_thuc,trang_thai,so_l
 390,KHTH giám sát bệnh nhân chuyển viện đã làm Bilan tổng thể,chuyen_mon,KHTH,,2026-04-21,2026-04-28,dang_thuc_hien,1,,Biên bản 2026-04-21,1
 391,KHTH giám sát ghi nhận bệnh nền rõ ràng chi tiết (không ghi mơ hồ),chuyen_mon,KHTH,,2026-04-21,2026-04-28,dang_thuc_hien,1,,Biên bản 2026-04-21,1
 392,KHTH + Điều dưỡng giám sát đánh giá bệnh án Thận nhân tạo (cá thể hóa kế hoạch chạy thận/Bilan/biến chứng),chuyen_mon,KHTH,Điều dưỡng,2026-04-21,2026-04-28,dang_thuc_hien,1,,Biên bản 2026-04-21,1
-393,KHTH + Điều dưỡng báo cáo tiến độ triển khai hoạt động sau học tập TNT tại BV LVT (chăm sóc chuyên sâu theo nhóm),chuyen_mon,KHTH,Điều dưỡng,2026-04-21,2026-04-28,tre_deadline,1,,Biên bản 2026-04-21,0
+393,KHTH + Điều dưỡng báo cáo tiến độ triển khai hoạt động sau học tập TNT tại BV LVT (chăm sóc chuyên sâu theo nhóm),chuyen_mon,KHTH,Điều dưỡng,2026-04-21,2026-05-18,da_hoan_thanh,1,,Biên bản 2026-04-21,0
 394,TCCB + KHTH giám sát tuân thủ phác đồ điều trị và phác đồ khám toàn diện,chuyen_mon,TCCB,KHTH,2026-04-21,2026-04-28,dang_thuc_hien,1,,Biên bản 2026-04-21,1
 395,KHTH báo cáo giám sát khám toàn diện thời gian thực buổi sáng (số ca/bác sĩ/bệnh can thiệp),quan_ly_khac,KHTH,,2026-04-21,2026-04-28,dang_thuc_hien,1,,Biên bản 2026-04-21,1
 396,KHTH báo cáo phân tích chi tiết các ca tai nạn lao động/giao thông/sinh hoạt,quan_ly_khac,KHTH,,2026-04-21,2026-04-28,dang_thuc_hien,2,Nhắc lại trong BB 2026-05-05,Biên bản 2026-04-21,1
-397,KHTH báo cáo ngày triển khai nội soi tiêu hóa và số lượng/cách thức thực hiện,chuyen_mon,KHTH,,2026-04-21,2026-04-28,tre_deadline,1,,Biên bản 2026-04-21,0
+397,KHTH báo cáo ngày triển khai nội soi tiêu hóa và số lượng/cách thức thực hiện,chuyen_mon,KHTH,,2026-04-21,2026-05-12,da_hoan_thanh,1,"Ngày triển khai: 12/5/2026
+Tới ngày 18/5/2026: đã thực hiện 06 ca. Trong đó 2 ca NS dạ dày và đại tràng. 4 ca nội soi dạ dày.",Biên bản 2026-04-21,0
 398,KHTH kiểm soát quy trình nhà đại thể và báo cáo (cách hoạt động/luồng di chuyển/liên hệ sự việc),quan_ly_khac,KHTH,,2026-04-21,2026-04-28,dang_thuc_hien,1,,Biên bản 2026-04-21,1
 399,KHTH xây dựng Bilan cho BN bán cấp cứu,chuyen_mon,KHTH,,2026-04-21,2026-04-28,tre_deadline,1,,Biên bản 2026-04-21,0
 400,KHTH xây dựng Bilan Shock nhiễm trùng (CLS/LS 24h/chia độ shock/phác đồ chi tiết kiểm tra lại),chuyen_mon,KHTH,,2026-04-21,2026-04-28,tre_deadline,1,,Biên bản 2026-04-21,0
