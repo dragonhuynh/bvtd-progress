@@ -1,23 +1,11 @@
 [
   {
-    "id": "266",
-    "ten": "KHTH + BS Trưởng CC xây dựng phác đồ Tim mạch và Lão khoa; lập kế hoạch CK Lão khoa dài hạn",
-    "phong": "KHTH",
+    "id": "166",
+    "ten": "Tăng cường bố trí Poster tuyên truyền TTGDSK tại khu Cấp cứu",
+    "phong": "Điều dưỡng",
     "trang_thai": "dang_thuc_hien",
     "ngay_ht": "",
-    "ghi_chu": "*Đã xây dựng danh mục tài liệu chuyên môn \"Chăm sóc toàn diện người cao tuổi\" gồm các chương:\nI. CHĂM SÓC TOÀN DIỆN NGƯỜI CAO TUỔI\nII. HỘI CHỨNG LÃO KHOA\nIII. BỆNH MẠN TÍNH KHÔNG LÂY\nIV. PHÒNG NGỪA – TẦM SOÁT\nV. CHĂM SÓC CUỐI ĐỜI – GIẢM NHẸ\n* Xây dựng dự thảo theo danh mục trên -Hiện đã có 8 dự thảo phác đồ \n* Đã trình dự thảo Kế hoạch triển khai phòng khám Lão khoa và đơn nguyen Lão khoa thuộc khoa Nội BVTD CS2",
-    "user": "KHTH",
-    "user_phong": "KHTH",
-    "at": "2026-05-18",
-    "migrated": false
-  },
-  {
-    "id": "322",
-    "ten": "Điều dưỡng + HCQT điều chỉnh kê nhiều nhất 2 giường trong 1 phòng khoa Sản",
-    "phong": "Điều dưỡng",
-    "trang_thai": "da_hoan_thanh",
-    "ngay_ht": "2026-03-16",
-    "ghi_chu": "",
+    "ghi_chu": "Phối hợp phòng CTXH",
     "user": "DD",
     "user_phong": "Điều dưỡng, Công Đoàn, CSKH, Đoàn Thanh Niên",
     "at": "2026-05-18",
