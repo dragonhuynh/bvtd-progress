@@ -164,7 +164,7 @@ id,ten_dau_viec,nhom,phong_chinh,phong_phoi_hop,bat_dau,ket_thuc,trang_thai,so_l
 163,Thay toàn bộ ghế nhựa xanh bằng ghế Inox tại khu CC và Khoa Ngoại,hanh_chanh,HCQT,,2026-02-04,2026-02-10,da_hoan_thanh,1,,Biên bản 04/02/2026,0
 164,Tháo dỡ toàn bộ quạt tại khu vực Cấp cứu,hanh_chanh,HCQT,,2026-02-04,2026-02-10,da_hoan_thanh,1,,Biên bản 04/02/2026,0
 165,Đồng bộ sử dụng khăn trải giường màu trắng,hanh_chanh,Điều dưỡng,,2026-02-04,2026-02-10,da_hoan_thanh,1,,Biên bản 04/02/2026,0
-166,Tăng cường bố trí Poster tuyên truyền TTGDSK tại khu Cấp cứu,hanh_chanh,Điều dưỡng,CTXH|HCQT,2026-02-04,2026-02-10,dang_thuc_hien,1,phối hợp với phòng CTXH,Biên bản 04/02/2026,0
+166,Tăng cường bố trí Poster tuyên truyền TTGDSK tại khu Cấp cứu,hanh_chanh,Điều dưỡng,CTXH|HCQT,2026-02-04,2026-02-10,dang_thuc_hien,1,Đang phối hợp với phòng CTXH,Biên bản 04/02/2026,0
 167,Thực hiện nghiêm túc chế độ báo cáo định kỳ (hoạt động chung + chuyên môn + chuyển tuyến),chuyen_mon,KHTH,,2026-02-04,2026-05-10,da_hoan_thanh,1,Thực hiện theo biểu mẫu báo cáo giao ban hằng ngày,Biên bản 04/02/2026,0
 168,Báo cáo phân tích hiệu quả dịch vụ kỹ thuật hàng tuần,chuyen_mon,KHTH,,2026-02-04,2026-02-10,dang_thuc_hien,1,,Biên bản 04/02/2026,1
 169,Rà soát quy trình chuyển tuyến; hạn chế tối đa chuyển tuyến Sản Phụ khoa,chuyen_mon,KHTH,,2026-02-04,2026-02-10,tre_deadline,1,,Biên bản 04/02/2026,0
@@ -291,7 +291,7 @@ id,ten_dau_viec,nhom,phong_chinh,phong_phoi_hop,bat_dau,ket_thuc,trang_thai,so_l
 290,CTXH + QLCL thực hiện khảo sát báo cáo ý kiến người dân; sản xuất video clip truyền thông làm nổi bật ca lâm sàng khó và tính tối ưu chi phí điều trị tại CS2,quan_ly_khac,CTXH,QLCL,2026-03-03,2026-03-10,tre_deadline,1,,Biên bản 2026-03-03,0
 291,"TCCB ban hành Quy định quản lý nhà nghỉ nhân viên phù hợp thực tế CS2 (tiêu chuẩn vệ sinh, sử dụng điện, sinh hoạt)",quan_ly_khac,TCCB,,2026-03-03,2026-03-10,tre_deadline,1,,Biên bản 2026-03-03,0
 292,TCCB xây dựng phương án cho nhân viên tham gia bầu cử đảm bảo hoạt động khám chữa bệnh ổn định,quan_ly_khac,TCCB,,2026-03-03,2026-03-10,tre_deadline,1,,Biên bản 2026-03-03,0
-293,"Điều dưỡng + KHTH + CTXH phối hợp Hội Phụ nữ địa phương triển khai truyền thông chiến dịch tiêm chủng và khám sức khỏe tại cộng đồng (xã, ấp)",chuyen_mon,Điều dưỡng,KHTH|CTXH,2026-03-03,2026-03-10,dang_thuc_hien,1,,Biên bản 2026-03-03,0
+293,"Điều dưỡng + KHTH + CTXH phối hợp Hội Phụ nữ địa phương triển khai truyền thông chiến dịch tiêm chủng và khám sức khỏe tại cộng đồng (xã, ấp)",chuyen_mon,Điều dưỡng,KHTH|CTXH,2026-03-03,2026-04-17,da_hoan_thanh,1,,Biên bản 2026-03-03,0
 294,HCQT sơn lại các mảng tường bị lỗi tại khoa Cấp cứu,hanh_chanh,HCQT,,2026-03-10,2026-03-17,da_hoan_thanh,1,,Biên bản 2026-03-10,0
 295,HCQT cung cấp tủ locker sơn trắng tại khu Cấp cứu cho bệnh nhân để đồ,hanh_chanh,HCQT,,2026-03-10,2026-03-17,da_hoan_thanh,1,,Biên bản 2026-03-10,0
 296,HCQT kiểm tra sửa chữa thang rác,hanh_chanh,HCQT,,2026-03-10,2026-03-17,tre_deadline,1,,Biên bản 2026-03-10,0
@@ -327,7 +327,7 @@ id,ten_dau_viec,nhom,phong_chinh,phong_phoi_hop,bat_dau,ket_thuc,trang_thai,so_l
 326,HCQT + Điều dưỡng làm lại hệ thống rèm khu hồi sức Cấp cứu để tăng tính riêng tư nam và nữ,hanh_chanh,HCQT,Điều dưỡng,2026-03-16,2026-03-24,dang_thuc_hien,1,⚠️ Báo cáo từ phòng phối hợp (DD) — cần kiểm tra lại với phòng chính (HCQT) | Chờ HCQT mời bên công ty vào đo,Biên bản 2026-03-16,0
 327,HCQT + KHTH + Điều dưỡng triển khai phòng lưu tại khu hồi sức Cấp cứu; lưu ý thanh toán BHYT,chuyen_mon,HCQT,KHTH|Điều dưỡng,2026-03-16,2026-03-24,tre_deadline,1,,Biên bản 2026-03-16,0
 328,KHTH + Điều dưỡng triển khai 100% khám sức khỏe toàn diện vào 01/04/2026; thông báo giao ban và báo cáo BGĐ mỗi tuần,chuyen_mon,KHTH,Điều dưỡng,2026-03-16,2026-04-01,dang_thuc_hien,1,,Biên bản 2026-03-16,1
-329,KHTH + TCKT triển khai giảm đau sản khoa (đẻ không đau) được thanh toán BHYT,chuyen_mon,KHTH,TCKT,2026-03-16,2026-03-24,tre_deadline,1,,Biên bản 2026-03-16,0
+329,KHTH + TCKT triển khai giảm đau sản khoa (đẻ không đau) được thanh toán BHYT,chuyen_mon,KHTH,TCKT,2026-03-16,2026-04-14,da_hoan_thanh,1,Bs Ngọc Hải đã duyệt Tờ trình chủ  trương,Biên bản 2026-03-16,0
 330,HCQT + VTTBYT triển khai cơ sở vật chất và trang thiết bị phục vụ Nội soi TMH và Nội soi Tiêu hóa trên/dưới,hanh_chanh,HCQT,VTTBYT,2026-03-16,2026-03-24,da_hoan_thanh,1,,Biên bản 2026-03-16,0
 331,Các ca chuyển viện: KHTH cho bệnh nhân ký phiếu cam kết đã được tư vấn đầy đủ nhưng vẫn muốn chuyển,chuyen_mon,KHTH,,2026-03-16,2026-03-24,tre_deadline,1,,Biên bản 2026-03-16,0
 332,"TCCB + ban điều hành trình kế hoạch phát triển dịch vụ trước 01/04/2026 (mục tiêu Q3/2026: 1000 BN/ngày, 5000 KSK/tháng) có cam kết KPI",quan_ly_khac,TCCB,,2026-03-16,2026-04-01,tre_deadline,1,,Biên bản 2026-03-16,0
@@ -377,7 +377,7 @@ id,ten_dau_viec,nhom,phong_chinh,phong_phoi_hop,bat_dau,ket_thuc,trang_thai,so_l
 376,Điều dưỡng giám sát trang phục người bệnh; tuyệt đối không để bệnh nhân không mặc áo trong quá trình lưu trú,chuyen_mon,Điều dưỡng,,2026-04-10,2026-04-10,da_hoan_thanh,1,,Biên bản 2026-04-10,1
 377,CTXH + Điều dưỡng đẩy mạnh quảng bá sự phối hợp giữa BV Từ Dũ và BV Nhi đồng TP tại khu vực phòng khám,quan_ly_khac,CTXH,Điều dưỡng,2026-04-10,2026-04-17,tre_deadline,1,,Biên bản 2026-04-10,0
 378,KHTH sắp xếp lịch trực điều trị đảm bảo nhân sự trực đêm BS nội trú ổn định dưới sự giám sát của Bs Thúy Phượng,quan_ly_khac,KHTH,,2026-04-10,2026-04-17,dang_thuc_hien,1,,Biên bản 2026-04-10,1
-379,"Công đoàn + Điều dưỡng phát động phong trào thể dục thể thao (bóng đá, nhảy dây); chuẩn bị Hội thao chào mừng lễ 30/04",quan_ly_khac,Công Đoàn,Điều dưỡng,2026-04-10,2026-04-30,tre_deadline,1,,Biên bản 2026-04-10,0
+379,"Công đoàn + Điều dưỡng phát động phong trào thể dục thể thao (bóng đá, nhảy dây); chuẩn bị Hội thao chào mừng lễ 30/04",quan_ly_khac,Công Đoàn,Điều dưỡng,2026-04-10,2026-04-24,da_hoan_thanh,1,,Biên bản 2026-04-10,0
 380,"KHTH phân tích và giám sát kế hoạch điều trị từng ca: bệnh nặng, đa chấn thương, thận nhân tạo",chuyen_mon,KHTH,,2026-04-13,2026-04-20,dang_thuc_hien,1,,Biên bản 2026-04-13,1
 381,"KHTH + Cấp cứu + Ngoại rút kinh nghiệm 3 ca chuyển viện: viêm ruột thừa, tiêm xương, tiêm mắt; rà soát lý do (thiếu thuốc hay ngoài danh mục)",chuyen_mon,KHTH,K.Cấp cứu|K.Ngoại,2026-04-13,2026-04-15,tre_deadline,1,,Biên bản 2026-04-13,0
 382,KHTH triển khai điều trị và khám toàn diện cá thể hóa cho bệnh nhân trên 65 tuổi từ 13/04/2026,chuyen_mon,KHTH,,2026-04-13,2026-04-17,dang_thuc_hien,1,,Biên bản 2026-04-13,1
