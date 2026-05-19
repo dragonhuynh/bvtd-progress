@@ -595,12 +595,50 @@ body {
 
 /* Filter bar */
 .filter-bar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-.filter-bar select, .filter-bar input {
+.filter-bar input {
   background: var(--white); border: 1px solid var(--border);
   border-radius: 8px; padding: 8px 14px; font-size: 13px; outline: none; transition: border .15s;
+  width: 200px;
 }
-.filter-bar select:focus, .filter-bar input:focus { border-color: var(--accent); }
-.filter-bar input { width: 200px; }
+.filter-bar input:focus { border-color: var(--accent); }
+
+/* Multi-select dropdown */
+.ms-wrap { position: relative; display: inline-block; }
+.ms-btn {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 8px; padding: 8px 32px 8px 14px; font-size: 13px;
+  cursor: pointer; white-space: nowrap; min-width: 140px; text-align: left;
+  position: relative; transition: border-color .15s; color: var(--text);
+  display: flex; align-items: center; gap: 6px;
+}
+.ms-btn::after { content: '▾'; position: absolute; right: 10px; opacity: .5; font-size: 11px; }
+.ms-btn.has-val { border-color: var(--accent); }
+.ms-tag {
+  background: var(--accent); color: #fff; border-radius: 4px;
+  padding: 1px 6px; font-size: 11px; white-space: nowrap; max-width: 90px;
+  overflow: hidden; text-overflow: ellipsis;
+}
+.ms-panel {
+  display: none; position: absolute; top: calc(100% + 4px); left: 0; z-index: 999;
+  background: var(--white); border: 1px solid var(--border); border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.12); min-width: 200px; max-height: 280px;
+  overflow-y: auto; padding: 6px 0;
+}
+.ms-wrap.open .ms-panel { display: block; }
+.ms-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 14px; font-size: 13px; cursor: pointer;
+  transition: background .1s; color: var(--text);
+}
+.ms-item:hover { background: var(--bg); }
+.ms-item input[type=checkbox] { accent-color: var(--accent); width: 15px; height: 15px; cursor: pointer; }
+.ms-item.checked { font-weight: 600; }
+.ms-clear {
+  display: block; width: 100%; border: none; background: none;
+  padding: 6px 14px; font-size: 12px; color: var(--muted);
+  cursor: pointer; text-align: left; border-top: 1px solid var(--border); margin-top: 4px;
+}
+.ms-clear:hover { color: var(--accent); }
 
 /* Nhom section headers in task view */
 .nhom-section-header {
@@ -655,6 +693,9 @@ body {
 .status-recurring { background: #f0fdf4; color: #166534; }
 .status-pending{ background: #fffbeb; color: #92400e; }
 .nguon-cell { font-size: 11px; color: var(--muted); white-space: nowrap; max-width: 140px; overflow: hidden; text-overflow: ellipsis; }
+.task-ghi-chu { max-width: 200px; }
+.ghi-chu-text { font-size: 12px; color: var(--text); line-height: 1.4; white-space: pre-wrap; word-break: break-word; }
+.task-note-mobile { display: none; }
 
 /* Dept progress bars */
 .dept-progress-row { display: flex; flex-direction: row; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
@@ -713,7 +754,9 @@ body {
   .page-header > div:last-child { width: 100%; }
   .search-box, .search-box input { width: 100%; }
   .filter-bar { flex-wrap: wrap; gap: 8px; }
-  .filter-bar select, .filter-bar input { min-width: 140px; }
+  .filter-bar input { min-width: 140px; }
+  .ms-btn { min-width: 140px; }
+  .ms-panel { min-width: 160px; }
   .sources-grid { grid-template-columns: repeat(2, 1fr); }
   /* Table → card layout on mobile */
   .task-table-wrap { overflow-x: visible; }
@@ -727,6 +770,7 @@ body {
   .task-ten { display: inline; }
   .task-deadline { font-size: 12px; color: var(--muted); margin-top: 4px; }
   .task-deadline::before { content: 'Deadline: '; }
+  .task-note-mobile { display: block; font-size: 12px; color: var(--muted); font-style: italic; margin-top: 3px; }
   .task-status { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 8px; }
   .task-status .btn-upd { flex: 1; min-width: 120px; text-align: center; }
   /* Dept sections */
@@ -1076,25 +1120,33 @@ body {
       <p class="subtitle" id="tasks-count-label">Tất cả đầu việc</p>
     </div>
     <div class="filter-bar">
-      <select id="filter-nhom" onchange="filterTasks()">
-        <option value="">Tất cả nhóm</option>
-        <option value="hanh_chanh">🏢 Hành chính</option>
-        <option value="chuyen_mon">🔬 Chuyên môn</option>
-        <option value="quan_ly_khac">📋 Quản lý khác</option>
-      </select>
-      <select id="filter-status" onchange="filterTasks()">
-        <option value="">Tất cả trạng thái</option>
-        <option value="chua_xong">⏳ Chưa xong</option>
-        <option value="da_hoan_thanh">✅ Hoàn thành</option>
-        <option value="dang_thuc_hien">🔄 Đang thực hiện</option>
-        <option value="tre_deadline">⚠️ Trễ deadline</option>
-      </select>
-      <select id="filter-dept" onchange="filterTasks()">
-        <option value="">Tất cả phòng</option>
-      </select>
-      <select id="filter-bienban" onchange="filterTasks()">
-        <option value="">Tất cả biên bản</option>
-      </select>
+      <div class="ms-wrap" id="ms-nhom">
+        <button class="ms-btn" onclick="msToggle('ms-nhom')">Tất cả nhóm</button>
+        <div class="ms-panel">
+          <label class="ms-item"><input type="checkbox" value="hanh_chanh" onchange="msChange('ms-nhom')"> 🏢 Hành chính</label>
+          <label class="ms-item"><input type="checkbox" value="chuyen_mon" onchange="msChange('ms-nhom')"> 🔬 Chuyên môn</label>
+          <label class="ms-item"><input type="checkbox" value="quan_ly_khac" onchange="msChange('ms-nhom')"> 📋 Quản lý khác</label>
+          <button class="ms-clear" onclick="msClear('ms-nhom')">✕ Bỏ lọc</button>
+        </div>
+      </div>
+      <div class="ms-wrap" id="ms-status">
+        <button class="ms-btn" onclick="msToggle('ms-status')">Đang thực hiện</button>
+        <div class="ms-panel">
+          <label class="ms-item"><input type="checkbox" value="chua_xong" onchange="msChange('ms-status')"> ⏳ Chưa xong</label>
+          <label class="ms-item"><input type="checkbox" value="da_hoan_thanh" onchange="msChange('ms-status')"> ✅ Hoàn thành</label>
+          <label class="ms-item"><input type="checkbox" value="dang_thuc_hien" onchange="msChange('ms-status')"> 🔄 Đang thực hiện</label>
+          <label class="ms-item"><input type="checkbox" value="tre_deadline" onchange="msChange('ms-status')"> ⚠️ Trễ deadline</label>
+          <button class="ms-clear" onclick="msClear('ms-status')">✕ Bỏ lọc</button>
+        </div>
+      </div>
+      <div class="ms-wrap" id="ms-dept">
+        <button class="ms-btn" onclick="msToggle('ms-dept')">Tất cả phòng</button>
+        <div class="ms-panel" id="ms-dept-panel"></div>
+      </div>
+      <div class="ms-wrap" id="ms-bienban">
+        <button class="ms-btn" onclick="msToggle('ms-bienban')">Tất cả biên bản</button>
+        <div class="ms-panel" id="ms-bienban-panel"></div>
+      </div>
       <input type="text" id="filter-search" placeholder="Tìm kiếm..." aria-label="Tìm kiếm đầu việc" oninput="_dbFilter()">
     </div>
   </header>
@@ -1325,10 +1377,11 @@ function doLogout() {
   if (_nhomChart)    { try { _nhomChart.destroy();    } catch(e) {} _nhomChart = null; }
   chartsInited = false; tasksRendered = false;
   window._myTasks = null; window._myStats = null;
-  const deptFilter = document.getElementById('filter-dept');
-  while (deptFilter.options.length > 1) deptFilter.remove(1);
-  const bbFilter = document.getElementById('filter-bienban');
-  while (bbFilter.options.length > 1) bbFilter.remove(1);
+  ['ms-nhom','ms-status','ms-dept','ms-bienban'].forEach(id => {
+    document.querySelectorAll('#' + id + ' input[type=checkbox]').forEach(c => c.checked = false);
+  });
+  document.getElementById('ms-dept-panel').innerHTML = '';
+  document.getElementById('ms-bienban-panel').innerHTML = '';
   document.getElementById('app-body').style.display = 'none';
   document.getElementById('login-overlay').style.display = 'flex';
   document.getElementById('login-user').value = '';
@@ -1677,11 +1730,12 @@ function buildTasksView(filtered) {
           : '';
         return `<tr>
           <td class="task-id">${t.id}</td>
-          <td class="task-ten">${t.ten}${parseInt(t.nhac)>=2?`<span class="task-nhac">🔁${t.nhac}x</span>`:''}</td>
+          <td class="task-ten">${t.ten}${parseInt(t.nhac)>=2?`<span class="task-nhac">🔁${t.nhac}x</span>`:''}${t.ghi_chu?`<span class="task-note-mobile">📝 ${t.ghi_chu}</span>`:''}</td>
           <td class="col-hide-mobile"><span style="font-size:11px;color:var(--muted)">${t.phoi_hop||'—'}</span></td>
           <td class="col-hide-mobile" style="white-space:nowrap;font-size:12px">${fmtDate(t.bat_dau)}</td>
           <td class="task-deadline" style="white-space:nowrap;font-size:12px">${t.ket_thuc?fmtDate(t.ket_thuc):'—'}</td>
           <td class="nguon-cell col-hide-mobile" title="${t.nguon}">${nguonShort}</td>
+          <td class="task-ghi-chu col-hide-mobile" title="${(t.ghi_chu||'').replace(/"/g,'&quot;')}">${t.ghi_chu ? `<span class="ghi-chu-text">${t.ghi_chu}</span>` : '<span style="color:var(--muted)">—</span>'}</td>
           <td class="task-status">${statusPill(t.tt, t.dk)}${updBtn}</td>
         </tr>`;
       }).join('');
@@ -1703,7 +1757,7 @@ function buildTasksView(filtered) {
             <table class="task-table">
               <thead><tr>
                 <th>ID</th><th>Đầu việc</th><th class="col-hide-mobile">Phối hợp</th>
-                <th class="col-hide-mobile">Bắt đầu</th><th>Deadline</th><th class="col-hide-mobile">Biên Bản</th><th>Trạng thái</th>
+                <th class="col-hide-mobile">Bắt đầu</th><th>Deadline</th><th class="col-hide-mobile">Biên Bản</th><th class="col-hide-mobile">Ghi chú</th><th>Trạng thái</th>
               </tr></thead>
               <tbody>${rows}</tbody>
             </table>
@@ -1725,20 +1779,66 @@ function toggleDept(uid) {
   if (icon) icon.textContent = el.classList.contains('hidden') ? '▶' : '▼';
 }
 
+// ── Multi-select helpers ──────────────────────────────────────────────────────
+function msGetVals(id) {
+  return [...document.querySelectorAll('#' + id + ' input[type=checkbox]:checked')].map(c => c.value);
+}
+function msToggle(id) {
+  const wrap = document.getElementById(id);
+  const isOpen = wrap.classList.contains('open');
+  document.querySelectorAll('.ms-wrap.open').forEach(w => w.classList.remove('open'));
+  if (!isOpen) wrap.classList.add('open');
+}
+function msChange(id) {
+  const vals = msGetVals(id);
+  const btn = document.querySelector('#' + id + ' .ms-btn');
+  const labels = [...document.querySelectorAll('#' + id + ' input[type=checkbox]:checked')]
+    .map(c => c.parentElement.textContent.trim());
+  if (!vals.length) {
+    const defaults = {'ms-status': 'Đang thực hiện', 'ms-nhom': 'Tất cả nhóm',
+                      'ms-dept': 'Tất cả phòng', 'ms-bienban': 'Tất cả biên bản'};
+    btn.innerHTML = defaults[id] || 'Tất cả';
+    btn.classList.remove('has-val');
+  } else {
+    btn.innerHTML = labels.slice(0, 2).map(l => '<span class="ms-tag">' + l + '</span>').join('')
+      + (labels.length > 2 ? ' <span class="ms-tag">+' + (labels.length - 2) + '</span>' : '');
+    btn.classList.add('has-val');
+  }
+  document.querySelectorAll('#' + id + ' .ms-item').forEach(item => {
+    item.classList.toggle('checked', item.querySelector('input').checked);
+  });
+  filterTasks();
+}
+function msClear(id) {
+  document.querySelectorAll('#' + id + ' input[type=checkbox]').forEach(c => c.checked = false);
+  msChange(id);
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.ms-wrap')) {
+    document.querySelectorAll('.ms-wrap.open').forEach(w => w.classList.remove('open'));
+  }
+});
+
 function filterTasks() {
-  const nhom     = document.getElementById('filter-nhom').value;
-  const status   = document.getElementById('filter-status').value;
-  const dept     = document.getElementById('filter-dept').value;
-  const bienban  = document.getElementById('filter-bienban').value;
-  const search   = (document.getElementById('filter-search').value || '').toLowerCase().trim();
+  const nhom    = msGetVals('ms-nhom');
+  const status  = msGetVals('ms-status');
+  const dept    = msGetVals('ms-dept');
+  const bienban = msGetVals('ms-bienban');
+  const search  = (document.getElementById('filter-search').value || '').toLowerCase().trim();
 
   const base = window._myTasks || D.tasks;
   const filtered = base.filter(t => {
-    if (nhom && t.nhom !== nhom) return false;
-    if (status === 'chua_xong') { if (t.tt === 'da_hoan_thanh') return false; }
-    else if (status && t.tt !== status) return false;
-    if (dept    && t.phong !== dept)    return false;
-    if (bienban && t.nguon !== bienban) return false;
+    if (nhom.length && !nhom.includes(t.nhom)) return false;
+    if (status.length) {
+      if (status.includes('chua_xong') && status.length === 1) {
+        if (t.tt === 'da_hoan_thanh') return false;
+      } else {
+        const match = status.some(s => s === 'chua_xong' ? t.tt !== 'da_hoan_thanh' : t.tt === s);
+        if (!match) return false;
+      }
+    }
+    if (dept.length    && !dept.includes(t.phong))    return false;
+    if (bienban.length && !bienban.includes(t.nguon)) return false;
     if (search && !t.ten.toLowerCase().includes(search) && !t.phong.toLowerCase().includes(search)) return false;
     return true;
   });
@@ -1750,13 +1850,19 @@ function initTasksView() {
   tasksRendered = true;
 
   const myTasks = window._myTasks || D.tasks;
-  const deptFilter = document.getElementById('filter-dept');
+  const deptPanel = document.getElementById('ms-dept-panel');
   [...new Set(myTasks.map(t => t.phong || 'Khác'))].sort().forEach(d => {
-    const o = document.createElement('option');
-    o.value = d; o.textContent = d;
-    deptFilter.appendChild(o);
+    const lbl = document.createElement('label');
+    lbl.className = 'ms-item';
+    lbl.innerHTML = '<input type="checkbox" value="' + d.replace(/"/g,'&quot;') + '" onchange="msChange(\'ms-dept\')"> ' + d;
+    deptPanel.appendChild(lbl);
   });
-  const bbFilter = document.getElementById('filter-bienban');
+  const clrDept = document.createElement('button');
+  clrDept.className = 'ms-clear'; clrDept.textContent = '✕ Bỏ lọc';
+  clrDept.setAttribute('onclick', "msClear('ms-dept')");
+  deptPanel.appendChild(clrDept);
+
+  const bbPanel = document.getElementById('ms-bienban-panel');
   const bbSortKey = s => {
     const m = s.match(/(\\d{2})\\/(\\d{2})\\/(\\d{4})\\s*$/);
     if (!m) return 0;
@@ -1765,15 +1871,23 @@ function initTasksView() {
   [...new Set(myTasks.map(t => t.nguon || '').filter(Boolean))]
     .sort((a, b) => bbSortKey(b) - bbSortKey(a))
     .forEach(bb => {
-      const o = document.createElement('option');
-      o.value = bb; o.textContent = bb.replace(/^Biên bản /, '');
-      bbFilter.appendChild(o);
+      const lbl = document.createElement('label');
+      lbl.className = 'ms-item';
+      lbl.innerHTML = '<input type="checkbox" value="' + bb.replace(/"/g,'&quot;') + '" onchange="msChange(\'ms-bienban\')"> ' + bb.replace(/^Biên bản /, '');
+      bbPanel.appendChild(lbl);
     });
-  // Default: chỉ hiện trễ + đang làm
-  document.getElementById('filter-status').value = 'chua_xong';
+  const clrBb = document.createElement('button');
+  clrBb.className = 'ms-clear'; clrBb.textContent = '✕ Bỏ lọc';
+  clrBb.setAttribute('onclick', "msClear('ms-bienban')");
+  bbPanel.appendChild(clrBb);
+
+  // Default: chỉ hiện trễ + đang làm (tick "Chưa xong")
+  const chuaXongCb = document.querySelector('#ms-status input[value="chua_xong"]');
+  if (chuaXongCb) { chuaXongCb.checked = true; msChange('ms-status'); }
   // Auto-select phòng khi user chỉ thuộc 1 phòng
   if (AUTH && AUTH.depts && AUTH.depts.length === 1) {
-    deptFilter.value = AUTH.depts[0];
+    const autoCb = deptPanel.querySelector('input[value="' + AUTH.depts[0].replace(/"/g,'&quot;') + '"]');
+    if (autoCb) { autoCb.checked = true; msChange('ms-dept'); }
   }
   filterTasks();
 }
