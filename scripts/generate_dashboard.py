@@ -111,7 +111,6 @@ def compute(tasks):
     for t in tasks:
         nhom[t.get("nhom") or "quan_ly_khac"] += 1
 
-    # Urgent (overdue tasks) — top 20
     urgent = sorted(
         [t for t in tasks if t["trang_thai"] == "tre_deadline"],
         key=lambda t: t.get("ket_thuc") or "9999"
@@ -192,7 +191,7 @@ def compute(tasks):
             {"id": t["id"], "ten": t["ten_dau_viec"],
              "phong": normalize_dept(t.get("phong_chinh", "")),
              "ket_thuc": t.get("ket_thuc", ""), "nhac": t.get("so_lan_nhac", "1")}
-            for t in urgent[:20]
+            for t in urgent
         ],
         "repeats": [
             {"id": t["id"], "ten": t["ten_dau_viec"],
@@ -547,7 +546,8 @@ body {
 .see-more:hover { text-decoration: underline; }
 
 /* Urgent list */
-.urgent-list { list-style: none; max-height: 400px; overflow-y: auto; }
+.urgent-list { list-style: none; max-height: 400px; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+#repeat-preview-list { max-height: none; overflow-y: visible; }
 .urgent-item {
   display: flex; align-items: flex-start; justify-content: space-between;
   gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border);
@@ -1432,7 +1432,7 @@ function computeFromTasks(tasks) {
 
   // Urgent (late, sorted by deadline)
   const urgent = tasks.filter(t => t.tt === 'tre_deadline')
-    .sort((a,b) => (a.ket_thuc||'9999').localeCompare(b.ket_thuc||'9999')).slice(0,20);
+    .sort((a,b) => (a.ket_thuc||'9999').localeCompare(b.ket_thuc||'9999'));
 
   // Repeats (nhac >= 2)
   const repeats = tasks.filter(t => parseInt(t.nhac||'1') >= 2)
