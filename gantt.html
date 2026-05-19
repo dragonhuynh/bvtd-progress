@@ -10,7 +10,7 @@
   --white:#fff; --text:#1a202c; --muted:#718096; --border:#e2e8f0;
   --green:#48bb78; --blue:#4299e1; --red:#f56565; --r:12px;
   --sh:0 2px 12px rgba(0,0,0,.08);
-  --col-id:52px; --col-sub:300px; --col-st:148px; --col-dp:96px; --day-w:38px; --row-h:44px;
+  --col-id:52px; --col-sub:420px; --col-st:148px; --col-dp:96px; --day-w:38px; --row-h:68px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;overflow:hidden;
@@ -169,7 +169,7 @@ html,body{height:100%;overflow:hidden;
 
 /* Task row */
 .tr{
-  display:flex;align-items:center;height:var(--row-h);
+  display:flex;align-items:center;height:var(--row-h);overflow:hidden;
   border-bottom:1px solid var(--border);cursor:default;
 }
 .tr:hover{background:#fdf6ee;}
@@ -180,8 +180,9 @@ html,body{height:100%;overflow:hidden;
   align-items:flex-start;gap:8px;min-width:0;
 }
 .tr-sub-txt{
-  font-size:13px;color:var(--text);font-weight:500;
-  word-break:break-word;
+  font-size:13px;color:var(--text);font-weight:500;line-height:1.4;
+  display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;
+  overflow:hidden;word-break:break-word;
 }
 .nd{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 .nd-hanh_chanh{background:#f59e0b;}
@@ -551,7 +552,7 @@ const TASKS   = [{"id": "1", "ten_dau_viec": "Bổ sung 2 hàng ghế Inox (15 c
 const TODAY_S = '2026-05-19';
 const DAY_W   = window.innerWidth < 480 ? 24 : (window.innerWidth < 768 ? 28 : 38);
 const VIEW_DAYS = window.innerWidth < 480 ? 21 : (window.innerWidth < 768 ? 28 : 42);
-const ROW_H = 44;
+const ROW_H = 68;
 const MONTHS  = ['Th1','Th2','Th3','Th4','Th5','Th6','Th7','Th8','Th9','Th10','Th11','Th12'];
 const ST_LBL  = {da_hoan_thanh:'Hoàn thành',dang_thuc_hien:'Đang thực hiện',tre_deadline:'Trễ deadline'};
 const NM_LBL  = {hanh_chanh:'Hành chính',chuyen_mon:'Chuyên môn',quan_ly_khac:'Quản lý khác'};
