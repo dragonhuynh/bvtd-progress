@@ -39,7 +39,7 @@ jobs:
                   dashboard.html tien_do.html || true
           if ! git diff --cached --quiet; then
             git commit -m "auto: áp dụng cập nhật dashboard $(date +'%d/%m/%Y %H:%M')"
-            git push
+            git push || (git pull --rebase origin main && git push)
           else
             echo "Không có thay đổi — bỏ qua push."
           fi
