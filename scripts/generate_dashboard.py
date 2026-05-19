@@ -1854,7 +1854,7 @@ function initTasksView() {
   [...new Set(myTasks.map(t => t.phong || 'Khác'))].sort().forEach(d => {
     const lbl = document.createElement('label');
     lbl.className = 'ms-item';
-    lbl.innerHTML = '<input type="checkbox" value="' + d.replace(/"/g,'&quot;') + '" onchange="msChange(\'ms-dept\')"> ' + d;
+    lbl.innerHTML = '<input type="checkbox" value="' + d.replace(/"/g,'&quot;') + '" onchange="msChange(\\'ms-dept\\')"> ' + d;
     deptPanel.appendChild(lbl);
   });
   const clrDept = document.createElement('button');
@@ -1873,7 +1873,7 @@ function initTasksView() {
     .forEach(bb => {
       const lbl = document.createElement('label');
       lbl.className = 'ms-item';
-      lbl.innerHTML = '<input type="checkbox" value="' + bb.replace(/"/g,'&quot;') + '" onchange="msChange(\'ms-bienban\')"> ' + bb.replace(/^Biên bản /, '');
+      lbl.innerHTML = '<input type="checkbox" value="' + bb.replace(/"/g,'&quot;') + '" onchange="msChange(\\'ms-bienban\\')"> ' + bb.replace(/^Biên bản /, '');
       bbPanel.appendChild(lbl);
     });
   const clrBb = document.createElement('button');
