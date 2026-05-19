@@ -23,6 +23,9 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Pull latest state
+        run: git pull --rebase origin main
+
       - name: Apply pending updates & regenerate dashboard
         run: python scripts/apply_pending.py
 
@@ -30,12 +33,12 @@ jobs:
         run: |
           git config user.name  "BVTD Bot"
           git config user.email "bot@bvtd.local"
+          git rm --force --ignore-unmatch data/pending_updates.json
           git add data/tasks.csv data/tasks_index.json \
                   data/report_versions.json data/update_log.csv \
                   dashboard.html tien_do.html || true
           if ! git diff --cached --quiet; then
             git commit -m "auto: áp dụng cập nhật dashboard $(date +'%d/%m/%Y %H:%M')"
-            git pull --rebase origin main
             git push
           else
             echo "Không có thay đổi — bỏ qua push."
