@@ -546,8 +546,7 @@ body {
 .see-more:hover { text-decoration: underline; }
 
 /* Urgent list */
-.urgent-list { list-style: none; max-height: 400px; overflow-y: scroll; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; touch-action: pan-y; }
-#repeat-preview-list { max-height: 2600px; overflow-y: auto; }
+.urgent-list { list-style: none; max-height: 480px; overflow-y: scroll; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; touch-action: pan-y; }
 .urgent-item {
   display: flex; align-items: flex-start; justify-content: space-between;
   gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border);
