@@ -260,11 +260,11 @@ id,ten_dau_viec,nhom,phong_chinh,phong_phoi_hop,bat_dau,ket_thuc,trang_thai,so_l
 259,HCQT + CNTT bố trí khu họp và sạc điện TTB tại CC; lưu ý PCCC,quan_ly_khac,HCQT,CNTT,2026-02-10,2026-02-13,da_hoan_thanh,1,,Biên bản 10/02/2026,0
 260,KHTH + HCQT lắp đặt biển chỉ dẫn đường bộ 3 vị trí đến BVTD CS2,hanh_chanh,KHTH,HCQT,2026-02-25,2026-03-03,tre_deadline,1,Phối hợp HCQT liên hệ địa phương : thống nhất vị trí lắp đặt,Biên bản 25/02/2026,0
 261,HCQT + KHTH thiết kế và lắp bảng thông tin khổ lớn tại cổng chính (Tiêm chủng + KSK),hanh_chanh,HCQT,KHTH,2026-02-25,2026-03-03,da_hoan_thanh,1,Giới thiệu Từ Dũ Vaccine và dịch vụ khám sức khỏe tổng quát,Biên bản 25/02/2026,0
-262,KHTH ký kết MOU với Trạm Y tế xã huyện Cần Giờ về chuyển tuyến và chia sẻ CLS,chuyen_mon,KHTH,,2026-02-25,2026-03-03,dang_thuc_hien,1,Đã làm tờ trình xin chủ trương,Biên bản 25/02/2026,0
+262,KHTH ký kết MOU với Trạm Y tế xã huyện Cần Giờ về chuyển tuyến và chia sẻ CLS,chuyen_mon,KHTH,,2026-02-25,2026-03-03,tre_deadline,1,Đã làm tờ trình xin chủ trương,Biên bản 25/02/2026,0
 263,KHTH khẩn trương đăng ký bổ sung DMKT nội soi TMH và tiêu hóa (trên và dưới) với Sở Y tế,chuyen_mon,KHTH,,2026-02-25,2026-04-15,da_hoan_thanh,2,Nhắc lại; mở rộng thêm nội soi TMH,Biên bản 25/02/2026,0
 264,KHTH + Điều dưỡng tổ chức gói khám tầm soát chuyên sâu cho nhóm nguy cơ cao,chuyen_mon,KHTH,Điều dưỡng,2026-02-25,2026-03-03,tre_deadline,1,NCT/PHCN/YHCT/Sản-Phụ khoa,Biên bản 25/02/2026,0
 265,Áp dụng mô hình luân chuyển khép kín: PK tổng quát → CK → tổng hợp kết thúc hồ sơ,chuyen_mon,KHTH,CTXH,2026-02-25,2026-03-03,tre_deadline,1,Phối hợp CTXH triển khai truyền thông,Biên bản 25/02/2026,0
-266,KHTH + BS Trưởng CC xây dựng phác đồ Tim mạch và Lão khoa; lập kế hoạch CK Lão khoa dài hạn,chuyen_mon,KHTH,K.Cấp cứu,2026-02-25,2026-03-03,dang_thuc_hien,1,"*Đã xây dựng danh mục tài liệu chuyên môn ""Chăm sóc toàn diện người cao tuổi"" gồm các chương:
+266,KHTH + BS Trưởng CC xây dựng phác đồ Tim mạch và Lão khoa; lập kế hoạch CK Lão khoa dài hạn,chuyen_mon,KHTH,K.Cấp cứu,2026-02-25,2026-03-03,tre_deadline,1,"*Đã xây dựng danh mục tài liệu chuyên môn ""Chăm sóc toàn diện người cao tuổi"" gồm các chương:
 I. CHĂM SÓC TOÀN DIỆN NGƯỜI CAO TUỔI
 II. HỘI CHỨNG LÃO KHOA
 III. BỆNH MẠN TÍNH KHÔNG LÂY
@@ -331,7 +331,7 @@ V. CHĂM SÓC CUỐI ĐỜI – GIẢM NHẸ
 323,HCQT sửa cửa ra vào khoa Sản thành cửa có thể khóa,hanh_chanh,HCQT,,2026-03-16,2026-03-24,tre_deadline,1,,Biên bản 2026-03-16,0
 324,Chuyển đổi công năng phòng khám Sản thành phòng hậu sản,hanh_chanh,HCQT,Điều dưỡng,2026-03-16,2026-03-24,da_hoan_thanh,1,,Biên bản 2026-03-16,0
 325,Làm bảng mica để bàn Tạm Ngưng tại khu tiếp nhận CC115 khi đi ngoại viện,hanh_chanh,HCQT,,2026-03-16,2026-03-24,da_hoan_thanh,1,,Biên bản 2026-03-16,0
-326,HCQT + Điều dưỡng làm lại hệ thống rèm khu hồi sức Cấp cứu để tăng tính riêng tư nam và nữ,hanh_chanh,HCQT,Điều dưỡng,2026-03-16,2026-03-24,dang_thuc_hien,1,⚠️ Báo cáo từ phòng phối hợp (DD) — cần kiểm tra lại với phòng chính (HCQT) | Chờ HCQT mời bên công ty vào đo,Biên bản 2026-03-16,0
+326,HCQT + Điều dưỡng làm lại hệ thống rèm khu hồi sức Cấp cứu để tăng tính riêng tư nam và nữ,hanh_chanh,HCQT,Điều dưỡng,2026-03-16,2026-03-24,tre_deadline,1,⚠️ Báo cáo từ phòng phối hợp (DD) — cần kiểm tra lại với phòng chính (HCQT) | Chờ HCQT mời bên công ty vào đo,Biên bản 2026-03-16,0
 327,HCQT + KHTH + Điều dưỡng triển khai phòng lưu tại khu hồi sức Cấp cứu; lưu ý thanh toán BHYT,chuyen_mon,HCQT,KHTH|Điều dưỡng,2026-03-16,2026-03-24,tre_deadline,1,,Biên bản 2026-03-16,0
 328,KHTH + Điều dưỡng triển khai 100% khám sức khỏe toàn diện vào 01/04/2026; thông báo giao ban và báo cáo BGĐ mỗi tuần,chuyen_mon,KHTH,Điều dưỡng,2026-03-16,2026-04-01,dang_thuc_hien,1,,Biên bản 2026-03-16,1
 329,KHTH + TCKT triển khai giảm đau sản khoa (đẻ không đau) được thanh toán BHYT,chuyen_mon,KHTH,TCKT,2026-03-16,2026-04-14,da_hoan_thanh,1,Bs Ngọc Hải đã duyệt Tờ trình chủ  trương,Biên bản 2026-03-16,0
