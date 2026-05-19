@@ -32,8 +32,11 @@ jobs:
           git config user.email "bot@bvtd.local"
           git add data/tasks.csv data/tasks_index.json \
                   data/report_versions.json data/update_log.csv \
-                  tien_do.html || true
-          git diff --cached --quiet \
-            || git commit -m "auto: áp dụng cập nhật dashboard $(date +'%d/%m/%Y %H:%M')"
-          git pull --rebase origin main
-          git push
+                  dashboard.html tien_do.html || true
+          if ! git diff --cached --quiet; then
+            git commit -m "auto: áp dụng cập nhật dashboard $(date +'%d/%m/%Y %H:%M')"
+            git pull --rebase origin main
+            git push
+          else
+            echo "Không có thay đổi — bỏ qua push."
+          fi
