@@ -1301,7 +1301,7 @@ body {
 const D = window.__D;
 
 // ── Auth configuration ─────────────────────────────────────────────────────────
-const PASS = 'bvtd@cs2';
+const PASS = '26051988';
 // depts: null = xem tất cả; array = chỉ xem phòng ban trong list
 const USERS = {
   'BGD':      null,
