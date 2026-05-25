@@ -232,8 +232,8 @@ id,ten_dau_viec,nhom,phong_chinh,phong_phoi_hop,bat_dau,ket_thuc,trang_thai,so_l
 231,Triển khai sổ khám sức khỏe toàn diện cho nhóm nguy cơ cao trước Tết,chuyen_mon,KHTH,BS Bảo Anh,2026-02-10,2026-02-13,tre_deadline,1,NB CC/lão khoa/sản phụ khoa/Nhi/PHCN/YHCT,Biên bản 10/02/2026,0
 232,Lên lịch Hội chẩn hàng tuần cho BS Giám đốc và BS Bảo Anh tại CS2,chuyen_mon,KHTH,,2026-02-10,2026-02-13,dang_thuc_hien,1,"Đã xin lịch thư ký BGĐ (Hằng) , chưa phản hồi",Biên bản 10/02/2026,1
 233,Sắp xếp lại phòng Phun Khí Dung đúng chuẩn (bàn ghế),chuyen_mon,KHTH,,2026-02-10,2026-05-18,da_hoan_thanh,1,,Biên bản 10/02/2026,0
-234,Làm công văn gửi BV Ung Bướu phối hợp điều trị các ca ung thư tại CS2,chuyen_mon,KHTH,,2026-02-10,2026-02-13,tre_deadline,1,,Biên bản 10/02/2026,0
-235,Làm bảng kiểm trước chuyển tuyến; theo dấu và gọi điện BN chuyển tuyến,chuyen_mon,KHTH,Điều dưỡng,2026-02-10,2026-02-13,tre_deadline,2,Nhắc lại; bảng kiểm gồm lý do/theo dõi/hình thức/quyền lợi NB,Biên bản 10/02/2026,0
+234,Làm công văn gửi BV Ung Bướu phối hợp điều trị các ca ung thư tại CS2,chuyen_mon,KHTH,,2026-02-10,2026-05-18,da_hoan_thanh,1,,Biên bản 10/02/2026,0
+235,Làm bảng kiểm trước chuyển tuyến; theo dấu và gọi điện BN chuyển tuyến,chuyen_mon,KHTH,Điều dưỡng,2026-02-10,2026-05-18,da_hoan_thanh,2,Nhắc lại; bảng kiểm gồm lý do/theo dõi/hình thức/quyền lợi NB,Biên bản 10/02/2026,0
 236,BS KHTH + BS Trưởng CC xuống khám lại các ca chuyển tuyến,chuyen_mon,KHTH,K.Cấp cứu,2026-02-10,2026-02-13,tre_deadline,1,,Biên bản 10/02/2026,0
 237,KHTH + BS Trưởng CC liên hệ BV Lê Văn Thịnh về nhân sự thực hiện nội soi,chuyen_mon,KHTH,K.Cấp cứu,2026-02-10,2026-05-18,da_hoan_thanh,1,,Biên bản 10/02/2026,0
 238,GMHS + KHTH triển khai nội soi tiêu hóa không đau; học tập và đào tạo tại BV Lê Văn Thịnh,chuyen_mon,GMHS,KHTH,2026-02-10,2026-02-13,tre_deadline,1,Tiêu hóa trên và tiêu hóa dưới,Biên bản 10/02/2026,0
@@ -279,7 +279,7 @@ V. CHĂM SÓC CUỐI ĐỜI – GIẢM NHẸ
 271,KHTH + Điều dưỡng + HCQT rà soát layout khu tiêm chủng; HCQT lắp bảng hiệu Từ Dũ Vaccine,chuyen_mon,HCQT,KHTH|Điều dưỡng,2026-02-25,2026-03-03,da_hoan_thanh,1,,Biên bản 25/02/2026,0
 272,KHTH lập Đề án điều trị trong ngày và lưu bệnh tại Khoa CC (đảm bảo thanh quyết toán BHYT),chuyen_mon,KHTH,,2026-02-25,2026-03-03,tre_deadline,1,,Biên bản 25/02/2026,0
 273,Tổ chức định kỳ hàng tuần diễn tập Code Red/Code Blue ứng phó thảm họa và CC hàng loạt,chuyen_mon,KHTH,,2026-02-25,2026-03-03,dang_thuc_hien,3,Đã thực hiện 1-2 tuần/ lần,Biên bản 25/02/2026,1
-274,TCCB lập Kế hoạch sự kiện Tổng kết Quý I BVTD CS2 (chiều T2 09/03/2026),chuyen_mon,TCCB,,2026-02-25,2026-03-09,tre_deadline,1,,Biên bản 25/02/2026,0
+274,TCCB lập Kế hoạch sự kiện Tổng kết Quý I BVTD CS2 (chiều T2 09/03/2026),chuyen_mon,TCCB,,2026-02-25,2026-05-21,da_hoan_thanh,1,,Biên bản 25/02/2026,0
 275,HCQT chủ trì tổ chức phong trào Tết trồng cây CS2 (kết hợp Tổng kết Q1 09/03/2026),chuyen_mon,HCQT,,2026-02-25,2026-03-09,da_hoan_thanh,1,,Biên bản 25/02/2026,0
 276,KHTH chuẩn bị báo cáo tổng kết 3 tháng bằng hình ảnh và số liệu tiêu biểu,chuyen_mon,KHTH,VTTBYT|HCQT|Điều dưỡng|TCKT|TCCB,2026-02-25,2026-03-09,da_hoan_thanh,1,⚠️ Báo cáo từ phòng phối hợp (HCQT) — cần kiểm tra lại với phòng chính (KHTH),Biên bản 25/02/2026,0
 277,TCCB bổ sung Điều dưỡng/hộ sinh học việc quản lý hành chính Thận nhân tạo CS2,quan_ly_khac,TCCB,,2026-02-25,2026-02-27,tre_deadline,1,Triển khai T6 27/02/2026,Biên bản 25/02/2026,0
@@ -346,7 +346,7 @@ V. CHĂM SÓC CUỐI ĐỜI – GIẢM NHẸ
 338,HCQT điều chuyển tấm chắn gấp phòng tiêm về kho; rà soát phương án di dời phòng tiêm lên vị trí A.01,hanh_chanh,HCQT,Điều dưỡng,2026-03-24,2026-03-31,da_hoan_thanh,1,,Biên bản 2026-03-24,0
 339,HCQT + Điều dưỡng trang trí và bổ sung nội dung tờ rơi truyền thông tiêm ngừa tại phòng tiêm,hanh_chanh,HCQT,Điều dưỡng,2026-03-24,2026-03-31,da_hoan_thanh,1,,Biên bản 2026-03-24,0
 340,"HCQT + KHTH + Điều dưỡng cải tạo Khu C tầng trệt cho khoa Nội + Nhi + Ngoại (sơn, sửa thấm dột, tháo vách ngăn, sơn hộp kỹ thuật, xem xét thay cửa đẩy)",hanh_chanh,HCQT,KHTH|Điều dưỡng,2026-03-24,2026-04-07,da_hoan_thanh,1,,Biên bản 2026-03-24,0
-341,"KHTH phối hợp BS Khoa Nhi triển khai khám định kỳ, tái khám, cá thể hóa kế hoạch điều trị và tư vấn tiêm ngừa cho trẻ em",chuyen_mon,KHTH,,2026-03-24,2026-03-31,dang_thuc_hien,1,,Biên bản 2026-03-24,1
+341,"KHTH phối hợp BS Khoa Nhi triển khai khám định kỳ, tái khám, cá thể hóa kế hoạch điều trị và tư vấn tiêm ngừa cho trẻ em",chuyen_mon,KHTH,,2026-03-24,2026-05-18,da_hoan_thanh,1,Giao BS Hữu - giám sát và nhắc nhở phác đồ chăm sóc toàn diện nhi,Biên bản 2026-03-24,1
 342,KHTH + CNTT + Điều dưỡng triển khai nhắc hẹn tái khám định kỳ (tháng/quý) qua Zalo và các kênh người dân thường dùng,quan_ly_khac,KHTH,CNTT|Điều dưỡng,2026-03-24,2026-03-31,dang_thuc_hien,1,,Biên bản 2026-03-24,1
 343,KHTH triển khai phác đồ điều trị Nội khoa của BV Chợ Rẫy tại phòng khám Nội 3 cho bác sĩ BV Từ Dũ tham khảo,chuyen_mon,KHTH,,2026-03-24,2026-05-18,da_hoan_thanh,1,"gửi 3 phác đồ Nội thường gặp (VGB, THA, ĐTĐ)",Biên bản 2026-03-24,0
 344,KHTH + YHCT + CTXH rà soát Poster truyền thông YHCT theo hướng dễ hiểu: triệu chứng bệnh đến phương pháp điều trị,quan_ly_khac,KHTH,YHCT|CTXH,2026-03-24,2026-03-31,tre_deadline,1,,Biên bản 2026-03-24,0
@@ -409,8 +409,8 @@ Tới ngày 18/5/2026: đã thực hiện 06 ca. Trong đó 2 ca NS dạ dày v�
 400,KHTH xây dựng Bilan Shock nhiễm trùng (CLS/LS 24h/chia độ shock/phác đồ chi tiết kiểm tra lại),chuyen_mon,KHTH,,2026-04-21,2026-05-18,da_hoan_thanh,1,,Biên bản 2026-04-21,0
 401,TCCB + KHTH + Điều dưỡng điều nhân sự Sơ sinh CS1 bổ sung trực đêm khoa Nhi CS2,quan_ly_khac,TCCB,KHTH|Điều dưỡng,2026-04-21,2026-04-28,tre_deadline,1,,Biên bản 2026-04-21,0
 402,KHTH sắp xếp BS GMHS học tập tại khoa CC và khám nội,chuyen_mon,KHTH,GMHS,2026-04-21,2026-05-18,da_hoan_thanh,1,,Biên bản 2026-04-21,0
-403,KHTH rà soát bảng checklist khám toàn diện (phối hợp các bộ phận và phòng khám CK),chuyen_mon,KHTH,,2026-04-21,2026-04-28,tre_deadline,1,,Biên bản 2026-04-21,0
-404,KHTH xây dựng bộ CLS thường quy theo triệu chứng/ICD bệnh,chuyen_mon,KHTH,,2026-04-21,2026-04-28,tre_deadline,1,,Biên bản 2026-04-21,0
+403,KHTH rà soát bảng checklist khám toàn diện (phối hợp các bộ phận và phòng khám CK),chuyen_mon,KHTH,,2026-04-21,2026-05-18,da_hoan_thanh,1,,Biên bản 2026-04-21,0
+404,KHTH xây dựng bộ CLS thường quy theo triệu chứng/ICD bệnh,chuyen_mon,KHTH,,2026-04-21,2026-05-18,da_hoan_thanh,1,,Biên bản 2026-04-21,0
 405,KHTH + Dược + YHCT triển khai thuốc thang/thuốc bốc tại CS2 (quy trình/vận chuyển/lưu trữ/hẹn BN),chuyen_mon,KHTH,Dược|YHCT,2026-04-21,2026-04-28,tre_deadline,1,liên hệ KHTH thống nhất danh mục thuốc thường gặp,Biên bản 2026-04-21,0
 406,Điều dưỡng + CTXH thiết kế Poster nuôi con bằng sữa mẹ Human Milk (dạ dày trẻ sơ sinh tại hậu sản/GMHS/Nhi),quan_ly_khac,Điều dưỡng,CTXH,2026-04-21,2026-04-21,da_hoan_thanh,1,,Biên bản 2026-04-21,0
 407,KHTH + Điều dưỡng + HCQT + VTTBYT rà soát TB KL họp T1-4/2026 và báo cáo hạng mục chưa/đang triển khai,quan_ly_khac,KHTH,Điều dưỡng|HCQT|VTTBYT,2026-04-21,2026-05-18,da_hoan_thanh,1,⚠️ Báo cáo từ phòng phối hợp (HCQT) — cần kiểm tra lại với phòng chính (KHTH),Biên bản 2026-04-21,0
@@ -430,7 +430,7 @@ Tới ngày 18/5/2026: đã thực hiện 06 ca. Trong đó 2 ca NS dạ dày v�
 421,KHTH + VTTBYT + HCQT xây dựng phương án Can thiệp nội mạch (TTB/bố trí mặt bằng/luồng BN/nhân sự),quan_ly_khac,KHTH,VTTBYT|HCQT,2026-05-05,2026-05-12,tre_deadline,1,,Biên bản 2026-05-05,0
 422,KHTH trình KPI nội soi tiêu hóa (ít nhất 10 ca/tuần) và ngày triển khai ca đầu tiên,quan_ly_khac,KHTH,,2026-05-05,2026-05-12,tre_deadline,1,,Biên bản 2026-05-05,0
 423,KHTH giám sát BS GMHS khám nội (ít nhất 30% tổng số BN nội),chuyen_mon,KHTH,GMHS,2026-05-05,2026-05-12,dang_thuc_hien,1,,Biên bản 2026-05-05,1
-424,KHTH + BS Thúy Phượng mô tả nhiệm vụ và vị trí việc làm cụ thể của 5 BS BV TD (sáng/chiều/tối); báo cáo 12/05,quan_ly_khac,KHTH,,2026-05-05,2026-05-12,tre_deadline,1,,Biên bản 2026-05-05,0
+424,KHTH + BS Thúy Phượng mô tả nhiệm vụ và vị trí việc làm cụ thể của 5 BS BV TD (sáng/chiều/tối); báo cáo 12/05,quan_ly_khac,KHTH,,2026-05-05,2026-05-18,da_hoan_thanh,1,,Biên bản 2026-05-05,0
 425,KHTH + HCQT triển khai thêm phòng khám hội chẩn Nội (BS Nguyễn Tri Phương ≥2 ngày/tuần đông bệnh) + phương án hẹn/điều phối,chuyen_mon,KHTH,HCQT,2026-05-05,2026-05-12,dang_thuc_hien,1,,Biên bản 2026-05-05,1
 426,KHTH trình phương án tăng cường khám toàn diện hàng tuần (nội/ngoại trú/phân tích tuân thủ/khắc phục),quan_ly_khac,KHTH,,2026-05-05,2026-05-12,dang_thuc_hien,1,,Biên bản 2026-05-05,1
 427,XN + VTTBYT + KHTH + TCKT triển khai đặt máy demo khí máu động mạch và lactate phục vụ CC và ngoại trú,chuyen_mon,XN,VTTBYT|KHTH|TCKT,2026-05-05,2026-05-12,tre_deadline,1,,Biên bản 2026-05-05,0
