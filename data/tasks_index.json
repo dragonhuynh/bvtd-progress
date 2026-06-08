@@ -1,6 +1,6 @@
 {
-  "next_id_num": 475,
-  "total": 474,
+  "next_id_num": 496,
+  "total": 495,
   "titles": [
     "Bổ sung 2 hàng ghế Inox (15 cái) khu chờ hành lang sảnh",
     "Loại bỏ tủ đầu giường tại các phòng khám",
@@ -475,7 +475,28 @@
     "KHTH phối hợp Ban Điều hành: Xây dựng kế hoạch thu hút bệnh nhân và nâng cao tỉ lệ tái khám",
     "TCCB phối hợp KHTH: Xây dựng phương án tăng số lượng khám sức khỏe và khám đoàn",
     "KHTH phối hợp Bộ phận Điều hành: Tổ chức khu vực khám đoàn riêng biệt tách biệt khỏi luồng bệnh nhân thông thường",
-    "Điều dưỡng: Rà soát điều phối khu vực đo sinh hiệu; BS từng phòng khám chịu trách nhiệm nhập sinh hiệu vào HIS"
+    "Điều dưỡng: Rà soát điều phối khu vực đo sinh hiệu; BS từng phòng khám chịu trách nhiệm nhập sinh hiệu vào HIS",
+    "HCQT dán decal sọc đảm bảo riêng tư tại khoa nội trú (Ngoại/Nhi/Sản)",
+    "HCQT thay ghế Inox bị rỉ tại khoa Sản",
+    "Điều dưỡng + HCQT dán nội quy buồng bệnh nội trú",
+    "HCQT dán decal màu da cam cửa X-quang và bổ sung chuông cửa",
+    "Giữ niêm phong máy CT khi chuyển tới (không mở ra) và báo cáo Ban giám đốc",
+    "KHTH giám sát việc giao tiếp của BS khi khám bệnh nội trú và ngoại trú (giới thiệu tên với người bệnh)",
+    "KHTH rà soát việc BN nội trú không biết tên bác sĩ thăm bệnh và đỡ sinh",
+    "KHTH báo cáo thực hiện ca Minh Hải trực tiếp cho Giám đốc",
+    "TCCB + KHTH làm việc với BGĐ BV LVT về bố trí nhân sự bác sĩ Nội và Ngoại",
+    "KHTH + HCQT + VTTBYT xây dựng quy trình X-quang/điện quang/điện quang can thiệp và sơ đồ di chuyển + vận hành theo không gian bố trí thực tế",
+    "HCQT phản hồi công văn không tăng giá giữ xe với TNXP",
+    "Mỗi tuần mỗi bộ phận có tối thiểu 1 sản phẩm/thành phẩm đã hoàn thành (kế hoạch không tính là sản phẩm)",
+    "Các bộ phận rà soát nội dung chưa hoàn thành (số lượng và lý do) báo cáo mỗi tuần",
+    "KHTH cải tiến báo cáo cụ thể hơn (tên đầu việc, người thực hiện, chức năng, kết quả đầu ra, thời điểm hoàn thành)",
+    "TCCB đầu mối tổ chức tổng kết 6 tháng hoạt động CS2 (liên hệ SYT và đơn vị liên quan; dự kiến chiều thứ 6; không văn nghệ)",
+    "TCCB rà soát nhân sự có thái độ tích cực và báo cáo tổng kết từng nhân sự việc đã triển khai khi hoàn tất về lại CS1",
+    "TCCB rà soát lại lịch bác sĩ theo đúng quy định Sở Y tế",
+    "Bộ phận điều hành triển khai tiêm ngừa ung thư cổ tử cung (HPV) và tìm nguồn bệnh tiêm ngừa",
+    "Tổ chức khám bệnh tại Xã đảo Thạnh An thể hiện tinh thần chủ động của BVTD CS2",
+    "KHTH + BS Phượng mô tả công việc và kỹ năng theo giờ của 4 bác sĩ Sản Phụ Khoa (SPK)",
+    "Điều dưỡng + HCQT thông báo số ĐT CSKH và Hotline đường dây nóng (nhân sự phụ trách + quy trình hoạt động); báo cáo số lượng và nội dung cuộc gọi mỗi tuần"
   ],
-  "updated": "2026-05-25"
+  "updated": "2026-06-09"
 }
