@@ -1,6 +1,14 @@
 {
-  "version": "0.32",
+  "version": "0.33",
   "history": [
+    {
+      "version": "0.33",
+      "ngay": "2026-06-09 23:17",
+      "loai": "check",
+      "thay_doi": [
+        "BGD xac nhan 47 task hoan thanh + gop ten ĐTN"
+      ]
+    },
     {
       "version": "0.32",
       "ngay": "2026-06-09 22:52",
