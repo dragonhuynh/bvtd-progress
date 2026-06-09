@@ -1,6 +1,14 @@
 {
-  "version": "0.31",
+  "version": "0.32",
   "history": [
+    {
+      "version": "0.32",
+      "ngay": "2026-06-09 22:52",
+      "loai": "check",
+      "thay_doi": [
+        "Hoan thanh 13 task"
+      ]
+    },
     {
       "version": "0.31",
       "ngay": "2026-06-09 22:43",
