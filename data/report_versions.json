@@ -1,6 +1,14 @@
 {
-  "version": "0.30",
+  "version": "0.31",
   "history": [
+    {
+      "version": "0.31",
+      "ngay": "2026-06-09 22:43",
+      "loai": "check",
+      "thay_doi": [
+        "re-apply 41 task hoan thanh sau revert"
+      ]
+    },
     {
       "version": "0.30",
       "ngay": "2026-06-09 02:01",
