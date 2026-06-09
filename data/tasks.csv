@@ -151,7 +151,7 @@ id,ten_dau_viec,nhom,phong_chinh,phong_phoi_hop,bat_dau,ket_thuc,trang_thai,so_l
 150,Vệ sinh khu vực gầm cầu thang Nhà thuốc,hanh_chanh,HCQT,,2026-02-04,2026-02-10,da_hoan_thanh,1,,Biên bản 04/02/2026,0
 151,Xử lý/di dời cây xanh bồn cây trước phòng khám YHCT,hanh_chanh,HCQT,,2026-02-04,2026-02-10,tre_deadline,1,,Biên bản 04/02/2026,0
 152,Tăng cường hệ thống chiếu sáng khu vực X-quang,hanh_chanh,HCQT,,2026-02-04,2026-04-27,da_hoan_thanh,1,Hoàn thành,Biên bản 04/02/2026,0
-153,Thu hồi và lưu kho tủ gỗ đỏ tại phòng HC và phòng trực các khoa,hanh_chanh,HCQT,,2026-02-04,2026-02-10,tre_deadline,1,,Biên bản 04/02/2026,0
+153,Thu hồi và lưu kho tủ gỗ đỏ tại phòng HC và phòng trực các khoa,hanh_chanh,HCQT,,2026-02-04,2026-04-15,da_hoan_thanh,1,Hoàn thành,Biên bản 04/02/2026,0
 154,Lắp bảng thông báo giờ khám bệnh kích thước lớn tại cổng BV,hanh_chanh,HCQT,,2026-02-04,2026-02-10,da_hoan_thanh,1,Sáng 07:00-11:30; Chiều 12:30-16:00,Biên bản 04/02/2026,0
 155,Kẻ vạch chỉ dẫn lối vào/ra khu phân luồng tiếp nhận bệnh nhân,hanh_chanh,HCQT,Điều dưỡng,2026-02-04,2026-02-10,da_hoan_thanh,1,Khung Inox khu tiếp nhận,Biên bản 04/02/2026,0
 156,Thiết kế và niêm yết Poster quy trình cấp phát thuốc; phân định ô nộp toa và ô nhận thuốc,hanh_chanh,Điều dưỡng,HCQT|Dược,2026-02-04,2026-02-10,da_hoan_thanh,1,Poster khổ lớn tại Khoa Dược,Biên bản 04/02/2026,0
@@ -328,7 +328,7 @@ V. CHĂM SÓC CUỐI ĐỜI – GIẢM NHẸ
 320,Báo cáo tuần phân tích chi tiết các nhóm xét nghiệm theo phòng khám và khoa (XN tại CS2 và tại CS1),quan_ly_khac,XN,KHTH,2026-03-16,2026-03-24,dang_thuc_hien,1,,Biên bản 2026-03-16,1
 321,"HCQT + VTTBYT rà soát, kiểm đếm, báo cáo danh sách chi tiết thiết bị Inox tại tất cả khu vực bệnh viện",hanh_chanh,HCQT,VTTBYT,2026-03-16,2026-03-24,tre_deadline,1,,Biên bản 2026-03-16,0
 322,Điều dưỡng + HCQT điều chỉnh kê nhiều nhất 2 giường trong 1 phòng khoa Sản,hanh_chanh,Điều dưỡng,HCQT,2026-03-16,2026-03-16,da_hoan_thanh,1,,Biên bản 2026-03-16,0
-323,HCQT sửa cửa ra vào khoa Sản thành cửa có thể khóa,hanh_chanh,HCQT,,2026-03-16,2026-03-24,tre_deadline,1,,Biên bản 2026-03-16,0
+323,HCQT sửa cửa ra vào khoa Sản thành cửa có thể khóa,hanh_chanh,HCQT,,2026-03-16,2026-03-24,da_hoan_thanh,1,Hoàn thành,Biên bản 2026-03-16,0
 324,Chuyển đổi công năng phòng khám Sản thành phòng hậu sản,hanh_chanh,HCQT,Điều dưỡng,2026-03-16,2026-03-24,da_hoan_thanh,1,,Biên bản 2026-03-16,0
 325,Làm bảng mica để bàn Tạm Ngưng tại khu tiếp nhận CC115 khi đi ngoại viện,hanh_chanh,HCQT,,2026-03-16,2026-03-24,da_hoan_thanh,1,,Biên bản 2026-03-16,0
 326,HCQT + Điều dưỡng làm lại hệ thống rèm khu hồi sức Cấp cứu để tăng tính riêng tư nam và nữ,hanh_chanh,HCQT,Điều dưỡng,2026-03-16,2026-03-24,tre_deadline,1,⚠️ Báo cáo từ phòng phối hợp (DD) — cần kiểm tra lại với phòng chính (HCQT) | Chờ HCQT mời bên công ty vào đo,Biên bản 2026-03-16,0
@@ -393,7 +393,7 @@ V. CHĂM SÓC CUỐI ĐỜI – GIẢM NHẸ
 385,HCQT lắp camera khu nhà nhân viên hướng cổng vào,hanh_chanh,HCQT,,2026-04-21,2026-04-24,da_hoan_thanh,1,Hoàn thành,Biên bản 2026-04-21,0
 386,HCQT + TNXP rà soát phương tiện để sai vị trí (CC/phòng khám/nhà ăn NV/khu D-G),hanh_chanh,HCQT,Thanh Niên Xung Phong,2026-04-21,2026-05-04,da_hoan_thanh,1,Hoàn thành,Biên bản 2026-04-21,0
 387,KHTH + Điều dưỡng + HCQT làm bảng thông tin trực phòng họp CC (lãnh đạo/BS/ĐD/hotline),hanh_chanh,KHTH,Điều dưỡng|HCQT,2026-04-21,2026-04-17,da_hoan_thanh,1,Đã hoàn thành,Biên bản 2026-04-21,0
-388,HCQT rà soát/đánh số/tập kết tủ và bồn Inox toàn viện và báo cáo số lượng,hanh_chanh,HCQT,,2026-04-21,2026-04-28,tre_deadline,1,Tập hợp lập Danh sách,Biên bản 2026-04-21,0
+388,HCQT rà soát/đánh số/tập kết tủ và bồn Inox toàn viện và báo cáo số lượng,hanh_chanh,HCQT,,2026-04-21,2026-05-20,da_hoan_thanh,1,Đã tập kết số lượng,Biên bản 2026-04-21,0
 389,HCQT làm tờ trình triển khai đơn vị làm sạch (tối thiểu 8 nhân sự) cho TCCB và BGĐ,quan_ly_khac,HCQT,Điều dưỡng|TCCB,2026-04-21,2026-04-28,da_hoan_thanh,1,,Biên bản 2026-04-21,0
 390,KHTH giám sát bệnh nhân chuyển viện đã làm Bilan tổng thể,chuyen_mon,KHTH,,2026-04-21,2026-04-28,dang_thuc_hien,1,,Biên bản 2026-04-21,1
 391,KHTH giám sát ghi nhận bệnh nền rõ ràng chi tiết (không ghi mơ hồ),chuyen_mon,KHTH,,2026-04-21,2026-04-28,dang_thuc_hien,1,,Biên bản 2026-04-21,1
@@ -454,13 +454,13 @@ Tới ngày 18/5/2026: đã thực hiện 06 ca. Trong đó 2 ca NS dạ dày v�
 445,TCCB + KHTH + Điều dưỡng bố trí lịch trực/làm việc đúng chính sách; ngày nghỉ/lễ/Tết chu đáo,quan_ly_khac,TCCB,KHTH|Điều dưỡng,2026-05-05,2026-05-12,dang_thuc_hien,1,,Biên bản 2026-05-05,1
 446,TCCB rà soát và giám sát nhân sự luân chuyển công tác cần có biên bản bàn giao công việc gửi về TCCB,quan_ly_khac,TCCB,,2026-05-05,2026-05-12,dang_thuc_hien,1,,Biên bản 2026-05-05,1
 447,HCQT: Khắc phục khóa cửa nhà vệ sinh và che chắn khu vực không hoạt động khu X-quang,hanh_chanh,HCQT,,2026-05-19,2026-05-26,tre_deadline,1,,Biên bản 2026-05-19,0
-448,HCQT: Dọn dẹp mặt tiền nhà ăn nhân viên (phát quang cây cối; loại bỏ vật dụng không cần thiết; di dời trụ điện 3 pha),hanh_chanh,HCQT,,2026-05-19,2026-05-26,tre_deadline,1,,Biên bản 2026-05-19,0
+448,HCQT: Dọn dẹp mặt tiền nhà ăn nhân viên (phát quang cây cối; loại bỏ vật dụng không cần thiết; di dời trụ điện 3 pha),hanh_chanh,HCQT,,2026-05-19,2026-05-20,da_hoan_thanh,1,Hoàn thành,Biên bản 2026-05-19,0
 449,Điều dưỡng phối hợp HCQT: Trang bị tủ lạnh và kiểm soát 5S phân loại thực phẩm nhà ăn nhân viên,hanh_chanh,Điều dưỡng,HCQT,2026-05-19,2026-05-26,tre_deadline,1,,Biên bản 2026-05-19,0
 450,Điều dưỡng phối hợp HCQT: Quy hoạch vị trí đặt cây nước lọc cho nhân viên,hanh_chanh,Điều dưỡng,HCQT,2026-05-19,2026-05-26,tre_deadline,1,,Biên bản 2026-05-19,0
-451,HCQT: Tăng cường giám sát đỗ xe đúng quy định khu nhà nhân viên,quan_ly_khac,HCQT,,2026-05-19,2026-05-26,tre_deadline,1,,Biên bản 2026-05-19,0
-452,HCQT: Kiểm soát vệ sinh 5S khu nhà đại thể và xử lý rác thải vật dụng quanh bồn cây,hanh_chanh,HCQT,,2026-05-19,2026-05-26,tre_deadline,1,,Biên bản 2026-05-19,0
-453,HCQT: Rà soát và lập danh sách các phòng khám chưa trang bị máy lạnh,hanh_chanh,HCQT,,2026-05-19,2026-05-26,tre_deadline,1,,Biên bản 2026-05-19,0
-454,HCQT: Điều chuyển máy lạnh từ CS1 sang CS2,hanh_chanh,HCQT,,2026-05-19,2026-05-22,tre_deadline,1,,Biên bản 2026-05-19,0
+451,HCQT: Tăng cường giám sát đỗ xe đúng quy định khu nhà nhân viên,quan_ly_khac,HCQT,,2026-05-19,2026-05-20,da_hoan_thanh,1,Hoàn thành,Biên bản 2026-05-19,0
+452,HCQT: Kiểm soát vệ sinh 5S khu nhà đại thể và xử lý rác thải vật dụng quanh bồn cây,hanh_chanh,HCQT,,2026-05-19,2026-05-20,da_hoan_thanh,1,Đã dọn vệ sinh,Biên bản 2026-05-19,0
+453,HCQT: Rà soát và lập danh sách các phòng khám chưa trang bị máy lạnh,hanh_chanh,HCQT,,2026-05-19,2026-05-19,da_hoan_thanh,1,Hoàn thành,Biên bản 2026-05-19,0
+454,HCQT: Điều chuyển máy lạnh từ CS1 sang CS2,hanh_chanh,HCQT,,2026-05-19,2026-05-29,da_hoan_thanh,1,Đã chuyển và lắp đặt xong.,Biên bản 2026-05-19,0
 455,KHTH: Chấm dứt in trả kết quả X-quang (PACS đã liên thông),quan_ly_khac,KHTH,,2026-05-19,2026-05-26,tre_deadline,1,,Biên bản 2026-05-19,0
 456,KHTH phối hợp BS Duyên: Theo dõi và giám sát các ca phẫu thuật bụng có biến chứng nhiễm trùng,chuyen_mon,KHTH,,2026-05-19,2026-05-26,tre_deadline,1,,Biên bản 2026-05-19,0
 457,KHTH phối hợp BS Trưởng khoa: Rà soát đánh giá mức độ tuân thủ chuyên môn BS; giải trình nếu vi phạm,chuyen_mon,KHTH,,2026-05-19,2026-05-26,tre_deadline,1,,Biên bản 2026-05-19,0
