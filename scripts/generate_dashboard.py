@@ -31,13 +31,16 @@ def normalize_dept(d: str) -> str:
 
 
 def extract_date_key(name: str) -> str | None:
-    """Extract YYMMDD from a name containing dd/mm/yyyy or dd/mm/yy pattern."""
+    """Extract YYMMDD from a name with dd/mm/yyyy, dd/mm/yy, or yyyy-mm-dd pattern."""
     m = re.search(r'\b(\d{2})/(\d{2})/(\d{4})\b', name)
     if m:
         return m.group(3)[2:] + m.group(2) + m.group(1)
     m = re.search(r'\b(\d{2})/(\d{2})/(\d{2})\b', name)
     if m:
         return m.group(3) + m.group(2) + m.group(1)
+    m = re.search(r'\b(\d{4})-(\d{2})-(\d{2})\b', name)
+    if m:
+        return m.group(1)[2:] + m.group(2) + m.group(3)
     return None
 
 
