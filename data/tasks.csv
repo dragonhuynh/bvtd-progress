@@ -230,7 +230,7 @@ id,ten_dau_viec,nhom,phong_chinh,phong_phoi_hop,bat_dau,ket_thuc,trang_thai,so_l
 229,KSNK + HCQT rà soát và trang bị kệ/tủ Inox đựng dụng cụ toàn viện,chuyen_mon,KSNK,HCQT,2026-02-10,2026-02-13,tre_deadline,1,,Biên bản 10/02/2026,0
 230,Xây dựng quy trình chuyên môn triển khai sổ sức khỏe,chuyen_mon,KHTH,K.Cấp cứu,2026-02-10,2026-02-13,da_hoan_thanh,1,,Biên bản 10/02/2026,0
 231,Triển khai sổ khám sức khỏe toàn diện cho nhóm nguy cơ cao trước Tết,chuyen_mon,KHTH,BS Bảo Anh,2026-02-10,2026-02-13,da_hoan_thanh,1,NB CC/lão khoa/sản phụ khoa/Nhi/PHCN/YHCT,Biên bản 10/02/2026,0
-232,Lên lịch Hội chẩn hàng tuần cho BS Giám đốc và BS Bảo Anh tại CS2,chuyen_mon,KHTH,,2026-02-10,2026-02-13,dang_thuc_hien,1,"Đã xin lịch thư ký BGĐ (Hằng) , chưa phản hồi",Biên bản 10/02/2026,1
+232,Lên lịch Hội chẩn hàng tuần cho BS Giám đốc và BS Bảo Anh tại CS2,chuyen_mon,KHTH,,2026-02-10,2026-05-10,da_hoan_thanh,1,"Đã xin lịch thư ký BGĐ (Hằng) , chưa phản hồi",Biên bản 10/02/2026,1
 233,Sắp xếp lại phòng Phun Khí Dung đúng chuẩn (bàn ghế),chuyen_mon,KHTH,,2026-02-10,2026-05-18,da_hoan_thanh,1,,Biên bản 10/02/2026,0
 234,Làm công văn gửi BV Ung Bướu phối hợp điều trị các ca ung thư tại CS2,chuyen_mon,KHTH,,2026-02-10,2026-05-18,da_hoan_thanh,1,,Biên bản 10/02/2026,0
 235,Làm bảng kiểm trước chuyển tuyến; theo dấu và gọi điện BN chuyển tuyến,chuyen_mon,KHTH,Điều dưỡng,2026-02-10,2026-05-18,da_hoan_thanh,2,Nhắc lại; bảng kiểm gồm lý do/theo dõi/hình thức/quyền lợi NB,Biên bản 10/02/2026,0
@@ -258,7 +258,7 @@ id,ten_dau_viec,nhom,phong_chinh,phong_phoi_hop,bat_dau,ket_thuc,trang_thai,so_l
 257,HCQT giám sát danh sách nhân viên ra vào và xe cấp cứu CC115,quan_ly_khac,HCQT,,2026-02-10,2026-02-13,da_hoan_thanh,1,,Biên bản 10/02/2026,0
 258,HCQT + Điều dưỡng bố trí nhân sự nữ khu nghỉ nhân viên; nhân sự nam khu bảo vệ sau cải tạo,quan_ly_khac,HCQT,Điều dưỡng,2026-02-10,2026-02-13,da_hoan_thanh,1,Cổng Phan Trọng Tuệ,Biên bản 10/02/2026,0
 259,HCQT + CNTT bố trí khu họp và sạc điện TTB tại CC; lưu ý PCCC,quan_ly_khac,HCQT,CNTT,2026-02-10,2026-02-13,da_hoan_thanh,1,,Biên bản 10/02/2026,0
-260,KHTH + HCQT lắp đặt biển chỉ dẫn đường bộ 3 vị trí đến BVTD CS2,hanh_chanh,KHTH,HCQT,2026-02-25,2026-03-03,tre_deadline,1,Phối hợp HCQT liên hệ địa phương : thống nhất vị trí lắp đặt,Biên bản 25/02/2026,0
+260,KHTH + HCQT lắp đặt biển chỉ dẫn đường bộ 3 vị trí đến BVTD CS2,hanh_chanh,KHTH,HCQT,2026-02-25,2026-06-15,da_hoan_thanh,1,Phối hợp HCQT liên hệ địa phương : thống nhất vị trí lắp đặt,Biên bản 25/02/2026,0
 261,HCQT + KHTH thiết kế và lắp bảng thông tin khổ lớn tại cổng chính (Tiêm chủng + KSK),hanh_chanh,HCQT,KHTH,2026-02-25,2026-03-03,da_hoan_thanh,1,Giới thiệu Từ Dũ Vaccine và dịch vụ khám sức khỏe tổng quát,Biên bản 25/02/2026,0
 262,KHTH ký kết MOU với Trạm Y tế xã huyện Cần Giờ về chuyển tuyến và chia sẻ CLS,chuyen_mon,KHTH,,2026-02-25,2026-03-03,da_hoan_thanh,1,Dự thảo HĐ chuyển mẫu XN (đang gửi TCKT),Biên bản 25/02/2026,0
 263,KHTH khẩn trương đăng ký bổ sung DMKT nội soi TMH và tiêu hóa (trên và dưới) với Sở Y tế,chuyen_mon,KHTH,,2026-02-25,2026-04-15,da_hoan_thanh,2,Nhắc lại; mở rộng thêm nội soi TMH,Biên bản 25/02/2026,0
