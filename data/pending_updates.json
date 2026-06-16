@@ -1,0 +1,26 @@
+[
+  {
+    "id": "232",
+    "ten": "Lên lịch Hội chẩn hàng tuần cho BS Giám đốc và BS Bảo Anh tại CS2",
+    "phong": "KHTH",
+    "trang_thai": "da_hoan_thanh",
+    "ngay_ht": "2026-05-10",
+    "ghi_chu": "",
+    "user": "KHTH",
+    "user_phong": "KHTH",
+    "at": "2026-06-15",
+    "migrated": false
+  },
+  {
+    "id": "260",
+    "ten": "KHTH + HCQT lắp đặt biển chỉ dẫn đường bộ 3 vị trí đến BVTD CS2",
+    "phong": "KHTH",
+    "trang_thai": "da_hoan_thanh",
+    "ngay_ht": "2026-06-15",
+    "ghi_chu": "",
+    "user": "KHTH",
+    "user_phong": "KHTH",
+    "at": "2026-06-15",
+    "migrated": false
+  }
+]
