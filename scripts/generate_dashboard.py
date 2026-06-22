@@ -2061,6 +2061,7 @@ const TT_LABELS = {da_hoan_thanh:'✅ Hoàn thành', dang_thuc_hien:'🔄 Đang 
 let _updTask = null;
 let _db = null;
 let _fbPending = {};  // { "USER_taskId": entry } — synced by real-time listener
+let _fbApproved = {}; // { "taskId": entry } — BGĐ duyệt / cập nhật trực tiếp, synced qua Firebase
 
 function isBGD() { return AUTH && AUTH.user === 'BGD'; }
 function lsGet(k) { try { return JSON.parse(localStorage.getItem(k)||'[]'); } catch(e) { return []; } }
@@ -2084,6 +2085,41 @@ function normalizePending(e) {
 }
 function fbPendingList() { return Object.values(_fbPending).map(normalizePending); }
 
+// ── Approved queue (BGĐ) — Firebase-backed, mirror localStorage để offline ───────
+// Key trong Firebase = task id (dedup theo id, khớp logic approveUpd cũ).
+function apprFbKey(a) { return String(a.id || ''); }
+function apprGet() {
+  // Gộp localStorage + Firebase, dedup theo id (Firebase ưu tiên)
+  const map = {};
+  lsGet(AK).forEach(a => { if (a && a.id != null) map[String(a.id)] = a; });
+  Object.values(_fbApproved).forEach(v => { const n = normalizePending(v); if (n.id) map[String(n.id)] = n; });
+  return Object.values(map);
+}
+function apprPush(entry) {
+  const arr = lsGet(AK);
+  const idx = arr.findIndex(a => String(a.id) === String(entry.id));
+  if (idx >= 0) arr[idx] = entry; else arr.push(entry);
+  lsSave(AK, arr);
+  if (fbInit()) _db.ref('bvtd_approved/' + apprFbKey(entry)).set(entry);
+}
+function apprRemove(id) {
+  lsSave(AK, lsGet(AK).filter(a => String(a.id) !== String(id)));
+  if (fbInit()) _db.ref('bvtd_approved/' + String(id)).remove();
+  delete _fbApproved[String(id)];
+}
+function apprClear() {
+  lsSave(AK, []);
+  if (fbInit()) _db.ref('bvtd_approved').remove();
+  _fbApproved = {};
+}
+// Đẩy ghi chú BGĐ đang kẹt trong localStorage lên Firebase (chạy 1 lần khi mở dashboard)
+function migrateApprovedToFb() {
+  if (!fbInit()) return;
+  const local = lsGet(AK);
+  if (!local.length) return;
+  local.forEach(a => { if (a && a.id != null) _db.ref('bvtd_approved/' + String(a.id)).set(a); });
+}
+
 function fbInit() {
   if (_db) return true;
   if (!fbEnabled()) return false;
@@ -2104,7 +2140,16 @@ function startFbListener() {
       renderReview();
     }
   });
+  _db.ref('bvtd_approved').on('value', snap => {
+    _fbApproved = snap.val() || {};
+    updateNavBadge();
+    if (document.getElementById('view-review')?.classList.contains('active')) {
+      renderPending();
+      renderReview();
+    }
+  });
   migrateLocalStorage();
+  migrateApprovedToFb();
 }
 
 function showBanner(msg, isOk) {
@@ -2260,13 +2305,10 @@ async function submitUpd() {
                  may:_getDeviceInfo(), ip:localIP,
                  at:new Date().toISOString().slice(0,10)};
   if (isBGD()) {
-    // BGĐ → thẳng vào approved queue, xuất JSON rồi chạy /check
-    const appr = lsGet(AK);
-    const idx = appr.findIndex(a => a.id === _updTask.id);
-    if (idx >= 0) appr[idx] = entry; else appr.push(entry);
-    lsSave(AK, appr);
-    showUpdMsg('✓ Đã lưu. Nhấn "Xuất JSON" trong panel bên dưới để áp dụng vào database.', false);
-    setTimeout(() => { closeUpd(); renderPending(); }, 1200);
+    // BGĐ → approved queue đồng bộ Firebase (giống phòng ban), không còn kẹt localStorage
+    apprPush(entry);
+    showUpdMsg('✓ Đã lưu và đồng bộ lên hệ thống. Ghi chú sẽ được áp dụng ở lần cập nhật kế tiếp.', false);
+    setTimeout(() => { closeUpd(); renderPending(); renderReview(); }, 1200);
   } else {
     // Phòng ban → Firebase pending (real-time, hiển thị ngay trên BGĐ dashboard)
     if (!fbEnabled()) {
@@ -2302,7 +2344,7 @@ async function submitUpd() {
 // ── Review view (BGĐ only) ────────────────────────────────────────────────────
 function renderReview() {
   if (!isBGD()) return;
-  const approved = lsGet(AK);
+  const approved = apprGet();
   const doneKeys = new Set(approved.map(a => a.id + '|' + a.user));
   const pending  = fbPendingList().filter(p => !doneKeys.has(p.id + '|' + p.user));
   const depts    = new Set(pending.map(p => p.user));
@@ -2414,7 +2456,7 @@ function updateNavBadge() {
   }
   if (navEl)  { navEl.style.display  = 'flex'; navEl.removeAttribute('aria-hidden');  }
   if (navLog) { navLog.style.display = 'flex'; navLog.removeAttribute('aria-hidden'); }
-  const approved  = lsGet(AK);
+  const approved  = apprGet();
   const doneKeys  = new Set(approved.map(a => a.id + '|' + a.user));
   const count     = fbPendingList().filter(p => !doneKeys.has(p.id + '|' + p.user)).length;
   if (badge) {
@@ -2426,7 +2468,7 @@ function updateNavBadge() {
 function renderPending() {
   const panel = document.getElementById('pending-panel');
   if (!panel || !isBGD()) { if (panel) panel.innerHTML = ''; return; }
-  const approvedItems = lsGet(AK);
+  const approvedItems = apprGet();
   const doneKeys2 = new Set(approvedItems.map(a => a.id + '|' + a.user));
   const pendingItems = fbPendingList().filter(p => !doneKeys2.has(p.id + '|' + p.user));
   if (!pendingItems.length && !approvedItems.length) { panel.innerHTML = ''; return; }
@@ -2519,7 +2561,7 @@ function showGHTokenSetup() {
 }
 
 async function uploadToGitHub() {
-  const approved = lsGet(AK);
+  const approved = apprGet();
   if (!approved.length) { alert('Chưa có cập nhật nào được duyệt.'); return; }
 
   let token = localStorage.getItem(GH_TOKEN_KEY) || '';
@@ -2558,7 +2600,7 @@ async function uploadToGitHub() {
     const resp = await fetch(apiUrl, { method: 'PUT', headers, body: JSON.stringify(body) });
 
     if (resp.ok) {
-      lsSave(AK, []);
+      apprClear();
       renderReview();
       updateNavBadge();
       if (btn) { btn.textContent = '✓ Đã gửi!'; btn.disabled = false; }
@@ -2589,7 +2631,7 @@ async function uploadToGitHub() {
 }
 
 function removeApproved(id) {
-  lsSave(AK, lsGet(AK).filter(a => a.id !== id));
+  apprRemove(id);
   renderPending(); renderReview();
 }
 
@@ -2608,15 +2650,12 @@ function approveUpd(id, user) {
   if (fbInit()) _db.ref('bvtd_pending/' + key).remove();
   delete _fbPending[key];
   const norm = normalizePending(item);
-  const appr = lsGet(AK);
-  const idx = appr.findIndex(a => String(a.id) === String(id));
-  if (idx >= 0) appr[idx] = norm; else appr.push(norm);
-  lsSave(AK, appr);
+  apprPush(norm);
   renderPending(); renderReview();
 }
 
 function approveAll() {
-  const approvedItems = lsGet(AK);
+  const approvedItems = apprGet();
   const doneKeys2 = new Set(approvedItems.map(a => a.id + '|' + a.user));
   const pendingItems = fbPendingList().filter(p => !doneKeys2.has(p.id + '|' + p.user));
   pendingItems.forEach(p => approveUpd(p.id, p.user));
@@ -2630,14 +2669,14 @@ function rejectUpd(id, user) {
 }
 
 function exportApproved() {
-  const appr = lsGet(AK);
+  const appr = apprGet();
   if (!appr.length) { alert('Chưa có cập nhật nào được duyệt.'); return; }
   const blob = new Blob([JSON.stringify(appr, null, 2)], {type:'application/json'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = 'pending_updates.json';
   a.click();
-  lsSave(AK, []);
+  apprClear();
   renderPending(); renderReview();
   alert('✓ Đã tải file cập nhật về máy.\\nĐặt file pending_updates.json vào thư mục data/ rồi chạy /check để áp dụng.');
 }
