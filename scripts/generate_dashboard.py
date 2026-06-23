@@ -839,6 +839,11 @@ body {
 .mfield input,.mfield textarea,.mfield select{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;outline:none;transition:border .15s;resize:vertical;box-sizing:border-box;}
 .mfield input:focus,.mfield textarea:focus,.mfield select:focus{border-color:var(--accent);}
 .mfield select{background:#fff;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23718096' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;}
+.chip-grp-label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin:8px 0 5px;}
+.chip-wrap{display:flex;flex-wrap:wrap;gap:6px;}
+.dept-chip{border:1.5px solid var(--border);background:#fff;color:#4a5568;border-radius:14px;padding:5px 11px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;user-select:none;transition:background .12s,border-color .12s,color .12s;}
+.dept-chip:hover{border-color:var(--accent);}
+.dept-chip.sel{background:var(--accent);border-color:var(--accent);color:#fff;}
 .mactions{display:flex;gap:10px;margin-top:20px;justify-content:flex-end;}
 .btn-cncl{background:var(--border);border:none;border-radius:7px;padding:9px 18px;font-size:13px;cursor:pointer;font-family:inherit;}
 .msg-err{padding:10px 12px;border-radius:8px;font-size:13px;background:#fff5f5;color:#c53030;border:1.5px solid #fc8181;}
@@ -1283,6 +1288,14 @@ body {
     <div class="mfield" id="upd-ngay-wrap">
       <label>Ngày hoàn thành (bắt buộc nếu chọn "Hoàn thành")</label>
       <input type="date" id="upd-ngay">
+    </div>
+    <div class="mfield" id="upd-deadline-wrap" style="display:none">
+      <label>Deadline (mặc định 4 ngày làm việc — bỏ qua T7/CN)</label>
+      <input type="date" id="upd-deadline">
+    </div>
+    <div class="mfield" id="upd-phutrach-wrap" style="display:none">
+      <label>Khoa / phòng phụ trách (chọn nhiều)</label>
+      <div id="upd-depts"></div>
     </div>
     <div class="mfield">
       <label id="upd-note-label">Ghi chú / Tình trạng</label>
@@ -2066,7 +2079,55 @@ let _fbApproved = {}; // { "taskId": entry } — BGĐ duyệt / cập nhật tr�
 
 function isBGD() { return AUTH && AUTH.user === 'BGD'; }
 function isDirector() { return AUTH && AUTH.user === 'P.T.HAI'; }   // BS Phạm Thanh Hải — PGĐ
-const DIRECTOR_NAME = 'BS Thanh Hải';
+const DIRECTOR_NAME = 'TS.BS. PHẠM THANH HẢI';
+// Phòng/khoa có thể được PGĐ giao phụ trách (sau này đẩy thông báo tới các đơn vị này)
+const CHI_DAO_DEPTS = {
+  'Bộ phận': ['HCQT','DD','QLCL','VTTBYT','TCKT','TCCB','CĐT','KHTH','CNTT'],
+  'Khoa':    ['DUOC','KSNK','CĐHA','SANH','NHI','NOI','NGOAI','CC','GMHS','TNT'],
+};
+// Deadline mặc định: hôm nay + 4 ngày; nếu rơi vào T7/CN → dời sang thứ Hai
+function chiDaoDeadline() {
+  const d = new Date();
+  d.setDate(d.getDate() + 4);
+  const dow = d.getDay();           // 0 = CN, 6 = T7
+  if (dow === 6) d.setDate(d.getDate() + 2);
+  else if (dow === 0) d.setDate(d.getDate() + 1);
+  return d;
+}
+function ymd(d) {
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+function dmyFromYmd(s) {            // 'yyyy-mm-dd' → 'dd/mm/yyyy'
+  if (!s) return '';
+  const [y,m,dd] = s.split('-');
+  return dd + '/' + m + '/' + y;
+}
+function renderDeptChips() {
+  const box = document.getElementById('upd-depts');
+  if (!box) return;
+  box.innerHTML = '';
+  Object.keys(CHI_DAO_DEPTS).forEach(grp => {
+    const lbl = document.createElement('div');
+    lbl.className = 'chip-grp-label';
+    lbl.textContent = grp;
+    box.appendChild(lbl);
+    const wrap = document.createElement('div');
+    wrap.className = 'chip-wrap';
+    CHI_DAO_DEPTS[grp].forEach(code => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'dept-chip';
+      b.textContent = code;
+      b.dataset.code = code;
+      b.onclick = () => b.classList.toggle('sel');
+      wrap.appendChild(b);
+    });
+    box.appendChild(wrap);
+  });
+}
+function getSelectedDepts() {
+  return Array.from(document.querySelectorAll('#upd-depts .dept-chip.sel')).map(b => b.dataset.code);
+}
 function lsGet(k) { try { return JSON.parse(localStorage.getItem(k)||'[]'); } catch(e) { return []; } }
 function lsSave(k, v) { localStorage.setItem(k, JSON.stringify(v)); }
 // Firebase RTDB cấm các ký tự . # $ [ ] / trong key → thay bằng '-'
@@ -2086,6 +2147,8 @@ function normalizePending(e) {
     user:       e.user    || e.phong   || '',
     user_phong: e.user_phong || e.phong || '',
     chi_dao:    e.chi_dao || '',
+    phu_trach:  e.phu_trach || [],
+    deadline:   e.deadline || '',
     at:         e.at      || (e.timestamp ? new Date(e.timestamp).toISOString().slice(0,10) : ''),
     migrated:   e.migrated || false,
   };
@@ -2225,17 +2288,23 @@ function openUpd(id, ten, phong, phoi) {
   document.getElementById('upd-note').value = '';
   document.getElementById('upd-msg').style.display = 'none';
   if (isDirector()) {
-    // Chế độ "Chỉ đạo" — chỉ nhập ghi chú, không có trạng thái/ngày
+    // Chế độ "Chỉ đạo" — ghi chú + deadline + phòng/khoa phụ trách
     document.getElementById('upd-ttl').textContent = '📌 Chỉ đạo / Ghi chú — ' + DIRECTOR_NAME;
     document.getElementById('upd-tt-wrap').style.display = 'none';
     document.getElementById('upd-ngay-wrap').style.display = 'none';
+    document.getElementById('upd-deadline-wrap').style.display = '';
+    document.getElementById('upd-phutrach-wrap').style.display = '';
+    document.getElementById('upd-deadline').value = ymd(chiDaoDeadline());
+    renderDeptChips();
     document.getElementById('upd-note-label').textContent = 'Nội dung chỉ đạo / ghi chú (sẽ hiện ở cột Ghi chú với tiền tố "' + DIRECTOR_NAME + ': …")';
-    document.getElementById('upd-note').placeholder = 'VD: Khẩn trương hoàn thành trước 30/06; phối hợp với KHTH...';
+    document.getElementById('upd-note').placeholder = 'VD: Khẩn trương hoàn thành; phối hợp với KHTH...';
     document.getElementById('upd-submit-btn').textContent = 'Gửi chỉ đạo →';
   } else {
     document.getElementById('upd-ttl').textContent = isBGD() ? '✏ Cập nhật tiến độ' : '✏ Báo cáo tiến độ';
     document.getElementById('upd-tt-wrap').style.display = '';
     document.getElementById('upd-ngay-wrap').style.display = '';
+    document.getElementById('upd-deadline-wrap').style.display = 'none';
+    document.getElementById('upd-phutrach-wrap').style.display = 'none';
     document.getElementById('upd-note-label').textContent = 'Ghi chú / Tình trạng';
     document.getElementById('upd-note').placeholder = 'VD: Đã hoàn thành... / Đang chờ... / Khó khăn vì...';
     document.getElementById('upd-submit-btn').textContent = isBGD() ? 'Lưu cập nhật →' : 'Gửi báo cáo →';
@@ -2377,13 +2446,18 @@ async function submitChiDao() {
   if (!fbInit()) {
     showUpdMsg('❌ Không thể kết nối Firebase. Kiểm tra internet và thử lại.', true); return;
   }
-  // ghi_chu mang sẵn tiền tố + mốc ngày để check.py chèn nguyên văn lên đầu cột Ghi chú
+  // ghi_chu mang sẵn tiền tố + mốc ngày + phòng phụ trách + hạn để chèn nguyên văn vào cột Ghi chú
   const _d = new Date();
   const _dmy = String(_d.getDate()).padStart(2,'0') + '/' + String(_d.getMonth()+1).padStart(2,'0');
-  const finalNote = DIRECTOR_NAME + ' (' + _dmy + '): ' + note;
+  const depts = getSelectedDepts();
+  const deadline = document.getElementById('upd-deadline').value;  // yyyy-mm-dd
+  const deptStr = depts.length ? ' [→ ' + depts.join(', ') + ']' : '';
+  const hanStr  = deadline ? ' — hạn ' + dmyFromYmd(deadline) : '';
+  const finalNote = DIRECTOR_NAME + ' (' + _dmy + ')' + deptStr + hanStr + ': ' + note;
   const [localIP] = await Promise.all([_getLocalIP()]);
   const entry = {id:_updTask.id, ten:_updTask.ten, phong:_updTask.phong,
                  trang_thai:'', ngay_ht:'', ghi_chu:finalNote, chi_dao:'1',
+                 phu_trach:depts, deadline:deadline,
                  user:AUTH.user, user_phong:DIRECTOR_NAME + ' (PGĐ)',
                  may:_getDeviceInfo(), ip:localIP,
                  at:new Date().toISOString().slice(0,10)};
