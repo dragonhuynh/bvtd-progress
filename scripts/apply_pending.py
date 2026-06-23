@@ -54,13 +54,20 @@ def main() -> None:
             continue
 
         old_tt = task["trang_thai"]
-        new_tt = p.get("trang_thai") or old_tt
-
-        task["trang_thai"] = new_tt
-        if new_tt == "da_hoan_thanh" and p.get("ngay_ht"):
-            task["ket_thuc"] = p["ngay_ht"]
-        if p.get("ghi_chu"):
-            task["ghi_chu"] = p["ghi_chu"]
+        if p.get("chi_dao"):
+            # Chỉ đạo (BS Thanh Hải / PGĐ): KHÔNG đổi trạng thái — chèn ghi chú lên đầu
+            new_tt = old_tt
+            if p.get("ghi_chu"):
+                old_note = (task.get("ghi_chu") or "").strip()
+                new_note = p["ghi_chu"].strip()
+                task["ghi_chu"] = f"{new_note} | {old_note}" if old_note else new_note
+        else:
+            new_tt = p.get("trang_thai") or old_tt
+            task["trang_thai"] = new_tt
+            if new_tt == "da_hoan_thanh" and p.get("ngay_ht"):
+                task["ket_thuc"] = p["ngay_ht"]
+            if p.get("ghi_chu"):
+                task["ghi_chu"] = p["ghi_chu"]
 
         log_rows.append({
             "ngay_cap_nhat":   today,
