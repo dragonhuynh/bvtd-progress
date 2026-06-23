@@ -54,20 +54,23 @@ def main() -> None:
             continue
 
         old_tt = task["trang_thai"]
-        if p.get("chi_dao"):
+        note_in = (p.get("ghi_chu") or "").strip()
+        # Nhận diện chỉ đạo theo cờ HOẶC theo tiền tố tên (phòng khi cờ chi_dao
+        # bị rớt giữa pipeline → vẫn prepend, KHÔNG ghi đè mất ghi chú cũ)
+        is_directive = bool(p.get("chi_dao")) or note_in.startswith("BS Thanh Hải")
+        if is_directive:
             # Chỉ đạo (BS Thanh Hải / PGĐ): KHÔNG đổi trạng thái — chèn ghi chú lên đầu
             new_tt = old_tt
-            if p.get("ghi_chu"):
+            if note_in:
                 old_note = (task.get("ghi_chu") or "").strip()
-                new_note = p["ghi_chu"].strip()
-                task["ghi_chu"] = f"{new_note} | {old_note}" if old_note else new_note
+                task["ghi_chu"] = f"{note_in} | {old_note}" if old_note else note_in
         else:
             new_tt = p.get("trang_thai") or old_tt
             task["trang_thai"] = new_tt
             if new_tt == "da_hoan_thanh" and p.get("ngay_ht"):
                 task["ket_thuc"] = p["ngay_ht"]
-            if p.get("ghi_chu"):
-                task["ghi_chu"] = p["ghi_chu"]
+            if note_in:
+                task["ghi_chu"] = note_in
 
         log_rows.append({
             "ngay_cap_nhat":   today,
