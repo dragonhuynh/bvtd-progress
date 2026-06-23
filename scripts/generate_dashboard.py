@@ -1269,9 +1269,9 @@ body {
 <!-- ═══ UPDATE MODAL ═══ -->
 <div id="upd-modal" class="modal-ov" style="display:none" onclick="if(event.target===this)closeUpd()">
   <div class="modal-bx">
-    <div class="modal-ttl">✏ Báo cáo tiến độ</div>
+    <div class="modal-ttl" id="upd-ttl">✏ Báo cáo tiến độ</div>
     <div class="modal-sub" id="upd-sub"></div>
-    <div class="mfield">
+    <div class="mfield" id="upd-tt-wrap">
       <label>Trạng thái</label>
       <select id="upd-tt">
         <option value="">-- Chọn trạng thái --</option>
@@ -1285,13 +1285,13 @@ body {
       <input type="date" id="upd-ngay">
     </div>
     <div class="mfield">
-      <label>Ghi chú / Tình trạng</label>
+      <label id="upd-note-label">Ghi chú / Tình trạng</label>
       <textarea id="upd-note" rows="3" placeholder="VD: Đã hoàn thành... / Đang chờ... / Khó khăn vì..."></textarea>
     </div>
     <div id="upd-msg" style="display:none"></div>
     <div class="mactions">
       <button class="btn-cncl" onclick="closeUpd()">Hủy</button>
-      <button class="btn-primary" onclick="submitUpd()">Gửi báo cáo →</button>
+      <button class="btn-primary" id="upd-submit-btn" onclick="submitUpd()">Gửi báo cáo →</button>
     </div>
   </div>
 </div>
@@ -1308,6 +1308,7 @@ const PASS = 'bvtd@cs2';
 // depts: null = xem tất cả; array = chỉ xem phòng ban trong list
 const USERS = {
   'BGD':      null,
+  'P.T.HAI':  null,   // BS Phạm Thanh Hải — Phó Giám đốc: xem tất cả, chỉ ra "Chỉ đạo" (ghi chú), không cập nhật trạng thái
   'HCQT':     ['HCQT'],
   'KHTH':     ['KHTH'],
   'CNTT':     ['CNTT'],
@@ -1723,12 +1724,12 @@ function buildTasksView(filtered) {
       const color  = avatarColor(dept);
       const rows = tasks.map(t => {
         const nguonShort = t.nguon ? t.nguon.replace(/^Biên bản /, '') : '—';
-        const canUpd = AUTH && (t.tt === 'tre_deadline' || t.tt === 'dang_thuc_hien' || (isBGD() && t.tt === 'da_hoan_thanh'));
-        const updLabel = isBGD() ? '✏ Cập nhật' : '✏ Báo cáo';
+        const canUpd = AUTH && (isDirector() || t.tt === 'tre_deadline' || t.tt === 'dang_thuc_hien' || (isBGD() && t.tt === 'da_hoan_thanh'));
+        const updLabel = isDirector() ? '📌 Chỉ đạo' : isBGD() ? '✏ Cập nhật' : '✏ Báo cáo';
         const alreadySent = !isBGD() && canUpd && _pendingIds.has(t.id);
         const updBtn = canUpd
           ? (alreadySent
-              ? `<button class="btn-upd btn-sent" data-id="${t.id}" data-ten="${t.ten.replace(/"/g,'&quot;')}" data-phong="${t.phong}" data-phoi="${t.phoi_hop||''}" onclick="openUpd(this.dataset.id,this.dataset.ten,this.dataset.phong,this.dataset.phoi)">↺ Cập nhật lại</button>`
+              ? `<button class="btn-upd btn-sent" data-id="${t.id}" data-ten="${t.ten.replace(/"/g,'&quot;')}" data-phong="${t.phong}" data-phoi="${t.phoi_hop||''}" onclick="openUpd(this.dataset.id,this.dataset.ten,this.dataset.phong,this.dataset.phoi)">${isDirector() ? '↺ Chỉ đạo lại' : '↺ Cập nhật lại'}</button>`
               : `<button class="btn-upd" data-id="${t.id}" data-ten="${t.ten.replace(/"/g,'&quot;')}" data-phong="${t.phong}" data-phoi="${t.phoi_hop||''}" onclick="openUpd(this.dataset.id,this.dataset.ten,this.dataset.phong,this.dataset.phoi)">${updLabel}</button>`)
           : '';
         return `<tr>
@@ -2064,6 +2065,8 @@ let _fbPending = {};  // { "USER_taskId": entry } — synced by real-time listen
 let _fbApproved = {}; // { "taskId": entry } — BGĐ duyệt / cập nhật trực tiếp, synced qua Firebase
 
 function isBGD() { return AUTH && AUTH.user === 'BGD'; }
+function isDirector() { return AUTH && AUTH.user === 'P.T.HAI'; }   // BS Phạm Thanh Hải — PGĐ
+const DIRECTOR_NAME = 'BS Thanh Hải';
 function lsGet(k) { try { return JSON.parse(localStorage.getItem(k)||'[]'); } catch(e) { return []; } }
 function lsSave(k, v) { localStorage.setItem(k, JSON.stringify(v)); }
 function fbKey(user, id) { return user + '_' + id; }
@@ -2079,6 +2082,7 @@ function normalizePending(e) {
     ghi_chu:    e.ghi_chu || '',
     user:       e.user    || e.phong   || '',
     user_phong: e.user_phong || e.phong || '',
+    chi_dao:    e.chi_dao || '',
     at:         e.at      || (e.timestamp ? new Date(e.timestamp).toISOString().slice(0,10) : ''),
     migrated:   e.migrated || false,
   };
@@ -2213,8 +2217,23 @@ function openUpd(id, ten, phong, phoi) {
   document.getElementById('upd-tt').value = '';
   document.getElementById('upd-ngay').value = new Date().toISOString().slice(0, 10);
   document.getElementById('upd-note').value = '';
-  document.getElementById('upd-ngay-wrap').style.display = '';
   document.getElementById('upd-msg').style.display = 'none';
+  if (isDirector()) {
+    // Chế độ "Chỉ đạo" — chỉ nhập ghi chú, không có trạng thái/ngày
+    document.getElementById('upd-ttl').textContent = '📌 Chỉ đạo / Ghi chú — ' + DIRECTOR_NAME;
+    document.getElementById('upd-tt-wrap').style.display = 'none';
+    document.getElementById('upd-ngay-wrap').style.display = 'none';
+    document.getElementById('upd-note-label').textContent = 'Nội dung chỉ đạo / ghi chú (sẽ hiện ở cột Ghi chú với tiền tố "' + DIRECTOR_NAME + ': …")';
+    document.getElementById('upd-note').placeholder = 'VD: Khẩn trương hoàn thành trước 30/06; phối hợp với KHTH...';
+    document.getElementById('upd-submit-btn').textContent = 'Gửi chỉ đạo →';
+  } else {
+    document.getElementById('upd-ttl').textContent = isBGD() ? '✏ Cập nhật tiến độ' : '✏ Báo cáo tiến độ';
+    document.getElementById('upd-tt-wrap').style.display = '';
+    document.getElementById('upd-ngay-wrap').style.display = '';
+    document.getElementById('upd-note-label').textContent = 'Ghi chú / Tình trạng';
+    document.getElementById('upd-note').placeholder = 'VD: Đã hoàn thành... / Đang chờ... / Khó khăn vì...';
+    document.getElementById('upd-submit-btn').textContent = isBGD() ? 'Lưu cập nhật →' : 'Gửi báo cáo →';
+  }
   document.getElementById('upd-modal').style.display = 'flex';
 }
 document.addEventListener('DOMContentLoaded', () => {
@@ -2268,6 +2287,7 @@ function _getLocalIP() {
 
 async function submitUpd() {
   if (!_updTask) return;
+  if (isDirector()) { await submitChiDao(); return; }
   const tt = document.getElementById('upd-tt').value;
   let ngayRaw = document.getElementById('upd-ngay').value.trim();
   const note = document.getElementById('upd-note').value.trim();
@@ -2341,6 +2361,36 @@ async function submitUpd() {
   }
 }
 
+// ── Gửi "Chỉ đạo" (BS Thanh Hải / PGĐ) — vào hàng đợi chờ BGĐ duyệt ─────────────
+async function submitChiDao() {
+  const note = document.getElementById('upd-note').value.trim();
+  if (!note) { showUpdMsg('Vui lòng nhập nội dung chỉ đạo / ghi chú.', true); return; }
+  if (!fbEnabled()) {
+    showUpdMsg('❌ Firebase chưa cấu hình — liên hệ CNTT để kích hoạt đồng bộ.', true); return;
+  }
+  if (!fbInit()) {
+    showUpdMsg('❌ Không thể kết nối Firebase. Kiểm tra internet và thử lại.', true); return;
+  }
+  // ghi_chu mang sẵn tiền tố để check.py chèn nguyên văn lên đầu cột Ghi chú
+  const finalNote = DIRECTOR_NAME + ': ' + note;
+  const [localIP] = await Promise.all([_getLocalIP()]);
+  const entry = {id:_updTask.id, ten:_updTask.ten, phong:_updTask.phong,
+                 trang_thai:'', ngay_ht:'', ghi_chu:finalNote, chi_dao:'1',
+                 user:AUTH.user, user_phong:DIRECTOR_NAME + ' (PGĐ)',
+                 may:_getDeviceInfo(), ip:localIP,
+                 at:new Date().toISOString().slice(0,10)};
+  const key = fbKey(AUTH.user, _updTask.id);
+  const _btn = document.querySelector(`button.btn-upd[data-id="${_updTask.id}"]`);
+  _db.ref('bvtd_pending/' + key).set(entry)
+    .then(() => {
+      _fbPending[key] = entry;
+      if (_btn) { _btn.textContent = '↺ Chỉ đạo lại'; _btn.classList.add('btn-sent'); }
+      showUpdMsg('✓ Đã gửi chỉ đạo. BGĐ sẽ duyệt để ghi vào cột Ghi chú.', false);
+      setTimeout(closeUpd, 1500);
+    })
+    .catch(e => showUpdMsg('❌ Lỗi gửi: ' + e.message, true));
+}
+
 // ── Review view (BGĐ only) ────────────────────────────────────────────────────
 function renderReview() {
   if (!isBGD()) return;
@@ -2384,7 +2434,7 @@ function renderReview() {
         <div class="rv-reporter">
           <span class="rv-reporter-phong">${p.user_phong || p.user}</span>
           <div class="rv-reporter-body">
-            <div style="font-size:13px;font-weight:600;">${TT_LABELS[p.trang_thai] || p.trang_thai || '—'}</div>
+            <div style="font-size:13px;font-weight:600;">${p.chi_dao ? '📌 Chỉ đạo (không đổi trạng thái)' : (TT_LABELS[p.trang_thai] || p.trang_thai || '—')}</div>
             ${p.ngay_ht ? `<div class="rv-item-meta">📅 Ngày hoàn thành: <b>${p.ngay_ht}</b></div>` : ''}
             ${p.ghi_chu ? `<div class="rv-item-meta">📝 ${p.ghi_chu}</div>` : ''}
             <div class="rv-item-meta" style="margin-top:4px;">Báo cáo ngày ${p.at}</div>
@@ -2432,7 +2482,7 @@ function renderReview() {
             <div class="rv-item-meta" style="margin-top:4px;">
               Phòng: <b>${a.user_phong || a.user}</b> &ensp;·&ensp; Phòng chính: ${a.phong} &ensp;·&ensp; ngày ${a.at}
             </div>
-            ${TT_LABELS[a.trang_thai] ? `<div class="rv-item-meta" style="margin-top:4px;">${TT_LABELS[a.trang_thai]}</div>` : ''}
+            ${a.chi_dao ? `<div class="rv-item-meta" style="margin-top:4px;">📌 Chỉ đạo (không đổi trạng thái)</div>` : (TT_LABELS[a.trang_thai] ? `<div class="rv-item-meta" style="margin-top:4px;">${TT_LABELS[a.trang_thai]}</div>` : '')}
             ${a.ngay_ht ? `<div class="rv-item-meta">📅 Ngày hoàn thành: <b>${a.ngay_ht}</b></div>` : ''}
             ${a.ghi_chu ? `<div class="rv-item-meta">📝 ${a.ghi_chu}</div>` : ''}
           </div>
@@ -2499,7 +2549,7 @@ function renderPending() {
               <span style="font-size:12px;font-weight:700;color:#2d3748;">📤 ${p.user_phong||p.user}</span>
               <span style="font-size:11px;color:#a0aec0;">ngày ${p.at}</span>
             </div>
-            ${p.trang_thai?`<div class="pending-meta" style="margin-top:4px;">${TT_LABELS[p.trang_thai]||p.trang_thai}</div>`:''}
+            ${p.chi_dao?`<div class="pending-meta" style="margin-top:4px;">📌 Chỉ đạo (không đổi trạng thái)</div>`:(p.trang_thai?`<div class="pending-meta" style="margin-top:4px;">${TT_LABELS[p.trang_thai]||p.trang_thai}</div>`:'')}
             ${p.ngay_ht?`<div class="pending-meta" style="margin-top:2px;">📅 Ngày HT: ${p.ngay_ht}</div>`:''}
             ${p.ghi_chu?`<div class="pending-meta" style="margin-top:2px;">📝 ${p.ghi_chu}</div>`:''}
             <div style="display:flex;gap:6px;margin-top:6px;">
@@ -2521,7 +2571,7 @@ function renderPending() {
           <span class="task-id">${a.id}</span>
           <div class="pending-name">${a.ten}</div>
           <div class="pending-meta">${a.phong} · ${a.user} ngày ${a.at}</div>
-          ${a.trang_thai?`<div class="pending-meta">${TT_LABELS[a.trang_thai]||a.trang_thai}</div>`:''}
+          ${a.chi_dao?`<div class="pending-meta">📌 Chỉ đạo (không đổi trạng thái)</div>`:(a.trang_thai?`<div class="pending-meta">${TT_LABELS[a.trang_thai]||a.trang_thai}</div>`:'')}
           ${a.ngay_ht?`<div class="pending-meta">📅 Ngày HT: ${a.ngay_ht}</div>`:''}
           ${a.ghi_chu?`<div class="pending-meta">📝 ${a.ghi_chu}</div>`:''}
         </div>
