@@ -2069,7 +2069,10 @@ function isDirector() { return AUTH && AUTH.user === 'P.T.HAI'; }   // BS Phạm
 const DIRECTOR_NAME = 'BS Thanh Hải';
 function lsGet(k) { try { return JSON.parse(localStorage.getItem(k)||'[]'); } catch(e) { return []; } }
 function lsSave(k, v) { localStorage.setItem(k, JSON.stringify(v)); }
-function fbKey(user, id) { return user + '_' + id; }
+// Firebase RTDB cấm các ký tự . # $ [ ] / trong key → thay bằng '-'
+// (quan trọng: user 'P.T.HAI' có dấu '.' sẽ làm .set() ném "Invalid key")
+function _safeKey(s) { return String(s == null ? '' : s).replace(/[.#$/\\[\\]]/g, '-'); }
+function fbKey(user, id) { return _safeKey(user) + '_' + id; }
 function fbEnabled() { return !!(FB_CFG && FB_CFG.databaseURL); }
 function normalizePending(e) {
   // Handle legacy migration format (task_id/task_ten) and missing at/user fields
@@ -2090,26 +2093,29 @@ function normalizePending(e) {
 function fbPendingList() { return Object.values(_fbPending).map(normalizePending); }
 
 // ── Approved queue (BGĐ) — Firebase-backed, mirror localStorage để offline ───────
-// Key trong Firebase = task id (dedup theo id, khớp logic approveUpd cũ).
-function apprFbKey(a) { return String(a.id || ''); }
+// Key trong Firebase = id + user (dedup theo CẶP id|user — tránh báo cáo phòng ban
+// và chỉ đạo PGĐ trên cùng 1 task ghi đè lẫn nhau). Sanitize vì user có thể chứa '.'.
+function apprId(a) { return String(a.id == null ? '' : a.id) + '|' + String(a.user || ''); }
+function apprFbKey(a) { return _safeKey(apprId(a)); }
 function apprGet() {
-  // Gộp localStorage + Firebase, dedup theo id (Firebase ưu tiên)
+  // Gộp localStorage + Firebase, dedup theo cặp id|user (Firebase ưu tiên)
   const map = {};
-  lsGet(AK).forEach(a => { if (a && a.id != null) map[String(a.id)] = a; });
-  Object.values(_fbApproved).forEach(v => { const n = normalizePending(v); if (n.id) map[String(n.id)] = n; });
+  lsGet(AK).forEach(a => { if (a && a.id != null) map[apprId(a)] = a; });
+  Object.values(_fbApproved).forEach(v => { const n = normalizePending(v); if (n.id) map[apprId(n)] = n; });
   return Object.values(map);
 }
 function apprPush(entry) {
   const arr = lsGet(AK);
-  const idx = arr.findIndex(a => String(a.id) === String(entry.id));
+  const idx = arr.findIndex(a => apprId(a) === apprId(entry));
   if (idx >= 0) arr[idx] = entry; else arr.push(entry);
   lsSave(AK, arr);
   if (fbInit()) _db.ref('bvtd_approved/' + apprFbKey(entry)).set(entry);
 }
-function apprRemove(id) {
-  lsSave(AK, lsGet(AK).filter(a => String(a.id) !== String(id)));
-  if (fbInit()) _db.ref('bvtd_approved/' + String(id)).remove();
-  delete _fbApproved[String(id)];
+function apprRemove(id, user) {
+  const target = apprId({id: id, user: user});
+  lsSave(AK, lsGet(AK).filter(a => apprId(a) !== target));
+  if (fbInit()) _db.ref('bvtd_approved/' + _safeKey(target)).remove();
+  delete _fbApproved[_safeKey(target)];
 }
 function apprClear() {
   lsSave(AK, []);
@@ -2121,7 +2127,7 @@ function migrateApprovedToFb() {
   if (!fbInit()) return;
   const local = lsGet(AK);
   if (!local.length) return;
-  local.forEach(a => { if (a && a.id != null) _db.ref('bvtd_approved/' + String(a.id)).set(a); });
+  local.forEach(a => { if (a && a.id != null) _db.ref('bvtd_approved/' + apprFbKey(a)).set(a); });
 }
 
 function fbInit() {
@@ -2371,8 +2377,10 @@ async function submitChiDao() {
   if (!fbInit()) {
     showUpdMsg('❌ Không thể kết nối Firebase. Kiểm tra internet và thử lại.', true); return;
   }
-  // ghi_chu mang sẵn tiền tố để check.py chèn nguyên văn lên đầu cột Ghi chú
-  const finalNote = DIRECTOR_NAME + ': ' + note;
+  // ghi_chu mang sẵn tiền tố + mốc ngày để check.py chèn nguyên văn lên đầu cột Ghi chú
+  const _d = new Date();
+  const _dmy = String(_d.getDate()).padStart(2,'0') + '/' + String(_d.getMonth()+1).padStart(2,'0');
+  const finalNote = DIRECTOR_NAME + ' (' + _dmy + '): ' + note;
   const [localIP] = await Promise.all([_getLocalIP()]);
   const entry = {id:_updTask.id, ten:_updTask.ten, phong:_updTask.phong,
                  trang_thai:'', ngay_ht:'', ghi_chu:finalNote, chi_dao:'1',
@@ -2486,7 +2494,7 @@ function renderReview() {
             ${a.ngay_ht ? `<div class="rv-item-meta">📅 Ngày hoàn thành: <b>${a.ngay_ht}</b></div>` : ''}
             ${a.ghi_chu ? `<div class="rv-item-meta">📝 ${a.ghi_chu}</div>` : ''}
           </div>
-          <button class="btn-rejt" style="flex-shrink:0;align-self:flex-start;" onclick="removeApproved('${a.id}')">✕ Bỏ</button>
+          <button class="btn-rejt" style="flex-shrink:0;align-self:flex-start;" onclick="removeApproved('${a.id}','${a.user}')">✕ Bỏ</button>
         </div>
       </div>`).join('');
     if (expBtn) expBtn.style.display = '';
@@ -2575,7 +2583,7 @@ function renderPending() {
           ${a.ngay_ht?`<div class="pending-meta">📅 Ngày HT: ${a.ngay_ht}</div>`:''}
           ${a.ghi_chu?`<div class="pending-meta">📝 ${a.ghi_chu}</div>`:''}
         </div>
-        <button class="btn-rejt" style="flex-shrink:0;margin-top:4px;" onclick="removeApproved('${a.id}')">✕</button>
+        <button class="btn-rejt" style="flex-shrink:0;margin-top:4px;" onclick="removeApproved('${a.id}','${a.user}')">✕</button>
       </div>`;
     });
   }
@@ -2680,8 +2688,8 @@ async function uploadToGitHub() {
   }
 }
 
-function removeApproved(id) {
-  apprRemove(id);
+function removeApproved(id, user) {
+  apprRemove(id, user);
   renderPending(); renderReview();
 }
 
