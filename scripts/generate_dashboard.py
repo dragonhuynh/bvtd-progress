@@ -2159,6 +2159,7 @@ function normalizePending(e) {
     user:       e.user    || e.phong   || '',
     user_phong: e.user_phong || e.phong || '',
     chi_dao:    e.chi_dao || '',
+    noi_dung:   e.noi_dung || '',
     phu_trach:  e.phu_trach || [],
     deadline:   e.deadline || '',
     at:         e.at      || (e.timestamp ? new Date(e.timestamp).toISOString().slice(0,10) : ''),
@@ -2489,7 +2490,7 @@ async function submitChiDao() {
   const [localIP] = await Promise.all([_getLocalIP()]);
   const entry = {id:_updTask.id, ten:_updTask.ten, phong:_updTask.phong,
                  trang_thai:'', ngay_ht:'', ghi_chu:finalNote, chi_dao:'1',
-                 phu_trach:depts, deadline:deadline,
+                 noi_dung:note, phu_trach:depts, deadline:deadline,
                  user:AUTH.user, user_phong:DIRECTOR_NAME + ' (PGĐ)',
                  may:_getDeviceInfo(), ip:localIP,
                  at:new Date().toISOString().slice(0,10)};

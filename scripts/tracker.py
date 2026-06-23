@@ -17,8 +17,13 @@ VERSIONS_JSON = DATA / "report_versions.json"
 FIELDNAMES = [
     "id", "ten_dau_viec", "nhom", "phong_chinh", "phong_phoi_hop",
     "bat_dau", "ket_thuc", "trang_thai", "so_lan_nhac",
-    "ghi_chu", "nguon_van_ban", "dinh_ky"
+    "ghi_chu", "nguon_van_ban", "dinh_ky",
+    # Chỉ đạo PGĐ (TS.BS. Phạm Thanh Hải) — lưu cấu trúc để chức năng nhắc việc đọc
+    "cd_noi_dung", "cd_phu_trach", "cd_deadline", "cd_ngay"
 ]
+
+# Các cột chỉ đạo PGĐ — dùng chung cho load/save/apply
+CD_FIELDS = ("cd_noi_dung", "cd_phu_trach", "cd_deadline", "cd_ngay")
 
 # Từ khóa xác định task định kỳ (lặp lại thường xuyên, không bao giờ "xong")
 _DINH_KY_PATTERNS = re.compile(
@@ -31,6 +36,20 @@ _DINH_KY_PATTERNS = re.compile(
 
 def detect_dinh_ky(ten: str) -> bool:
     return bool(_DINH_KY_PATTERNS.search(ten))
+
+def save_directive_fields(task: dict, p: dict, today: str) -> None:
+    """Ghi cấu trúc chỉ đạo PGĐ vào task: công việc / phụ trách / deadline / ngày.
+    Dùng cho chức năng nhắc việc sau này (đọc cd_deadline + cd_phu_trach)."""
+    pt = p.get("phu_trach") or []
+    if isinstance(pt, list):
+        pt = "|".join(str(x).strip() for x in pt if str(x).strip())
+    if p.get("noi_dung"):
+        task["cd_noi_dung"] = p["noi_dung"]
+    if pt:
+        task["cd_phu_trach"] = pt
+    if p.get("deadline"):
+        task["cd_deadline"] = p["deadline"]
+    task["cd_ngay"] = p.get("at") or today
 
 # ── Nhóm công tác ──────────────────────────────────────────────────────────────
 
@@ -179,6 +198,8 @@ def load_tasks() -> list[dict]:
         tasks = list(csv.DictReader(f))
     for t in tasks:
         t.setdefault("dinh_ky", "0")
+        for c in CD_FIELDS:
+            t.setdefault(c, "")
     return tasks
 
 def save_tasks(tasks: list[dict]) -> None:
