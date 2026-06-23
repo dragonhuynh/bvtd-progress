@@ -1698,6 +1698,8 @@ function buildTasksView(filtered) {
   let totalDepts = new Set();
   const parts = [];
   const _pendingIds = new Set(fbPendingList().filter(p => p.user === AUTH.user).map(p => p.id));
+  // Phủ ghi chú chỉ đạo từ Firebase (chỉ đạo mới gửi chưa apply vào CSV vẫn hiện ngay)
+  const _dirOverlay = buildDirectiveOverlay();
 
   NHOM_GROUPS.forEach(nhomG => {
     const nhomTasks = filtered.filter(t => t.nhom === nhomG.key);
@@ -1737,6 +1739,9 @@ function buildTasksView(filtered) {
       const color  = avatarColor(dept);
       const rows = tasks.map(t => {
         const nguonShort = t.nguon ? t.nguon.replace(/^Biên bản /, '') : '—';
+        let noteShown = t.ghi_chu || '';
+        const _dn = _dirOverlay[t.id];
+        if (_dn && !noteShown.includes(_dn)) noteShown = _dn + (noteShown ? ' | ' + noteShown : '');
         const canUpd = AUTH && (isDirector() || t.tt === 'tre_deadline' || t.tt === 'dang_thuc_hien' || (isBGD() && t.tt === 'da_hoan_thanh'));
         const updLabel = isDirector() ? '📌 Chỉ đạo' : isBGD() ? '✏ Cập nhật' : '✏ Báo cáo';
         const alreadySent = !isBGD() && canUpd && _pendingIds.has(t.id);
@@ -1747,12 +1752,12 @@ function buildTasksView(filtered) {
           : '';
         return `<tr>
           <td class="task-id">${t.id}</td>
-          <td class="task-ten">${t.ten}${parseInt(t.nhac)>=2?`<span class="task-nhac">🔁${t.nhac}x</span>`:''}${t.ghi_chu?`<span class="task-note-mobile">📝 ${t.ghi_chu}</span>`:''}</td>
+          <td class="task-ten">${t.ten}${parseInt(t.nhac)>=2?`<span class="task-nhac">🔁${t.nhac}x</span>`:''}${noteShown?`<span class="task-note-mobile">📝 ${noteShown}</span>`:''}</td>
           <td class="col-hide-mobile"><span style="font-size:11px;color:var(--muted)">${t.phoi_hop||'—'}</span></td>
           <td class="col-hide-mobile" style="white-space:nowrap;font-size:12px">${fmtDate(t.bat_dau)}</td>
           <td class="task-deadline" style="white-space:nowrap;font-size:12px">${t.ket_thuc?fmtDate(t.ket_thuc):'—'}</td>
           <td class="nguon-cell col-hide-mobile" title="${t.nguon}">${nguonShort}</td>
-          <td class="task-ghi-chu col-hide-mobile" title="${(t.ghi_chu||'').replace(/"/g,'&quot;')}">${t.ghi_chu ? `<span class="ghi-chu-text">${t.ghi_chu}</span>` : '<span style="color:var(--muted)">—</span>'}</td>
+          <td class="task-ghi-chu col-hide-mobile" title="${noteShown.replace(/"/g,'&quot;')}">${noteShown ? `<span class="ghi-chu-text">${noteShown}</span>` : '<span style="color:var(--muted)">—</span>'}</td>
           <td class="task-status">${statusPill(t.tt, t.dk)}${updBtn}</td>
         </tr>`;
       }).join('');
@@ -1860,6 +1865,13 @@ function filterTasks() {
     return true;
   });
   buildTasksView(filtered);
+}
+
+// Render lại danh sách đầu việc khi có chỉ đạo mới từ Firebase (nếu đang ở tab này)
+function refreshTasksIfActive() {
+  if (tasksRendered && document.getElementById('view-tasks')?.classList.contains('active')) {
+    filterTasks();
+  }
 }
 
 function initTasksView() {
@@ -2155,6 +2167,24 @@ function normalizePending(e) {
 }
 function fbPendingList() { return Object.values(_fbPending).map(normalizePending); }
 
+// Gộp chỉ đạo từ Firebase (chờ duyệt + đã duyệt) → map { taskId: ghi_chu mới nhất }
+// để phủ lên cột Ghi chú ngay, không phải chờ apply vào CSV + redeploy.
+function buildDirectiveOverlay() {
+  const map = {};
+  const consider = (e) => {
+    if (!e || e.id == null) return;
+    const isDir = e.chi_dao || (e.ghi_chu && e.ghi_chu.toUpperCase().includes('PHẠM THANH HẢI'));
+    if (!isDir || !e.ghi_chu) return;
+    const cur = map[e.id];
+    if (!cur || (e.at || '') >= (cur.at || '')) map[e.id] = { note: e.ghi_chu, at: e.at || '' };
+  };
+  try { fbPendingList().forEach(consider); } catch(_) {}
+  try { apprGet().forEach(consider); } catch(_) {}
+  const out = {};
+  Object.keys(map).forEach(k => { out[k] = map[k].note; });
+  return out;
+}
+
 // ── Approved queue (BGĐ) — Firebase-backed, mirror localStorage để offline ───────
 // Key trong Firebase = id + user (dedup theo CẶP id|user — tránh báo cáo phòng ban
 // và chỉ đạo PGĐ trên cùng 1 task ghi đè lẫn nhau). Sanitize vì user có thể chứa '.'.
@@ -2212,6 +2242,7 @@ function startFbListener() {
       renderPending();
       renderReview();
     }
+    refreshTasksIfActive();
   });
   _db.ref('bvtd_approved').on('value', snap => {
     _fbApproved = snap.val() || {};
@@ -2220,6 +2251,7 @@ function startFbListener() {
       renderPending();
       renderReview();
     }
+    refreshTasksIfActive();
   });
   migrateLocalStorage();
   migrateApprovedToFb();
