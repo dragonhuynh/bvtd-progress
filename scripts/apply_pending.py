@@ -14,7 +14,7 @@ log = logging.getLogger(__name__)
 ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from tracker import load_tasks, save_tasks, bump_version, append_update_log
+from tracker import load_tasks, save_tasks, bump_version, append_update_log, save_directive_fields
 
 PENDING_FILE = ROOT / "data" / "pending_updates.json"
 
@@ -64,6 +64,7 @@ def main() -> None:
             if note_in:
                 old_note = (task.get("ghi_chu") or "").strip()
                 task["ghi_chu"] = f"{note_in} | {old_note}" if old_note else note_in
+            save_directive_fields(task, p, today)
         else:
             new_tt = p.get("trang_thai") or old_tt
             task["trang_thai"] = new_tt
