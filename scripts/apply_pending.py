@@ -57,7 +57,7 @@ def main() -> None:
         note_in = (p.get("ghi_chu") or "").strip()
         # Nhận diện chỉ đạo theo cờ HOẶC theo tiền tố tên (phòng khi cờ chi_dao
         # bị rớt giữa pipeline → vẫn prepend, KHÔNG ghi đè mất ghi chú cũ)
-        is_directive = bool(p.get("chi_dao")) or note_in.startswith("BS Thanh Hải")
+        is_directive = bool(p.get("chi_dao")) or ("PHẠM THANH HẢI" in note_in.upper())
         if is_directive:
             # Chỉ đạo (BS Thanh Hải / PGĐ): KHÔNG đổi trạng thái — chèn ghi chú lên đầu
             new_tt = old_tt
