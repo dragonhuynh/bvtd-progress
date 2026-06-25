@@ -87,7 +87,18 @@ _NHOM_KEYWORDS = {
 
 
 def classify_nhom(ten_dau_viec: str, phong_chinh: str) -> str:
-    """Phân loại task vào 1 trong 3 nhóm dựa trên phòng và từ khóa."""
+    """Phân loại task vào 1 trong 3 nhóm dựa trên phòng và từ khóa.
+
+    LUẬT CỨNG (Phiên 22, 2026-06-25): KHTH đứng chính LUÔN thuộc 'chuyen_mon',
+    ưu tiên cao hơn cả từ khóa. KHTH (Kế hoạch Tổng hợp) là phòng phụ trách
+    CHUYÊN MÔN của bệnh viện. Lỗi tái diễn nhiều lần: trước đây KHTH bị xếp
+    'quan_ly_khac' và còn bị từ khóa khớp-substring đẩy nhầm
+    (kho→khoa, CT→YHCT/CTC, Nội→nội trú/nội dung, soi→...) → nhóm sai lung tung.
+    """
+    # Ưu tiên 0: luật cứng theo phòng chính (xem docstring)
+    if phong_chinh.strip() == "KHTH":
+        return "chuyen_mon"
+
     ten_lower = ten_dau_viec.lower()
 
     # Ưu tiên 1: từ khóa đặc trưng
