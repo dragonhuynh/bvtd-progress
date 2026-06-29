@@ -1,6 +1,14 @@
 {
-  "version": "1.0",
+  "version": "2.0",
   "history": [
+    {
+      "version": "2.0",
+      "ngay": "2026-06-29 07:47",
+      "loai": "parse",
+      "thay_doi": [
+        "thêm 1 đầu việc mới từ dashboard"
+      ]
+    },
     {
       "version": "1.0",
       "ngay": "2026-06-29 07:21",

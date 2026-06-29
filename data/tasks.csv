@@ -20,7 +20,7 @@ id,ten_dau_viec,nhom,phong_chinh,phong_phoi_hop,bat_dau,ket_thuc,trang_thai,so_l
 19,Đo lường kích thước khu vực WC và hành lang ngoài cho X-quang,hanh_chanh,HCQT,VTTBYT,2025-12-16,2026-03-20,da_hoan_thanh,1,Hoàn thành,BC Tiến độ họp BS Ngọc Hải 16/12/2025,0,,,,
 20,Di dời hệ thống máy xét nghiệm lên Lầu 1,chuyen_mon,VTTBYT,XN,2025-12-16,2025-12-30,da_hoan_thanh,1,,BC Tiến độ họp BS Ngọc Hải 16/12/2025,0,,,,
 21,Thiết lập quy trình lấy máu tại chỗ cho người già/khó di chuyển,chuyen_mon,XN,Điều dưỡng,2025-12-16,2025-12-30,da_hoan_thanh,1,,BC Tiến độ họp BS Ngọc Hải 16/12/2025,0,,,,
-22,Khảo sát phương án thông vách phòng Châm cứu - Massage,hanh_chanh,HCQT,,2025-12-16,2025-12-26,tre_deadline,1,,BC Tiến độ họp BS Ngọc Hải 16/12/2025,0,,,,
+22,Khảo sát phương án thông vách phòng Châm cứu - Massage,hanh_chanh,HCQT,,2025-12-16,2025-12-26,tre_deadline,1,"TS.BS. PHẠM THANH HẢI (23/06) [→ HCQT, KHTH] — hạn 29/06/2026: KHTH trình phương án",BC Tiến độ họp BS Ngọc Hải 16/12/2025,0,,HCQT|KHTH,2026-06-29,2026-06-23
 23,Họp thống nhất vấn đề thủ thuật giữa YHCT và PHCT,chuyen_mon,Bs Hoàng,,2025-12-16,2025-12-30,tre_deadline,1,,BC Tiến độ họp BS Ngọc Hải 16/12/2025,0,,,,
 24,Khảo sát tháo dỡ đánh giá tái sử dụng máy lạnh Lầu 1 (Kho Dược),hanh_chanh,HCQT,,2025-12-16,2025-12-19,da_hoan_thanh,1,,BC Tiến độ họp BS Ngọc Hải 16/12/2025,0,,,,
 25,Báo cáo xin ý kiến BS Ngọc Hải về phương án tháo máy lạnh,quan_ly_khac,HCQT,,2025-12-16,2025-12-19,da_hoan_thanh,1,,BC Tiến độ họp BS Ngọc Hải 16/12/2025,0,,,,
@@ -553,7 +553,7 @@ Tới ngày 18/5/2026: đã thực hiện 06 ca. Trong đó 2 ca NS dạ dày v�
 544,HCQT chuẩn bị phòng làm việc và phòng họp online cho BS Thanh Hải,hanh_chanh,HCQT,,2026-06-16,2026-06-23,tre_deadline,1,,Biên bản 2026-06-16,0,,,,
 545,HCQT trang bị bảng đồng thông tin Hoàng Hậu Từ Dũ tại CS2; CTXH đưa thông tin lên standee điện tử,hanh_chanh,HCQT,CTXH,2026-06-16,2026-06-23,tre_deadline,1,,Biên bản 2026-06-16,0,,,,
 546,HCQT dán decal các cửa kính phòng CT,hanh_chanh,HCQT,,2026-06-16,2026-06-23,tre_deadline,1,,Biên bản 2026-06-16,0,,,,
-547,HCQT + Điều dưỡng giám sát việc phơi quần áo không đúng nơi quy định,hanh_chanh,HCQT,Điều dưỡng,2026-06-16,2026-06-23,tre_deadline,1,,Biên bản 2026-06-16,0,,,,
+547,HCQT + Điều dưỡng giám sát việc phơi quần áo không đúng nơi quy định,hanh_chanh,HCQT,Điều dưỡng,2026-06-16,2026-06-29,da_hoan_thanh,1,⚠️ Báo cáo từ phòng phối hợp (DD) — cần kiểm tra lại với phòng chính (HCQT),Biên bản 2026-06-16,0,,,,
 548,HCQT giám sát để xe đúng nơi quy định của bệnh nhân,hanh_chanh,HCQT,,2026-06-16,2026-06-23,tre_deadline,1,,Biên bản 2026-06-16,0,,,,
 549,HCQT thay giường khoa VLTL bằng giường khoa THTM ở CS1,hanh_chanh,HCQT,,2026-06-16,2026-06-23,tre_deadline,1,,Biên bản 2026-06-16,0,,,,
 550,KHTH + BS Thanh Hải rà soát đảm bảo các vấn đề cấp cứu an toàn,chuyen_mon,KHTH,,2026-06-16,2026-06-23,tre_deadline,1,,Biên bản 2026-06-16,0,,,,
@@ -573,3 +573,4 @@ Tới ngày 18/5/2026: đã thực hiện 06 ca. Trong đó 2 ca NS dạ dày v�
 564,HCQT + VTTBYT lưu ý các vấn đề bàn giao trang thiết bị thực hiện đúng quy định,quan_ly_khac,HCQT,VTTBYT,2026-06-16,2026-06-23,tre_deadline,1,,Biên bản 2026-06-16,0,,,,
 565,Các bộ phận tuân thủ 6 rõ khi đề xuất và trình BS Thanh Hải trước khi trình Giám đốc,quan_ly_khac,BGD,,2026-06-16,2026-06-23,tre_deadline,1,,Biên bản 2026-06-16,0,,,,
 566,Vị trí công việc tại các khoa,hanh_chanh,Điều dưỡng,BGD,2026-06-29,2026-07-03,dang_thuc_hien,1,,Họp giao ban Giám đốc — 29/06/2026,0,,,,
+567,Test _ Thực hiện A,chuyen_mon,Điều dưỡng,HCQT,2026-06-24,2026-07-03,dang_thuc_hien,1,,Họp giao ban Giám đốc — 24/06/2026,0,,,,
