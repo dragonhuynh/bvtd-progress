@@ -1737,6 +1737,9 @@ function buildTasksView(filtered) {
 
     depts.forEach((dept, idx) => {
       const tasks  = byDept[dept];
+      // Sắp xếp theo ngày biên bản (BB) mới nhất → cũ nhất (bat_dau = ngày BB; tie-break ID giảm dần)
+      tasks.sort((a, b) =>
+        (b.bat_dau || '').localeCompare(a.bat_dau || '') || (parseInt(b.id) - parseInt(a.id)));
       const done   = tasks.filter(t => t.tt === 'da_hoan_thanh').length;
       const active = tasks.filter(t => t.tt === 'dang_thuc_hien').length;
       const late   = tasks.filter(t => t.tt === 'tre_deadline').length;
