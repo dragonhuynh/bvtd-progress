@@ -431,8 +431,8 @@ body {
   .login-card { padding: 28px 20px 24px; }
 }
 
-/* ── App body ── */
-#app-body { display: none; min-height: 100vh; }
+/* ── App body ── (app-shell: cao cố định, .main tự cuộn → sticky header phòng ban hoạt động) */
+#app-body { display: none; height: 100vh; overflow: hidden; }
 
 /* Sidebar */
 .sidebar {
@@ -645,22 +645,23 @@ body {
 
 /* Nhom section headers in task view */
 .nhom-section-header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 14px 20px; margin: 24px 0 4px;
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 10px 16px; margin: 22px 0 8px;
   background: var(--sidebar); border-radius: var(--r);
   color: #fff;
 }
 .nhom-section-header:first-child { margin-top: 0; }
-.nhom-label { font-size: 15px; font-weight: 700; }
+.nhom-label { font-size: 14px; font-weight: 700; flex: 1; min-width: 0; }
 
 /* Task dept sections */
 .dept-section { margin-bottom: 12px; }
 .dept-section-header {
   display: flex; align-items: center; gap: 12px;
-  padding: 12px 16px; background: var(--white);
+  padding: 10px 16px; background: var(--white);
   border-radius: var(--r) var(--r) 0 0;
   border-bottom: 2px solid var(--border);
   cursor: pointer; user-select: none;
+  position: sticky; top: 0; z-index: 5;
 }
 .dept-section-header:hover { background: #f9f9f9; }
 .dept-section-avatar { width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0; }
@@ -674,31 +675,52 @@ body {
 .badge-gray   { background: #f7fafc; color: #4a5568; }
 .toggle-ic    { font-size: 12px; color: var(--muted); }
 
-.task-table-wrap { background: var(--white); border-radius: 0 0 var(--r) var(--r); overflow-x: auto; box-shadow: var(--sh); }
-.task-table-wrap.hidden { display: none; }
-.task-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-.task-table th {
-  background: #f7fafc; padding: 10px 14px; text-align: left;
-  font-weight: 600; color: var(--muted); font-size: 11px;
+/* ── Danh sách đầu việc (grid-based, gọn 4 cột) ── */
+.tlist { --tl-cols: 40px minmax(0,1fr) 118px 142px;
+  background: var(--white); border-radius: 0 0 var(--r) var(--r); box-shadow: var(--sh); overflow: hidden; }
+.tlist.hidden { display: none; }
+.tlist-head {
+  display: grid; grid-template-columns: var(--tl-cols); gap: 14px;
+  padding: 9px 16px; background: #f7fafc; border-bottom: 1px solid var(--border);
+  font-size: 11px; font-weight: 600; color: var(--muted);
   text-transform: uppercase; letter-spacing: .04em;
-  white-space: nowrap; border-bottom: 1px solid var(--border);
 }
-.task-table td { padding: 11px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
-.task-table tr:last-child td { border-bottom: none; }
-.task-table tr:hover td { background: #fafbfc; }
-.task-id { font-size: 11px; font-weight: 700; color: var(--muted); white-space: nowrap; }
-.task-ten { line-height: 1.45; max-width: 320px; }
-.task-nhac { font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 4px; background: #fef3c7; color: #92400e; margin-left: 5px; }
+.trow {
+  display: grid; grid-template-columns: var(--tl-cols);
+  grid-template-areas: "id main due pill" "id main due action";
+  gap: 4px 12px; padding: 11px 16px; border-bottom: 1px solid var(--border); align-items: start;
+}
+.trow:last-child { border-bottom: none; }
+.trow:hover { background: #fafbfc; }
+.tc-id   { grid-area: id; font-size: 12px; font-weight: 700; color: var(--muted); }
+.tc-main { grid-area: main; min-width: 0; }
+.tc-title { font-size: 13.5px; font-weight: 600; line-height: 1.45; color: var(--text); }
+.tc-meta { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.chip { font-size: 11px; padding: 2px 8px; border-radius: 6px; max-width: 260px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.chip-src  { background: #eef2f7; color: #51637a; }
+.chip-coop { background: #f0ecfb; color: #6b4ea8; }
+.tc-note { font-size: 12px; color: var(--muted); font-style: italic; margin-top: 6px; line-height: 1.4;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.task-nhac { font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 4px; background: #fef3c7; color: #92400e; margin-left: 5px; white-space: nowrap; }
+.tc-due { grid-area: due; }
+.due-date { font-size: 12.5px; font-weight: 600; color: var(--text); white-space: nowrap; }
+.due-rel  { font-size: 11px; font-weight: 600; margin-top: 3px; white-space: nowrap; }
+.due-late { color: var(--red); }
+.due-today, .due-soon { color: #c05621; }
+.due-ok  { color: var(--muted); font-weight: 500; }
+.due-rec { color: #166534; }
+.tc-pill   { grid-area: pill; justify-self: start; }
+.tc-action { grid-area: action; justify-self: start; margin-top: 7px; opacity: 0; transition: opacity .12s; }
+.trow:hover .tc-action, .trow:focus-within .tc-action { opacity: 1; }
 .status-pill { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; white-space: nowrap; display: inline-block; }
 .status-done      { background: #f0fff4; color: #276749; }
 .status-active    { background: #ebf8ff; color: #2c5282; }
 .status-late      { background: #fff5f5; color: #c53030; }
 .status-recurring { background: #f0fdf4; color: #166534; }
 .status-pending{ background: #fffbeb; color: #92400e; }
+.task-id { font-size: 11px; font-weight: 700; color: var(--muted); white-space: nowrap; }
 .nguon-cell { font-size: 11px; color: var(--muted); white-space: nowrap; max-width: 140px; overflow: hidden; text-overflow: ellipsis; }
-.task-ghi-chu { max-width: 200px; }
-.ghi-chu-text { font-size: 12px; color: var(--text); line-height: 1.4; white-space: pre-wrap; word-break: break-word; }
-.task-note-mobile { display: none; }
 
 /* Dept progress bars */
 .dept-progress-row { display: flex; flex-direction: row; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
@@ -761,21 +783,30 @@ body {
   .ms-btn { min-width: 140px; }
   .ms-panel { min-width: 160px; }
   .sources-grid { grid-template-columns: repeat(2, 1fr); }
-  /* Table → card layout on mobile */
-  .task-table-wrap { overflow-x: visible; }
-  .task-table { min-width: 0; width: 100%; }
-  .task-table thead { display: none; }
-  .task-table tbody { display: block; padding: 6px 10px 10px; }
-  .task-table tr { display: block; border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; padding: 10px 12px; background: var(--white); }
-  .task-table td { display: block; border: none; padding: 2px 0; }
-  .col-hide-mobile { display: none; }
-  .task-id { display: inline; margin-right: 6px; }
-  .task-ten { display: inline; }
-  .task-deadline { font-size: 12px; color: var(--muted); margin-top: 4px; }
-  .task-deadline::before { content: 'Deadline: '; }
-  .task-note-mobile { display: block; font-size: 12px; color: var(--muted); font-style: italic; margin-top: 3px; }
-  .task-status { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 8px; }
-  .task-status .btn-upd { flex: 1; min-width: 120px; text-align: center; }
+  /* Danh sách đầu việc → thẻ card trên mobile */
+  .tlist { background: transparent; box-shadow: none; border-radius: 0; overflow: visible; padding: 2px 0; }
+  .tlist-head { display: none; }
+  .trow {
+    grid-template-columns: auto 1fr;
+    grid-template-areas: "id pill" "main main" "due due" "action action";
+    gap: 7px 10px; padding: 12px 14px; margin-bottom: 9px;
+    border: 1px solid var(--border); border-radius: 12px; background: var(--white);
+    box-shadow: 0 1px 2px rgba(16,42,67,.04);
+  }
+  .trow:last-child { border-bottom: 1px solid var(--border); }
+  .trow:hover { background: var(--white); }
+  .dept-section-header { position: static; }
+  .tc-id { font-size: 12px; align-self: center; }
+  .tc-pill { justify-self: end; align-self: center; }
+  .tc-title { font-size: 14.5px; }
+  .chip { max-width: 100%; }
+  .tc-due { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+    padding-top: 7px; border-top: 1px dashed var(--border); }
+  .due-date { font-size: 13px; }
+  .due-date::before { content: '⏰ Hạn: '; font-weight: 600; color: var(--muted); }
+  .due-rel { margin-top: 0; font-size: 12px; }
+  .tc-action { justify-self: stretch; margin-top: 2px; opacity: 1; }
+  .tc-action .btn-upd { width: 100%; text-align: center; min-height: 44px; font-size: 14px; padding: 10px 12px; }
   /* Dept sections */
   .dept-section-header { padding: 10px 12px; }
   .dept-badges { gap: 4px; }
@@ -825,7 +856,7 @@ body {
 .pending-meta{color:var(--muted);margin-top:2px;}
 .btn-appr{background:#f0fff4;border:1px solid var(--green);color:#276749;border-radius:6px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;min-height:36px;}
 .btn-rejt{background:#fff5f5;border:1px solid var(--red);color:#c53030;border-radius:6px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;min-height:36px;}
-.btn-upd{background:none;border:1px solid var(--pink);border-radius:6px;padding:7px 12px;font-size:13px;font-weight:600;cursor:pointer;color:var(--pink);transition:background-color .15s,color .15s,border-color .15s;margin-top:4px;display:inline-block;min-height:36px;}
+.btn-upd{background:none;border:1px solid var(--pink);border-radius:6px;padding:5px 12px;font-size:12.5px;font-weight:600;cursor:pointer;color:var(--pink);transition:background-color .15s,color .15s,border-color .15s;display:inline-block;line-height:1.3;}
 .btn-upd:hover{background:var(--pink);color:#fff;}
 .btn-sent{background:#f0fff4;border-color:#68d391;color:#276749;}
 .btn-sent:hover{background:#dcfce7;}
@@ -848,6 +879,18 @@ body {
 .btn-cncl{background:var(--border);border:none;border-radius:7px;padding:9px 18px;font-size:13px;cursor:pointer;font-family:inherit;}
 .msg-err{padding:10px 12px;border-radius:8px;font-size:13px;background:#fff5f5;color:#c53030;border:1.5px solid #fc8181;}
 .msg-ok{padding:10px 12px;border-radius:8px;font-size:13px;background:#f0fff4;color:#276749;border:1.5px solid #68d391;}
+
+/* ── Tạo Task view ── */
+.ct-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px 22px;max-width:760px;box-shadow:0 1px 3px rgba(0,0,0,.04);}
+.ct-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 16px;}
+.req{color:#e53e3e;}
+.ct-chips{display:flex;flex-wrap:wrap;gap:6px;}
+.ct-check{display:flex !important;align-items:center;gap:8px;text-transform:none !important;letter-spacing:0 !important;font-size:13px !important;color:var(--text) !important;cursor:pointer;font-weight:500 !important;}
+.ct-check input{width:auto !important;margin:0;cursor:pointer;}
+.ct-actions{display:flex;gap:10px;margin-top:18px;justify-content:flex-end;flex-wrap:wrap;}
+.ct-flow-banner{background:#ebf8ff;border:1px solid #90cdf4;color:#2c5282;border-radius:9px;padding:11px 14px;font-size:13px;margin-bottom:16px;line-height:1.5;}
+.ct-flow-banner.direct{background:#f0fff4;border-color:#9ae6b4;color:#276749;}
+@media (max-width:640px){ .ct-grid{grid-template-columns:1fr;} .ct-card{padding:16px;} .ct-actions{flex-direction:column-reverse;} .ct-actions button{width:100%;} }
 
 /* ── Nav badge ── */
 .nav-badge{display:inline-flex;align-items:center;justify-content:center;background:#f56565;color:#fff;font-size:10px;font-weight:700;border-radius:10px;min-width:18px;height:18px;padding:0 5px;margin-left:auto;flex-shrink:0;}
@@ -993,6 +1036,9 @@ body {
     </div>
     <div class="nav-item" data-view="tasks">
       <span class="ni">✔</span><span>Đầu Việc</span>
+    </div>
+    <div class="nav-item" data-view="create">
+      <span class="ni">➕</span><span>Tạo Task</span>
     </div>
     <div class="nav-group-label" style="margin-top:16px;">Liên kết</div>
     <div class="nav-item" data-view="review" id="nav-review" style="display:none">
@@ -1159,6 +1205,75 @@ body {
     </div>
   </header>
   <div id="tasks-by-nhom"></div>
+</div>
+
+
+<!-- ═══ TẠO TASK ═══ -->
+<div id="view-create" class="view">
+  <header class="page-header">
+    <div>
+      <h1>➕ Tạo Đầu Việc</h1>
+      <p class="subtitle">Nhập đầu việc mới từ biên bản họp / họp giao ban</p>
+    </div>
+  </header>
+
+  <div class="ct-flow-banner" id="ct-flow-banner"></div>
+
+  <div class="ct-card">
+    <div class="ct-grid">
+      <div class="mfield">
+        <label>Nguồn (loại cuộc họp) <span class="req">*</span></label>
+        <select id="ct-source">
+          <option value="Họp giao ban Giám đốc">Họp giao ban Giám đốc (chỉ đạo BS Giám đốc)</option>
+          <option value="Họp giao ban CS1">Họp giao ban CS1 (BS Giám đốc)</option>
+          <option value="Họp giao ban CS2">Họp giao ban CS2 (chỉ đạo BS Phó Giám đốc)</option>
+        </select>
+      </div>
+      <div class="mfield">
+        <label>Ngày họp <span class="req">*</span></label>
+        <input type="date" id="ct-ngay">
+      </div>
+    </div>
+
+    <div class="mfield">
+      <label>Tên đầu việc <span class="req">*</span></label>
+      <textarea id="ct-ten" rows="2" placeholder="VD: Rà soát quy trình tiếp nhận bệnh nhân khu khám bệnh..."></textarea>
+    </div>
+
+    <div class="ct-grid">
+      <div class="mfield">
+        <label>Phòng chính (chịu trách nhiệm) <span class="req">*</span></label>
+        <select id="ct-phong"></select>
+      </div>
+      <div class="mfield">
+        <label>Deadline (hạn hoàn thành)</label>
+        <input type="date" id="ct-deadline">
+      </div>
+    </div>
+
+    <div class="mfield">
+      <label>Phòng phối hợp (chọn nhiều — tùy chọn)</label>
+      <div id="ct-phoi" class="ct-chips"></div>
+    </div>
+
+    <div class="mfield">
+      <label class="ct-check">
+        <input type="checkbox" id="ct-dinhky">
+        <span>Đầu việc định kỳ (lặp lại thường xuyên — không bị đánh trễ hạn)</span>
+      </label>
+    </div>
+
+    <div class="mfield">
+      <label>Ghi chú (tùy chọn)</label>
+      <textarea id="ct-note" rows="2" placeholder="Bối cảnh, yêu cầu cụ thể, người chỉ đạo..."></textarea>
+    </div>
+
+    <div id="ct-msg" style="display:none"></div>
+    <div class="ct-actions">
+      <button class="btn-primary" id="ct-submit-btn" onclick="submitNewTask(false)">Tạo đầu việc →</button>
+      <button class="btn-cncl" id="ct-submit-more" onclick="submitNewTask(true)" title="Lưu task này và giữ nguồn/ngày để nhập tiếp">Lưu &amp; nhập tiếp</button>
+    </div>
+  </div>
 </div>
 
 
@@ -1397,7 +1512,7 @@ function doLogout() {
   AUTH = null;
   if (_monthlyChart) { try { _monthlyChart.destroy(); } catch(e) {} _monthlyChart = null; }
   if (_nhomChart)    { try { _nhomChart.destroy();    } catch(e) {} _nhomChart = null; }
-  chartsInited = false; tasksRendered = false;
+  chartsInited = false; tasksRendered = false; _ctInited = false;
   window._myTasks = null; window._myStats = null;
   ['ms-nhom','ms-status','ms-dept','ms-bienban'].forEach(id => {
     document.querySelectorAll('#' + id + ' input[type=checkbox]').forEach(c => c.checked = false);
@@ -1448,6 +1563,22 @@ function statusPill(tt, dk) {
     return '<span class="status-pill status-active">🔄 Đang thực hiện</span>';
   }
   return '<span class="status-pill status-late">⚠️ Trễ deadline</span>';
+}
+
+// Thông tin hạn chót + số ngày còn/trễ (giúp dễ theo dõi)
+function dueInfo(t) {
+  const d = t.ket_thuc ? fmtDate(t.ket_thuc) : '—';
+  if (t.tt === 'da_hoan_thanh') return { date: d, cls: 'due-ok', txt: '' };
+  if (t.dk === '1')             return { date: d, cls: 'due-rec', txt: '↻ Định kỳ' };
+  if (!t.ket_thuc)              return { date: '—', cls: '', txt: '' };
+  const p = t.ket_thuc.split('-');
+  const due = new Date(+p[0], +p[1]-1, +p[2]);
+  const today = new Date(); today.setHours(0,0,0,0);
+  const diff = Math.round((due - today) / 86400000);
+  if (diff < 0)   return { date: d, cls: 'due-late',  txt: '⚠ Trễ ' + (-diff) + ' ngày' };
+  if (diff === 0) return { date: d, cls: 'due-today', txt: '⏰ Hôm nay' };
+  if (diff <= 3)  return { date: d, cls: 'due-soon',  txt: 'Còn ' + diff + ' ngày' };
+  return { date: d, cls: 'due-ok', txt: 'Còn ' + diff + ' ngày' };
 }
 
 function nhomLabel(n) {
@@ -1693,10 +1824,16 @@ const NHOM_GROUPS = [
 function buildTasksView(filtered) {
   const container = document.getElementById('tasks-by-nhom');
   container.innerHTML = '';
+  const overlayHtml = renderNewTaskOverlay();   // pseudo-row: đầu việc mới chờ cấp ID
 
   if (!filtered.length) {
-    container.innerHTML = '<div class="no-tasks-msg">Không tìm thấy đầu việc nào.</div>';
-    document.getElementById('tasks-count-label').textContent = '0 đầu việc';
+    if (overlayHtml) {
+      container.innerHTML = overlayHtml;
+      document.getElementById('tasks-count-label').textContent = 'Đang chờ cấp ID';
+    } else {
+      container.innerHTML = '<div class="no-tasks-msg">Không tìm thấy đầu việc nào.</div>';
+      document.getElementById('tasks-count-label').textContent = '0 đầu việc';
+    }
     return;
   }
 
@@ -1746,7 +1883,7 @@ function buildTasksView(filtered) {
       const uid    = 'ds_' + nhomG.key + '_' + idx;
       const color  = avatarColor(dept);
       const rows = tasks.map(t => {
-        const nguonShort = t.nguon ? t.nguon.replace(/^Biên bản /, '') : '—';
+        const nguonShort = t.nguon ? t.nguon.replace(/^Biên bản /, '') : '';
         let noteShown = t.ghi_chu || '';
         const _dn = _dirOverlay[t.id];
         if (_dn && !noteShown.includes(_dn)) noteShown = _dn + (noteShown ? ' | ' + noteShown : '');
@@ -1758,16 +1895,25 @@ function buildTasksView(filtered) {
               ? `<button class="btn-upd btn-sent" data-id="${t.id}" data-ten="${t.ten.replace(/"/g,'&quot;')}" data-phong="${t.phong}" data-phoi="${t.phoi_hop||''}" onclick="openUpd(this.dataset.id,this.dataset.ten,this.dataset.phong,this.dataset.phoi)">${isDirector() ? '↺ Chỉ đạo lại' : '↺ Cập nhật lại'}</button>`
               : `<button class="btn-upd" data-id="${t.id}" data-ten="${t.ten.replace(/"/g,'&quot;')}" data-phong="${t.phong}" data-phoi="${t.phoi_hop||''}" onclick="openUpd(this.dataset.id,this.dataset.ten,this.dataset.phong,this.dataset.phoi)">${updLabel}</button>`)
           : '';
-        return `<tr>
-          <td class="task-id">${t.id}</td>
-          <td class="task-ten">${t.ten}${parseInt(t.nhac)>=2?`<span class="task-nhac">🔁${t.nhac}x</span>`:''}${noteShown?`<span class="task-note-mobile">📝 ${noteShown}</span>`:''}</td>
-          <td class="col-hide-mobile"><span style="font-size:11px;color:var(--muted)">${t.phoi_hop||'—'}</span></td>
-          <td class="col-hide-mobile" style="white-space:nowrap;font-size:12px">${fmtDate(t.bat_dau)}</td>
-          <td class="task-deadline" style="white-space:nowrap;font-size:12px">${t.ket_thuc?fmtDate(t.ket_thuc):'—'}</td>
-          <td class="nguon-cell col-hide-mobile" title="${t.nguon}">${nguonShort}</td>
-          <td class="task-ghi-chu col-hide-mobile" title="${noteShown.replace(/"/g,'&quot;')}">${noteShown ? `<span class="ghi-chu-text">${noteShown}</span>` : '<span style="color:var(--muted)">—</span>'}</td>
-          <td class="task-status">${statusPill(t.tt, t.dk)}${updBtn}</td>
-        </tr>`;
+        const di = dueInfo(t);
+        const metaChips =
+          (nguonShort ? `<span class="chip chip-src" title="Biên bản: ${nguonShort.replace(/"/g,'&quot;')}">📋 ${nguonShort}</span>` : '') +
+          (t.phoi_hop ? `<span class="chip chip-coop" title="Phối hợp: ${t.phoi_hop.replace(/"/g,'&quot;')}">🤝 ${t.phoi_hop}</span>` : '');
+        const nhacBadge = parseInt(t.nhac) >= 2 ? `<span class="task-nhac">🔁${t.nhac}x</span>` : '';
+        return `<div class="trow">
+          <div class="tc-id">${t.id}</div>
+          <div class="tc-main">
+            <div class="tc-title">${t.ten}${nhacBadge}</div>
+            ${metaChips ? `<div class="tc-meta">${metaChips}</div>` : ''}
+            ${noteShown ? `<div class="tc-note" title="${noteShown.replace(/"/g,'&quot;')}">📝 ${noteShown}</div>` : ''}
+          </div>
+          <div class="tc-due">
+            <div class="due-date">${di.date}</div>
+            ${di.txt ? `<div class="due-rel ${di.cls}">${di.txt}</div>` : ''}
+          </div>
+          <div class="tc-pill">${statusPill(t.tt, t.dk)}</div>
+          <div class="tc-action">${updBtn}</div>
+        </div>`;
       }).join('');
 
       parts.push(`
@@ -1783,20 +1929,15 @@ function buildTasksView(filtered) {
             </div>
             <span class="toggle-ic" id="ic-${uid}">▼</span>
           </div>
-          <div class="task-table-wrap" id="${uid}">
-            <table class="task-table">
-              <thead><tr>
-                <th>ID</th><th>Đầu việc</th><th class="col-hide-mobile">Phối hợp</th>
-                <th class="col-hide-mobile">Bắt đầu</th><th>Deadline</th><th class="col-hide-mobile">Biên Bản</th><th class="col-hide-mobile">Ghi chú</th><th>Trạng thái</th>
-              </tr></thead>
-              <tbody>${rows}</tbody>
-            </table>
+          <div class="tlist" id="${uid}">
+            <div class="tlist-head"><span>#</span><span>Đầu việc</span><span>Hạn chót</span><span>Trạng thái</span></div>
+            ${rows}
           </div>
         </div>`);
     });
   });
 
-  container.innerHTML = parts.join('');
+  container.innerHTML = overlayHtml + parts.join('');
 
   document.getElementById('tasks-count-label').textContent =
     `${filtered.length} đầu việc · ${totalDepts.size} phòng ban`;
@@ -2080,6 +2221,7 @@ function switchView(name) {
   const n = document.querySelector(`[data-view="${name}"]`);
   if (n) n.classList.add('active');
   if (name === 'tasks')  initTasksView();
+  if (name === 'create') initCreateView();
   if (name === 'review') renderReview();
   if (name === 'log')    initLogView();
 }
@@ -2170,6 +2312,12 @@ function normalizePending(e) {
     noi_dung:   e.noi_dung || '',
     phu_trach:  e.phu_trach || [],
     deadline:   e.deadline || '',
+    // Đầu việc mới (tạo tay từ tab Tạo Task)
+    new_task:   e.new_task || '',
+    phoi_hop:   e.phoi_hop || '',
+    bat_dau:    e.bat_dau  || '',
+    nguon:      e.nguon    || '',
+    dinh_ky:    e.dinh_ky  || '',
     at:         e.at      || (e.timestamp ? new Date(e.timestamp).toISOString().slice(0,10) : ''),
     migrated:   e.migrated || false,
   };
@@ -2192,6 +2340,73 @@ function buildDirectiveOverlay() {
   const out = {};
   Object.keys(map).forEach(k => { out[k] = map[k].note; });
   return out;
+}
+
+// Gom "đầu việc mới" (tab Tạo Task) đang chờ trong Firebase (pending + approved)
+// để hiện NGAY trong danh sách Đầu Việc dạng pseudo-row, không phải chờ apply+redeploy.
+// Tự ẩn khi task đã được cấp ID & ghi vào CSV (khớp ten|phong|nguon).
+function _newTaskOverlayEntries() {
+  const out = [], seen = {};
+  const applied = new Set((D.tasks || []).map(t =>
+    (t.ten || '').trim().toLowerCase() + '|' + (t.phong || '') + '|' + (t.nguon || '')));
+  const consider = (e, approved) => {
+    if (!e || !e.new_task) return;
+    const phong = e.phong || '';
+    const canSee = isBGD() || isDirector()
+      || (AUTH && AUTH.depts && AUTH.depts.includes(phong))
+      || (e.user && AUTH && e.user === AUTH.user);
+    if (!canSee) return;
+    const sig = (e.ten || '').trim().toLowerCase() + '|' + phong + '|' + (e.nguon || '');
+    if (applied.has(sig)) return;             // đã cấp ID → đã có trong list thật
+    if (seen[sig]) { if (approved) seen[sig].approved = true; return; }
+    seen[sig] = { e: e, approved: approved };
+    out.push(seen[sig]);
+  };
+  try { fbPendingList().forEach(x => consider(x, false)); } catch(_) {}
+  try { apprGet().forEach(x => consider(x, true)); } catch(_) {}
+  return out;
+}
+
+function renderNewTaskOverlay() {
+  const items = _newTaskOverlayEntries();
+  if (!items.length) return '';
+  const rows = items.map(({ e, approved }) => {
+    const phoi = (e.phoi_hop || '').split('|').filter(Boolean).join(', ');
+    const nguonShort = e.nguon ? e.nguon.replace(/^Biên bản /, '') : '';
+    const badge = approved
+      ? '<span class="badge badge-blue">✅ Đã duyệt · chờ gửi</span>'
+      : '<span class="badge" style="background:#fef3c7;color:#92400e">📨 Chờ BGĐ duyệt</span>';
+    const dl = e.deadline ? dmyFromYmd(e.deadline) : '—';
+    const esc = s => (s || '').replace(/</g, '&lt;');
+    const metaChips =
+      (nguonShort ? `<span class="chip chip-src">📋 ${esc(nguonShort)}</span>` : '') +
+      (phoi ? `<span class="chip chip-coop">🤝 ${esc(phoi)}</span>` : '') +
+      (e.dinh_ky === '1' ? '<span class="chip">↻ Định kỳ</span>' : '');
+    return `<div class="trow" style="background:#ecfdf5;border-left:3px solid #10b981">
+      <div class="tc-id">🆕</div>
+      <div class="tc-main">
+        <div class="tc-title">${esc(e.ten)} <span class="task-nhac" style="background:#10b981">${esc(e.phong)}</span></div>
+        ${metaChips ? `<div class="tc-meta">${metaChips}</div>` : ''}
+        ${e.ghi_chu ? `<div class="tc-note">📝 ${esc(e.ghi_chu)}</div>` : ''}
+      </div>
+      <div class="tc-due"><div class="due-date">${dl}</div></div>
+      <div class="tc-pill">${badge}</div>
+      <div class="tc-action"></div>
+    </div>`;
+  }).join('');
+  return `
+    <div class="nhom-section-header" style="background:linear-gradient(135deg,#10b981,#059669)">
+      <span class="nhom-label">🆕 Đầu Việc Mới — Chờ Cấp ID</span>
+      <div class="dept-badges">
+        <span class="badge" style="background:rgba(255,255,255,.2);color:#fff">${items.length} mới</span>
+      </div>
+    </div>
+    <div class="dept-section">
+      <div class="tlist">
+        <div class="tlist-head"><span>#</span><span>Đầu việc</span><span>Hạn chót</span><span>Trạng thái</span></div>
+        ${rows}
+      </div>
+    </div>`;
 }
 
 // ── Approved queue (BGĐ) — Firebase-backed, mirror localStorage để offline ───────
@@ -2463,7 +2678,7 @@ async function submitUpd() {
         if (_btn) {
           _btn.textContent = '↺ Cập nhật lại';
           _btn.classList.add('btn-sent');
-          const pill = _btn.closest('td') && _btn.closest('td').querySelector('.status-pill');
+          const pill = _btn.closest('.trow') && _btn.closest('.trow').querySelector('.status-pill');
           if (pill) {
             const lb = tt === 'da_hoan_thanh' ? 'Hoàn thành' : tt === 'dang_thuc_hien' ? 'Đang làm' : 'Trễ deadline';
             pill.textContent = '⏳ ' + lb + ' — chờ duyệt';
@@ -2514,6 +2729,127 @@ async function submitChiDao() {
     .catch(e => showUpdMsg('❌ Lỗi gửi: ' + e.message, true));
 }
 
+// ── Tạo Task mới (đầu việc từ biên bản / họp giao ban) ──────────────────────────
+let _ctInited = false;
+function _allDepts() {
+  return [...new Set((D.tasks||[]).map(t => t.phong || '').filter(Boolean))]
+    .sort((a,b) => a.localeCompare(b,'vi'));
+}
+function initCreateView() {
+  const direct = isBGD() || isDirector();
+  const banner = document.getElementById('ct-flow-banner');
+  if (banner) {
+    banner.className = 'ct-flow-banner' + (direct ? ' direct' : '');
+    banner.innerHTML = direct
+      ? '✅ <b>Bạn tạo trực tiếp</b> — đầu việc vào thẳng hàng đợi <b>“Đã duyệt”</b>. BGĐ bấm <b>“Gửi lên GitHub”</b> ở tab <b>Duyệt Cập Nhật</b> để cấp ID &amp; ghi vào hệ thống.'
+      : '📨 Đầu việc bạn tạo sẽ <b>chờ BGĐ duyệt</b> ở tab <b>Duyệt Cập Nhật</b> trước khi được cấp ID &amp; ghi vào hệ thống.';
+  }
+  if (_ctInited) return;
+  _ctInited = true;
+  document.getElementById('ct-ngay').value = new Date().toISOString().slice(0,10);
+  document.getElementById('ct-deadline').value = ymd(chiDaoDeadline());
+  const depts = _allDepts();
+  const mine = (AUTH && AUTH.depts && AUTH.depts.length) ? AUTH.depts[0] : '';
+  document.getElementById('ct-phong').innerHTML = '<option value="">-- Chọn phòng chính --</option>' +
+    depts.map(d => `<option value="${d.replace(/"/g,'&quot;')}"${d===mine?' selected':''}>${d}</option>`).join('');
+  document.getElementById('ct-phoi').innerHTML = depts.map(d =>
+    `<button type="button" class="dept-chip" data-dept="${d.replace(/"/g,'&quot;')}" onclick="this.classList.toggle('sel')">${d}</button>`
+  ).join('');
+}
+function _ctSelectedPhoi() {
+  return Array.from(document.querySelectorAll('#ct-phoi .dept-chip.sel')).map(b => b.dataset.dept);
+}
+function _ctMsg(msg, isErr) {
+  const el = document.getElementById('ct-msg');
+  el.textContent = msg;
+  el.className = isErr ? 'msg-err' : 'msg-ok';
+  el.style.display = 'block';
+}
+async function submitNewTask(addAnother) {
+  const ten      = document.getElementById('ct-ten').value.trim();
+  const phong    = document.getElementById('ct-phong').value;
+  const source   = document.getElementById('ct-source').value;
+  const ngay     = document.getElementById('ct-ngay').value;
+  const deadline = document.getElementById('ct-deadline').value;
+  const dinhky   = document.getElementById('ct-dinhky').checked;
+  const note     = document.getElementById('ct-note').value.trim();
+  if (!ten)   { _ctMsg('Vui lòng nhập tên đầu việc.', true); return; }
+  if (ten.length < 5) { _ctMsg('Tên đầu việc quá ngắn — mô tả rõ hơn (≥ 5 ký tự).', true); return; }
+  if (!phong) { _ctMsg('Vui lòng chọn phòng chính.', true); return; }
+  if (!ngay)  { _ctMsg('Vui lòng chọn ngày họp.', true); return; }
+  if (deadline && deadline < ngay) { _ctMsg('Hạn hoàn thành không được trước ngày họp.', true); return; }
+  if (!fbEnabled() || !fbInit()) { _ctMsg('❌ Firebase chưa sẵn sàng — kiểm tra internet/cấu hình.', true); return; }
+  const phoi  = _ctSelectedPhoi();
+  const nguon = source + ' — ' + dmyFromYmd(ngay);   // VD: "Họp giao ban CS2 — 29/06/2026"
+  const tmpId = 'NEW-' + Date.now() + '-' + Math.floor(Math.random()*1e4);
+  const [localIP] = await Promise.all([_getLocalIP()]);
+  const entry = {
+    id: tmpId, new_task: '1',
+    ten: ten, phong: phong,
+    phoi_hop: phoi.join('|'),
+    nguon: nguon, bat_dau: ngay, deadline: deadline,
+    dinh_ky: dinhky ? '1' : '0',
+    trang_thai: 'dang_thuc_hien', ghi_chu: note,
+    user: AUTH.user, user_phong: AUTH.depts ? AUTH.depts.join(', ') : AUTH.user,
+    may: _getDeviceInfo(), ip: localIP,
+    at: new Date().toISOString().slice(0,10),
+  };
+  const direct = isBGD() || isDirector();
+  try {
+    if (direct) {
+      apprPush(entry);
+    } else {
+      await _db.ref('bvtd_pending/' + _safeKey(tmpId)).set(entry);
+      _fbPending[_safeKey(tmpId)] = entry;
+    }
+  } catch(e) { _ctMsg('❌ Lỗi gửi: ' + e.message, true); return; }
+  _ctMsg(direct
+    ? '✓ Đã tạo. Vào tab “Duyệt Cập Nhật” → “Gửi lên GitHub” để áp dụng vào hệ thống.'
+    : '✓ Đã gửi. Chờ BGĐ duyệt ở tab “Duyệt Cập Nhật”.', false);
+  document.getElementById('ct-ten').value = '';
+  document.getElementById('ct-note').value = '';
+  document.getElementById('ct-dinhky').checked = false;
+  document.querySelectorAll('#ct-phoi .dept-chip.sel').forEach(b => b.classList.remove('sel'));
+  if (!addAnother) document.getElementById('ct-deadline').value = ymd(chiDaoDeadline());
+  updateNavBadge();
+  if (isBGD()) { renderPending(); renderReview(); }
+  setTimeout(() => { const m = document.getElementById('ct-msg'); if (m) m.style.display = 'none'; }, addAnother ? 2500 : 4500);
+}
+
+// Thẻ hiển thị "đầu việc mới" trong tab Duyệt (pending hoặc approved)
+function renderNewTaskCard(e, approved) {
+  const meta = [
+    `🏢 Phòng chính: <b>${e.phong || '—'}</b>`,
+    e.phoi_hop ? `🤝 Phối hợp: ${e.phoi_hop.split('|').join(', ')}` : '',
+    e.nguon    ? `📄 ${e.nguon}` : '',
+    e.bat_dau  ? `📅 Ngày họp: ${fmtDate(e.bat_dau)}` : '',
+    e.deadline ? `⏰ Deadline: <b>${fmtDate(e.deadline)}</b>` : `<span style="color:var(--muted)">Không có deadline</span>`,
+    e.dinh_ky === '1' ? `↻ Định kỳ` : '',
+  ].filter(Boolean).join(' &ensp;·&ensp; ');
+  const actions = approved
+    ? `<button class="btn-rejt" style="flex-shrink:0;align-self:flex-start;" onclick="removeApproved('${e.id}','${e.user}')">✕ Bỏ</button>`
+    : `<div class="rv-reporter-actions">
+         <button class="btn-appr" onclick="approveUpd('${e.id}','${e.user}')">✓ Duyệt</button>
+         <button class="btn-rejt" onclick="rejectUpd('${e.id}','${e.user}')">✕ Từ chối</button>
+       </div>`;
+  return `
+    <div class="rv-item ${approved ? 'approved-color' : 'pending-color'}">
+      <div class="rv-item-hdr">
+        <div style="flex:1;min-width:0;">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <span class="badge badge-green">🆕 Đầu việc mới</span>
+            <span style="font-size:14px;font-weight:700;">${e.ten || '(chưa có tên)'}</span>
+          </div>
+          <div class="rv-item-meta" style="margin-top:6px;">${meta}</div>
+          ${e.ghi_chu ? `<div class="rv-item-meta" style="margin-top:4px;">📝 ${e.ghi_chu}</div>` : ''}
+          <div class="rv-item-meta" style="margin-top:4px;">Tạo bởi <b>${e.user_phong || e.user}</b> · ngày ${e.at}</div>
+        </div>
+        ${approved ? actions : ''}
+      </div>
+      ${approved ? '' : actions}
+    </div>`;
+}
+
 // ── Review view (BGĐ only) ────────────────────────────────────────────────────
 function renderReview() {
   if (!isBGD()) return;
@@ -2545,6 +2881,7 @@ function renderReview() {
     pending.forEach(p => { if (!grouped[p.id]) grouped[p.id] = []; grouped[p.id].push(p); });
     pendEl.innerHTML = Object.values(grouped).map(grp => {
       const first = grp[0];
+      if (first.new_task) return renderNewTaskCard(first, false);
       const task  = D.tasks.find(t => t.id === first.id);
       const curTT = task ? statusPill(task.tt, task.dk) : '';
       const taskMeta = task ? [
@@ -2594,7 +2931,7 @@ function renderReview() {
     apprEl.innerHTML = '<div class="rv-empty" style="padding:20px 0;">Chưa có mục nào được duyệt.</div>';
     if (expBtn) expBtn.style.display = 'none';
   } else {
-    apprEl.innerHTML = approved.map(a => `
+    apprEl.innerHTML = approved.map(a => a.new_task ? renderNewTaskCard(a, true) : `
       <div class="rv-item approved-color">
         <div class="rv-item-hdr">
           <div style="flex:1;min-width:0;">
@@ -2658,6 +2995,19 @@ function renderPending() {
     pendingItems.forEach(p => { if (!grouped[p.id]) grouped[p.id] = []; grouped[p.id].push(p); });
     Object.values(grouped).forEach(grp => {
       const first = grp[0];
+      if (first.new_task) {
+        h += `<div class="pending-item" style="border-left:3px solid #48bb78;">
+          <div class="pending-info" style="width:100%;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <span class="badge badge-green">🆕 Đầu việc mới</span>
+              <div class="pending-name" style="margin:0;">${first.ten}</div>
+              <span style="font-size:11px;color:#718096;margin-left:auto;">Phòng chính: <b>${first.phong}</b></span>
+            </div>
+            <div class="pending-meta">📄 ${first.nguon||'—'} · Tạo bởi ${first.user_phong||first.user} (ngày ${first.at})</div>
+          </div>
+        </div>`;
+        return;
+      }
       const multiPhong = grp.length > 1;
       h += `<div class="pending-item" style="${multiPhong?'border-left:3px solid #f6ad55;':''}">
         <div class="pending-info" style="width:100%;">

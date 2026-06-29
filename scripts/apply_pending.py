@@ -14,7 +14,22 @@ log = logging.getLogger(__name__)
 ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from tracker import load_tasks, save_tasks, bump_version, append_update_log, save_directive_fields
+from tracker import (
+    load_tasks, save_tasks, bump_version, append_update_log,
+    save_directive_fields, classify_nhom, detect_dinh_ky,
+)
+
+
+def _norm_phoi(v) -> str:
+    """phong_phoi_hop dùng '|' (pipe). Chấp nhận list hoặc chuỗi."""
+    if isinstance(v, list):
+        return "|".join(str(x).strip() for x in v if str(x).strip())
+    return str(v or "").strip()
+
+
+def _next_id_num(tasks: list[dict]) -> int:
+    nums = [int(t["id"]) for t in tasks if str(t.get("id", "")).isdigit()]
+    return (max(nums) + 1) if nums else 1
 
 PENDING_FILE = ROOT / "data" / "pending_updates.json"
 
@@ -41,12 +56,59 @@ def main() -> None:
     today = str(date.today())
     log_rows: list[dict] = []
     changes = 0
+    new_count = 0
+    next_num = _next_id_num(tasks)
 
     print(f"{'='*55}")
     print(f"📱 AUTO-APPLY — {len(pending)} cập nhật từ dashboard")
     print(f"{'='*55}")
 
     for p in pending:
+        # ── Đầu việc MỚI (tạo tay từ tab Tạo Task) ─────────────────────────────
+        if p.get("new_task"):
+            ten = (p.get("ten") or "").strip()
+            phong = (p.get("phong") or "").strip()
+            if not ten or not phong:
+                print(f"  ⚠ Bỏ qua đầu việc mới thiếu tên/phòng: {p.get('id')!r}")
+                continue
+            new_id = str(next_num)
+            next_num += 1
+            is_dk = "1" if (str(p.get("dinh_ky", "")) == "1" or detect_dinh_ky(ten)) else "0"
+            row = {
+                "id": new_id,
+                "ten_dau_viec": ten,
+                "nhom": classify_nhom(ten, phong),
+                "phong_chinh": phong,
+                "phong_phoi_hop": _norm_phoi(p.get("phoi_hop")),
+                "bat_dau": (p.get("bat_dau") or today),
+                "ket_thuc": (p.get("deadline") or ""),
+                "trang_thai": (p.get("trang_thai") or "dang_thuc_hien"),
+                "so_lan_nhac": "1",
+                "ghi_chu": (p.get("ghi_chu") or ""),
+                "nguon_van_ban": (p.get("nguon") or ""),
+                "dinh_ky": is_dk,
+            }
+            tasks.append(row)
+            task_map[new_id] = row
+            new_count += 1
+            log_rows.append({
+                "ngay_cap_nhat":   today,
+                "task_id":         new_id,
+                "ten_dau_viec":    ten,
+                "phong_chinh":     phong,
+                "phong_bao_cao":   p.get("user_phong", p.get("user", "")),
+                "user":            p.get("user", ""),
+                "trang_thai_cu":   "",
+                "trang_thai_moi":  row["trang_thai"],
+                "ngay_hoan_thanh": "",
+                "ghi_chu":         f"[Tạo mới] {row['ghi_chu']}".strip(),
+                "nguon":           "dashboard_new_task",
+                "may":             p.get("may", ""),
+                "ip":              p.get("ip", ""),
+            })
+            print(f"  ➕ [{new_id}] {ten[:50]} ({phong}) — từ {p.get('user_phong') or p.get('user','')}")
+            continue
+
         tid = str(p.get("id", ""))
         task = task_map.get(tid)
         if not task:
@@ -98,8 +160,11 @@ def main() -> None:
 
     PENDING_FILE.unlink()
 
-    ver = bump_version("check", ["auto-apply từ dashboard"])
-    print(f"\n✓ Áp dụng {changes}/{len(pending)} cập nhật. Phiên bản: v{ver}")
+    if new_count:
+        ver = bump_version("parse", [f"thêm {new_count} đầu việc mới từ dashboard"])
+    else:
+        ver = bump_version("check", ["auto-apply từ dashboard"])
+    print(f"\n✓ Áp dụng {changes}/{len(pending)} cập nhật + {new_count} đầu việc mới. Phiên bản: v{ver}")
 
     print("\n▶ Sinh lại dashboard HTML...")
     import generate_dashboard
