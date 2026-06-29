@@ -1318,6 +1318,10 @@ const D = window.__D;
 
 // ── Auth configuration ─────────────────────────────────────────────────────────
 const PASS = 'bvtd@cs2';
+// Mật khẩu riêng theo user (override mật khẩu chung PASS). Không có trong list → dùng PASS.
+const PASS_OVERRIDES = {
+  'BGD': '26051988',
+};
 // depts: null = xem tất cả; array = chỉ xem phòng ban trong list
 const USERS = {
   'BGD':      null,
@@ -1363,7 +1367,8 @@ function doLogin() {
   const user = (document.getElementById('login-user').value || '').trim().toUpperCase();
   const pass  = document.getElementById('login-pass').value || '';
   const errEl = document.getElementById('login-err');
-  if (!(user in USERS) || pass !== PASS) {
+  const expected = PASS_OVERRIDES[user] || PASS;
+  if (!(user in USERS) || pass !== expected) {
     errEl.style.display = 'block';
     document.getElementById('login-pass').value = '';
     return;
