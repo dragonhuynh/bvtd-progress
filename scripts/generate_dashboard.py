@@ -664,7 +664,7 @@ body {
   position: sticky; top: 0; z-index: 5;
 }
 .dept-section-header:hover { background: #f9f9f9; }
-.dept-section-avatar { width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0; }
+.dept-section-avatar { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
 .dept-section-name { font-size: 14px; font-weight: 700; flex: 1; }
 .dept-badges { display: flex; gap: 6px; flex-wrap: wrap; }
 .badge { font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 5px; }
@@ -1270,8 +1270,13 @@ body {
 
     <div id="ct-msg" style="display:none"></div>
     <div class="ct-actions">
-      <button class="btn-primary" id="ct-submit-btn" onclick="submitNewTask(false)">Tạo đầu việc →</button>
-      <button class="btn-cncl" id="ct-submit-more" onclick="submitNewTask(true)" title="Lưu task này và giữ nguồn/ngày để nhập tiếp">Lưu &amp; nhập tiếp</button>
+      <button class="btn-primary" id="ct-submit-btn" onclick="submitNewTask(false)" title="Gửi đầu việc này rồi dọn sạch form. Dùng khi chỉ nhập 1 việc.">✓ Tạo đầu việc</button>
+      <button class="btn-cncl" id="ct-submit-more" onclick="submitNewTask(true)" title="Gửi đầu việc này nhưng GIỮ LẠI Nguồn + Ngày họp để nhập nhanh việc kế tiếp cùng biên bản.">＋ Lưu &amp; nhập việc tiếp cùng 1 BB</button>
+    </div>
+    <div class="ct-hint" style="margin-top:10px;font-size:13px;color:var(--muted);line-height:1.6">
+      💡 <b>Chỉ nhập 1 việc</b> → bấm <b>“✓ Tạo đầu việc”</b> — gửi xong là form được dọn sạch.<br>
+      💡 <b>Nhập nhiều việc từ cùng 1 biên bản</b> → bấm <b>“＋ Lưu &amp; nhập việc tiếp cùng 1 BB”</b> cho từng việc. Hệ thống <b>giữ nguyên Nguồn + Ngày họp</b>, bạn chỉ cần gõ tên việc mới; đến việc <b>cuối cùng</b> thì bấm <b>“✓ Tạo đầu việc”</b> để chốt.<br>
+      ℹ️ Cả hai nút đều gửi vào mục <b>“Chờ Duyệt”</b>. BGĐ duyệt &amp; bấm <b>“Gửi lên GitHub”</b> thì đầu việc mới được cấp số và rơi vào danh sách chính.
     </div>
   </div>
 </div>
@@ -1829,7 +1834,7 @@ function buildTasksView(filtered) {
   if (!filtered.length) {
     if (overlayHtml) {
       container.innerHTML = overlayHtml;
-      document.getElementById('tasks-count-label').textContent = 'Đang chờ cấp ID';
+      document.getElementById('tasks-count-label').textContent = 'Đang chờ duyệt';
     } else {
       container.innerHTML = '<div class="no-tasks-msg">Không tìm thấy đầu việc nào.</div>';
       document.getElementById('tasks-count-label').textContent = '0 đầu việc';
@@ -1919,7 +1924,7 @@ function buildTasksView(filtered) {
       parts.push(`
         <div class="dept-section">
           <div class="dept-section-header" onclick="toggleDept('${uid}')">
-            <div class="dept-section-avatar" style="background:${color}">${dept.slice(0,4)}</div>
+            <div class="dept-section-avatar" style="background:${color}"></div>
             <div class="dept-section-name">${dept}</div>
             <div class="dept-badges">
               ${done   ? `<span class="badge badge-green">${done} xong</span>`  : ''}
@@ -2396,7 +2401,7 @@ function renderNewTaskOverlay() {
   }).join('');
   return `
     <div class="nhom-section-header" style="background:linear-gradient(135deg,#10b981,#059669)">
-      <span class="nhom-label">🆕 Đầu Việc Mới — Chờ Cấp ID</span>
+      <span class="nhom-label">🆕 Đầu Việc Mới — Chờ Duyệt</span>
       <div class="dept-badges">
         <span class="badge" style="background:rgba(255,255,255,.2);color:#fff">${items.length} mới</span>
       </div>
